@@ -1,14 +1,16 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import { MantineProvider } from '@mantine/core';
 import App from './App';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <MantineProvider>
       <App />
     </MantineProvider>
   </React.StrictMode>,
-  document.getElementById('root')
 );
