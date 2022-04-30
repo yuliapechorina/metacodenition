@@ -6,8 +6,8 @@ import Welcome from './Welcome';
 const App = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Login />} />
-      <Route path="/welcome" element={<Welcome />} />
+      <Route path='/' element={<Login />} />
+      <Route path='/welcome' element={<Welcome />} />
     </Routes>
   </BrowserRouter>
 );
