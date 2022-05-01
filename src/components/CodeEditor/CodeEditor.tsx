@@ -1,4 +1,4 @@
-import { Navbar, Tabs } from '@mantine/core';
+import { Tabs } from '@mantine/core';
 import Editor from '@monaco-editor/react';
 import React, { useState } from 'react';
 
