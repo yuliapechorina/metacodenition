@@ -16,11 +16,11 @@ const MainLink = ({ icon, label, pathName }: LinkProps) => {
       <UnstyledButton
         className={
           location.pathname === pathName
-            ? 'bg-emerald-100 w-full h-10 p-2 rounded-md'
-            : 'bg-zinc-50 w-full h-10 p-2 rounded-md'
+            ? 'bg-emerald-100 w-full h-10 p-2 rounded-md whitespace-nowrap'
+            : 'bg-zinc-50 w-full h-10 p-2 rounded-md whitespace-nowrap'
         }
       >
-        <Group className='justify-start '>
+        <Group className='justify-start flex-nowrap'>
           {icon}
           <Text size='sm'>{label}</Text>
         </Group>
