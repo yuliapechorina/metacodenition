@@ -1,14 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from './Login';
-import Welcome from './Welcome';
+import { BrowserRouter } from 'react-router-dom';
+import MainPage from './pages/MainPage/MainPage';
 
 const App = () => (
   <BrowserRouter>
-    <Routes>
-      <Route path='/' element={<Login />} />
-      <Route path='/welcome' element={<Welcome />} />
-    </Routes>
+    <MainPage />
   </BrowserRouter>
 );
 export default App;
