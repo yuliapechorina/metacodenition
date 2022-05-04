@@ -1,21 +1,30 @@
-import { AppShell, Group, Header, Navbar, UnstyledButton } from '@mantine/core';
+import {
+  AppShell,
+  Group,
+  Header,
+  Navbar,
+  Text,
+  UnstyledButton,
+} from '@mantine/core';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import MainLinks from '../../components/MainLinks/MainLinks';
 import { ReactComponent as TitleIcon } from './title.svg';
-import CodeEditor from '../../components/CodeEditor/CodeEditor';
+import { auth } from '../../firebase';
 
 const MainPage = () => {
-  const location = useLocation();
-
-  const files = ['main.c', 'main.h'];
+  const [user] = useAuthState(auth);
 
   return (
     <AppShell
       header={
         <Header height={40} className='p-3'>
-          <TitleIcon />
+          <Group position='apart'>
+            <TitleIcon />
+            <Text>{user?.displayName}</Text>
+          </Group>
         </Header>
       }
       navbar={
@@ -46,11 +55,7 @@ const MainPage = () => {
         body: 'w-screen h-full',
       }}
     >
-      {location.pathname === '/step-5' ? (
-        <CodeEditor tabNames={files} />
-      ) : (
-        'Hello world!'
-      )}
+      <Outlet />
     </AppShell>
   );
 };
