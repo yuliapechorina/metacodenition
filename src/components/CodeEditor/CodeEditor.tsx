@@ -2,11 +2,8 @@ import { Tabs } from '@mantine/core';
 import Editor from '@monaco-editor/react';
 import React, { useState } from 'react';
 
-type CodeEditorProps = {
-  tabNames: string[];
-};
-
-const CodeEditor = ({ tabNames }: CodeEditorProps) => {
+const CodeEditor = () => {
+  const tabNames = ['main.c', 'main.h'];
   const [activeTab, setActiveTab] = useState(1);
 
   return (
