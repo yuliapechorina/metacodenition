@@ -19,7 +19,7 @@ const data = [
       />
     ),
     label: 'Understanding the problem',
-    pathName: '/step-1',
+    pathName: 'step-1',
   },
   {
     icon: (
@@ -29,7 +29,7 @@ const data = [
       />
     ),
     label: 'Searching for similar problems',
-    pathName: '/step-2',
+    pathName: 'step-2',
   },
   {
     icon: (
@@ -39,7 +39,7 @@ const data = [
       />
     ),
     label: 'Designing a solution',
-    pathName: '/step-3',
+    pathName: 'step-3',
   },
   {
     icon: (
@@ -49,7 +49,7 @@ const data = [
       />
     ),
     label: 'Evaluating a solution',
-    pathName: '/step-4',
+    pathName: 'step-4',
   },
   {
     icon: (
@@ -59,7 +59,7 @@ const data = [
       />
     ),
     label: 'Implementing a solution',
-    pathName: '/step-5',
+    pathName: 'step-5',
   },
   {
     icon: (
@@ -69,7 +69,7 @@ const data = [
       />
     ),
     label: 'Evaluating implemented solution',
-    pathName: '/step-6',
+    pathName: 'step-6',
   },
 ];
 
