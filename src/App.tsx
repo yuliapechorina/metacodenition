@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import CodeEditor from './components/CodeEditor';
 import AuthRoute from './components/AuthRoute';
 import PlaceHolder from './components/Placeholder';
+import ProblemPage from './pages/ProblemPage';
 
 const App = () => (
   <BrowserRouter>
@@ -13,7 +14,7 @@ const App = () => (
       <Route path='/login' element={<Login />} />
       <Route element={<AuthRoute />}>
         <Route path='/assignment' element={<MainPage />}>
-          <Route path='step-1' element={<PlaceHolder elementName='Step 1' />} />
+          <Route path='step-1' element={<ProblemPage />} />
           <Route path='step-2' element={<PlaceHolder elementName='Step 2' />} />
           <Route path='step-3' element={<PlaceHolder elementName='Step 3' />} />
           <Route path='step-4' element={<PlaceHolder elementName='Step 4' />} />
