@@ -15,7 +15,7 @@ const MainLink = ({ icon, label, pathName }: LinkProps) => {
     <Link to={pathName}>
       <UnstyledButton
         className={
-          location.pathname === pathName
+          location.pathname === `/assignment/${pathName}`
             ? 'bg-emerald-100 w-full h-10 p-2 rounded-md whitespace-nowrap'
             : 'bg-zinc-50 w-full h-10 p-2 rounded-md whitespace-nowrap'
         }
