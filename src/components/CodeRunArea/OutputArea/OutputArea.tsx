@@ -7,7 +7,7 @@ const OutputArea = () => {
   const [output] = useState(sampleText.repeat(10));
   const [expanded, setExpanded] = useState(false);
   return (
-    <Stack className='pb-4'>
+    <Stack className='h-full pb-4'>
       <Group>
         <Text className='grow text-lg'>Output</Text>
         <Button
@@ -19,7 +19,7 @@ const OutputArea = () => {
       </Group>
       <Text
         className={`text-base bg-slate-100 p-4 rounded-md ${
-          expanded ? 'h-100% max-h-48 overflow-y-scroll' : 'truncate'
+          expanded ? 'overflow-y-scroll h-full min-h-[50px] mb-28' : 'truncate'
         }`}
       >
         {output}

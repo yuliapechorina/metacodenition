@@ -1,12 +1,12 @@
-import { Stack } from '@mantine/core';
+import Split from 'react-split';
 import CodeEditor from '../../components/CodeEditor';
 import CodeRunArea from '../../components/CodeRunArea';
 
 const ImplementationPage = () => (
-  <Stack className='h-full'>
-    <CodeEditor className='h-48 flex-auto' />
-    <CodeRunArea className='p-4 pb-12 fit-content bg-slate-300' />
-  </Stack>
+  <Split className='split h-full' direction='vertical'>
+    <CodeEditor className='h-full' />
+    <CodeRunArea className='p-4 pb-12 bg-slate-300' />
+  </Split>
 );
 
 export default ImplementationPage;

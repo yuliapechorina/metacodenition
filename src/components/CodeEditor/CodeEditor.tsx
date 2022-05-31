@@ -12,15 +12,16 @@ const CodeEditor = (props: { className?: string }) => {
       active={activeTab}
       onTabChange={setActiveTab}
       variant='outline'
-      classNames={{ body: className, root: `flex flex-col ${className}` }}
+      classNames={{ body: `${className}`, root: 'flex flex-col' }}
     >
       {tabNames.map((tabName) => (
         <Tabs.Tab label={tabName}>
           <Editor
             theme='vs'
-            height='100%'
+            height='99%'
             language='c'
             value='// Enter your code here'
+            className='shrink'
           />
         </Tabs.Tab>
       ))}
