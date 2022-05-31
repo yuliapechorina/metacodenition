@@ -2,7 +2,8 @@ import { Tabs } from '@mantine/core';
 import Editor from '@monaco-editor/react';
 import React, { useState } from 'react';
 
-const CodeEditor = () => {
+const CodeEditor = (props: { className?: string }) => {
+  const { className } = props;
   const tabNames = ['main.c', 'main.h'];
   const [activeTab, setActiveTab] = useState(1);
 
@@ -11,15 +12,22 @@ const CodeEditor = () => {
       active={activeTab}
       onTabChange={setActiveTab}
       variant='outline'
-      classNames={{ body: 'h-full', root: 'h-full' }}
+      classNames={{ body: className, root: `flex flex-col ${className}` }}
     >
       {tabNames.map((tabName) => (
         <Tabs.Tab label={tabName}>
-          <Editor theme='vs' language='c' value='// Enter your code here' />
+          <Editor
+            theme='vs'
+            height='100%'
+            language='c'
+            value='// Enter your code here'
+          />
         </Tabs.Tab>
       ))}
     </Tabs>
   );
 };
+
+CodeEditor.defaultProps = { className: '' };
 
 export default CodeEditor;
