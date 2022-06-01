@@ -1,6 +1,7 @@
-import { Button, Group, Input, Stack, Text } from '@mantine/core';
+import { Group, Stack, Text, UnstyledButton } from '@mantine/core';
 import React, { useState } from 'react';
-import { HiOutlineDotsCircleHorizontal, HiOutlinePlay } from 'react-icons/hi';
+import { HiDotsHorizontal, HiPlay } from 'react-icons/hi';
+import CodeInput from '../../CodeInput';
 
 type InputAreaProps = {
   loading: boolean;
@@ -19,31 +20,25 @@ const InputArea = (props: InputAreaProps) => {
     <Stack>
       <Text className='grow text-lg'>Input</Text>
       <Group>
-        <Input
-          variant='filled'
-          className='grow'
+        <CodeInput
+          className='grow rounded'
           placeholder='Input'
-          size='lg'
           value={input}
           onChange={handleInputChange}
         />
-        <Button
-          className='hover:bg-transparent hover:scale-150'
-          size='lg'
-          onClick={runCallback}
-        >
+        <UnstyledButton className='hover:scale-150' onClick={runCallback}>
           {loading ? (
-            <HiOutlineDotsCircleHorizontal
-              size={24}
-              className='bg-emerald-300 stroke-emerald-400 h-full w-full rounded-md p-0.5'
+            <HiDotsHorizontal
+              size='36px'
+              className=' bg-emerald-500 fill-emerald-50 rounded-full p-1'
             />
           ) : (
-            <HiOutlinePlay
-              size={24}
-              className='bg-emerald-400 stroke-emerald-800 h-full w-full rounded-md p-0.5'
+            <HiPlay
+              size='36px'
+              className=' bg-emerald-500 fill-emerald-50 rounded-full p-1'
             />
           )}
-        </Button>
+        </UnstyledButton>
       </Group>
     </Stack>
   );

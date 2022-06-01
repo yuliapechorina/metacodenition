@@ -5,7 +5,7 @@ import CodeRunArea from '../../components/CodeRunArea';
 const ImplementationPage = () => (
   <Split className='split h-full' direction='vertical' sizes={[75, 25]}>
     <CodeEditor className='h-full' />
-    <CodeRunArea className='p-4 bg-slate-300 relative' />
+    <CodeRunArea className='p-4 bg-gray-300 relative' />
   </Split>
 );
 
