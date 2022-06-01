@@ -1,9 +1,20 @@
 import { Button, Group, Input, Stack, Text } from '@mantine/core';
 import React, { useState } from 'react';
+import { HiOutlineDotsCircleHorizontal, HiOutlinePlay } from 'react-icons/hi';
 
-const InputArea = () => {
+type InputAreaProps = {
+  loading: boolean;
+  runCallback: () => void;
+};
+
+const InputArea = (props: InputAreaProps) => {
+  const { loading, runCallback } = props;
   const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
+
   return (
     <Stack>
       <Text className='grow text-lg'>Input</Text>
@@ -14,15 +25,24 @@ const InputArea = () => {
           placeholder='Input'
           size='lg'
           value={input}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setInput(e.target.value)
-          }
+          onChange={handleInputChange}
         />
         <Button
-          className='hover:bg-transparent text-3xl hover:scale-150'
-          onClick={() => setLoading(!loading)}
+          className='hover:bg-transparent hover:scale-150'
+          size='lg'
+          onClick={runCallback}
         >
-          {loading ? '⏸️' : '▶️'}
+          {loading ? (
+            <HiOutlineDotsCircleHorizontal
+              size={24}
+              className='bg-emerald-300 stroke-emerald-400 h-full w-full rounded-md p-0.5'
+            />
+          ) : (
+            <HiOutlinePlay
+              size={24}
+              className='bg-emerald-400 stroke-emerald-800 h-full w-full rounded-md p-0.5'
+            />
+          )}
         </Button>
       </Group>
     </Stack>

@@ -1,31 +1,74 @@
-import { Tabs } from '@mantine/core';
+import { Stack, Tabs } from '@mantine/core';
 import Editor from '@monaco-editor/react';
 import React, { useState } from 'react';
 
-const CodeEditor = (props: { className?: string }) => {
+type CodeEditorProps = {
+  className?: string;
+};
+
+type File = {
+  id: number;
+  name: string;
+  content: string;
+};
+
+const CodeEditor = (props: CodeEditorProps) => {
   const { className } = props;
-  const tabNames = ['main.c', 'main.h'];
-  const [activeTab, setActiveTab] = useState(1);
+
+  const [activeFileId, setActiveFileId] = useState<number>(0);
+  const [files, setFiles] = useState<File[]>([
+    {
+      id: 0,
+      name: 'main.c',
+      content: '// Enter your main code here',
+    },
+    {
+      id: 1,
+      name: 'main.h',
+      content: '// Enter your header code here',
+    },
+  ]);
+
+  const handleFileEdit = (id: number, content?: string) => {
+    if (!content) {
+      return;
+    }
+
+    const newFiles: File[] = files.map((file) => {
+      if (file.id === id) {
+        return {
+          ...file,
+          content,
+        };
+      }
+
+      return file;
+    });
+
+    setFiles(newFiles);
+  };
 
   return (
-    <Tabs
-      active={activeTab}
-      onTabChange={setActiveTab}
-      variant='outline'
-      classNames={{ body: `${className}`, root: 'flex flex-col' }}
-    >
-      {tabNames.map((tabName) => (
-        <Tabs.Tab label={tabName}>
-          <Editor
-            theme='vs'
-            height='99%'
-            language='c'
-            value='// Enter your code here'
-            className='shrink'
-          />
-        </Tabs.Tab>
-      ))}
-    </Tabs>
+    <Stack className='overflow-hidden'>
+      <Tabs
+        active={activeFileId}
+        onTabChange={setActiveFileId}
+        variant='outline'
+        classNames={{ body: `${className}`, root: 'flex flex-col' }}
+        key={activeFileId}
+      >
+        {files?.map((file) => (
+          <Tabs.Tab label={file.name} key={file.id} />
+        ))}
+      </Tabs>
+      <Editor
+        theme='vs'
+        language='c'
+        value={files.filter((file) => file.id === activeFileId)[0].content}
+        className='shrink'
+        onChange={(newContent) => handleFileEdit(activeFileId, newContent)}
+      />
+    </Stack>
   );
 };
 
