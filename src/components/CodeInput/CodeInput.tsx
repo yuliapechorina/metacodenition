@@ -15,8 +15,9 @@ const CodeInput = (props: CodeInputProps) => {
   return (
     <Input
       className={className}
-      classNames={{ input: 'font-mono rounded h-12 text-lg bg-gray-100' }}
-      styles={{ input: { width: '100%' } }}
+      classNames={{
+        input: 'font-mono rounded h-12 text-lg bg-gray-100 w-full',
+      }}
       icon={CodeInputIcon()}
       variant='headless'
       placeholder={placeholder}

@@ -29,13 +29,13 @@ const CodeEditor = (props: CodeEditorProps) => {
     },
   ]);
 
-  const handleFileEdit = (id: number, content?: string) => {
+  const handleFileEdit = (content?: string) => {
     if (!content) {
       return;
     }
 
     const newFiles: File[] = files.map((file) => {
-      if (file.id === id) {
+      if (file.id === activeFileId) {
         return {
           ...file,
           content,
@@ -66,7 +66,7 @@ const CodeEditor = (props: CodeEditorProps) => {
         language='c'
         value={files.filter((file) => file.id === activeFileId)[0].content}
         className='shrink'
-        onChange={(newContent) => handleFileEdit(activeFileId, newContent)}
+        onChange={handleFileEdit}
       />
     </Stack>
   );

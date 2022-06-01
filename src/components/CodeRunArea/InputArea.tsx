@@ -1,7 +1,7 @@
 import { Group, Stack, Text, UnstyledButton } from '@mantine/core';
 import React, { useState } from 'react';
 import { HiDotsHorizontal, HiPlay } from 'react-icons/hi';
-import CodeInput from '../../CodeInput';
+import CodeInput from '../CodeInput';
 
 type InputAreaProps = {
   loading: boolean;
