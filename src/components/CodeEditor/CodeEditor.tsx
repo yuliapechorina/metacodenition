@@ -1,25 +1,77 @@
-import { Tabs } from '@mantine/core';
+import { Stack, Tabs } from '@mantine/core';
 import Editor from '@monaco-editor/react';
 import React, { useState } from 'react';
 
-const CodeEditor = () => {
-  const tabNames = ['main.c', 'main.h'];
-  const [activeTab, setActiveTab] = useState(1);
+type CodeEditorProps = {
+  className?: string;
+};
+
+type File = {
+  id: number;
+  name: string;
+  content: string;
+};
+
+const CodeEditor = (props: CodeEditorProps) => {
+  const { className } = props;
+
+  const [activeFileId, setActiveFileId] = useState<number>(0);
+  const [files, setFiles] = useState<File[]>([
+    {
+      id: 0,
+      name: 'main.c',
+      content: '// Enter your main code here',
+    },
+    {
+      id: 1,
+      name: 'main.h',
+      content: '// Enter your header code here',
+    },
+  ]);
+
+  const handleFileEdit = (content?: string) => {
+    if (!content) {
+      return;
+    }
+
+    const newFiles: File[] = files.map((file) => {
+      if (file.id === activeFileId) {
+        return {
+          ...file,
+          content,
+        };
+      }
+
+      return file;
+    });
+
+    setFiles(newFiles);
+  };
 
   return (
-    <Tabs
-      active={activeTab}
-      onTabChange={setActiveTab}
-      variant='outline'
-      classNames={{ body: 'h-full', root: 'h-full' }}
-    >
-      {tabNames.map((tabName) => (
-        <Tabs.Tab label={tabName}>
-          <Editor theme='vs' language='c' value='// Enter your code here' />
-        </Tabs.Tab>
-      ))}
-    </Tabs>
+    <Stack className='overflow-hidden'>
+      <Tabs
+        active={activeFileId}
+        onTabChange={setActiveFileId}
+        variant='outline'
+        classNames={{ body: `${className}`, root: 'flex flex-col' }}
+        key={activeFileId}
+      >
+        {files?.map((file) => (
+          <Tabs.Tab label={file.name} key={file.id} />
+        ))}
+      </Tabs>
+      <Editor
+        theme='vs'
+        language='c'
+        value={files.filter((file) => file.id === activeFileId)[0].content}
+        className='shrink'
+        onChange={handleFileEdit}
+      />
+    </Stack>
   );
 };
+
+CodeEditor.defaultProps = { className: '' };
 
 export default CodeEditor;

@@ -75,8 +75,9 @@ const MainPage = () => {
         </Navbar>
       }
       classNames={{
-        root: 'h-screen overflow-clip',
-        body: 'w-screen h-full',
+        root: 'h-screen w-screen overflow-hidden',
+        body: 'h-full w-screen flex-row',
+        main: 'flex-auto p-0 w-48',
       }}
     >
       <Outlet />
