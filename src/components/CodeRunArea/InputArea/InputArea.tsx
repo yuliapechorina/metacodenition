@@ -26,16 +26,16 @@ const InputArea = (props: InputAreaProps) => {
           value={input}
           onChange={handleInputChange}
         />
-        <UnstyledButton className='hover:scale-150' onClick={runCallback}>
+        <UnstyledButton className='hover:scale-110' onClick={runCallback}>
           {loading ? (
             <HiDotsHorizontal
-              size='36px'
-              className=' bg-emerald-500 fill-emerald-50 rounded-full p-1'
+              size='48px'
+              className=' bg-white fill-emerald-500 rounded-full'
             />
           ) : (
             <HiPlay
-              size='36px'
-              className=' bg-emerald-500 fill-emerald-50 rounded-full p-1'
+              size='48px'
+              className=' bg-white fill-emerald-500 rounded-full'
             />
           )}
         </UnstyledButton>
