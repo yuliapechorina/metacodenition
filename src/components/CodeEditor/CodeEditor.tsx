@@ -1,61 +1,30 @@
 import { Stack, Tabs } from '@mantine/core';
 import Editor from '@monaco-editor/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import useCode from '../../context/CodeContext';
 
 type CodeEditorProps = {
   className?: string;
 };
 
-type File = {
-  id: number;
-  name: string;
-  content: string;
-};
-
 const CodeEditor = (props: CodeEditorProps) => {
   const { className } = props;
 
-  const [activeFileId, setActiveFileId] = useState<number>(0);
-  const [files, setFiles] = useState<File[]>([
-    {
-      id: 0,
-      name: 'main.c',
-      content: '// Enter your main code here',
-    },
-    {
-      id: 1,
-      name: 'main.h',
-      content: '// Enter your header code here',
-    },
-  ]);
+  const [activeFileIndex, setActiveFileIndex] = useState<number>(0);
+  const { files, editFile } = useCode();
 
   const handleFileEdit = (content?: string) => {
-    if (!content) {
-      return;
-    }
-
-    const newFiles: File[] = files.map((file) => {
-      if (file.id === activeFileId) {
-        return {
-          ...file,
-          content,
-        };
-      }
-
-      return file;
-    });
-
-    setFiles(newFiles);
+    editFile!(files![activeFileIndex].id, content!);
   };
 
   return (
     <Stack className='overflow-hidden'>
       <Tabs
-        active={activeFileId}
-        onTabChange={setActiveFileId}
+        active={activeFileIndex}
+        onTabChange={setActiveFileIndex}
         variant='outline'
         classNames={{ body: `${className}`, root: 'flex flex-col' }}
-        key={activeFileId}
+        key={activeFileIndex}
       >
         {files?.map((file) => (
           <Tabs.Tab label={file.name} key={file.id} />
@@ -64,7 +33,7 @@ const CodeEditor = (props: CodeEditorProps) => {
       <Editor
         theme='vs'
         language='c'
-        value={files.filter((file) => file.id === activeFileId)[0].content}
+        value={files?.[activeFileIndex].content}
         className='shrink'
         onChange={handleFileEdit}
       />
