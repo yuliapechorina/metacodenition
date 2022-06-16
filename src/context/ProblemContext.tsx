@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface IProblemContext {
   problemStatement: string;
+  highlightProblemChunk: (chunk: string) => void;
 }
 
 const ProblemContext = React.createContext<Partial<IProblemContext>>({});
 
-const problemStatement = `
+const defaultProblem = `
 <p>
 Let's imagine that you have a list that contains amounts of rainfall for each day, collected by a meteorologist. Her rain gathering equipment occasionally makes a mistake and reports a negative amount for that day. We have to ignore those.
 <br/>We need to write a program to:
@@ -19,17 +20,36 @@ Let's imagine that you have a list that contains amounts of rainfall for each da
 </p>
 `;
 
+const initialProblem: string =
+  JSON.parse(localStorage.getItem('problem') as string) || defaultProblem;
+
 type ProblemProviderProps = {
   children: React.ReactNode;
 };
 
 export const ProblemProvider = ({ children }: ProblemProviderProps) => {
+  const [problemStatement, setProblemStatement] =
+    useState<string>(initialProblem);
+
+  const highlightProblemChunk = (chunk: string) => {
+    const highlightedProblem = problemStatement!.replace(
+      chunk,
+      `<mark className='bg-yellow-200'>${chunk}</mark>`
+    );
+    setProblemStatement(highlightedProblem);
+  };
+
   const value = React.useMemo(
     () => ({
       problemStatement,
+      highlightProblemChunk,
     }),
-    [problemStatement]
+    [problemStatement, highlightProblemChunk]
   );
+
+  useEffect(() => {
+    localStorage.setItem('problem', JSON.stringify(problemStatement));
+  }, [problemStatement]);
 
   return (
     <ProblemContext.Provider value={value}>{children}</ProblemContext.Provider>

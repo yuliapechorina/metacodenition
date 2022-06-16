@@ -6,23 +6,14 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core';
 import HTMLReactParser from 'html-react-parser';
-import React, { useState } from 'react';
+import React from 'react';
 import useProblem from '../../context/ProblemContext';
 
 const ProblemPage = () => {
-  const { problemStatement } = useProblem();
-  const [problem, setProblem] = useState(problemStatement);
-
-  const highlightChunk = (chunk: string) => {
-    const highlightedProblem = problem!.replace(
-      chunk,
-      `<mark className='bg-yellow-200'>${chunk}</mark>`
-    );
-    setProblem(highlightedProblem);
-  };
+  const { problemStatement, highlightProblemChunk } = useProblem();
 
   const handleMouseUp = () => {
-    highlightChunk(window.getSelection()?.toString()!);
+    highlightProblemChunk!(window.getSelection()?.toString()!);
   };
 
   return (
@@ -33,7 +24,7 @@ const ProblemPage = () => {
           onMouseUp={handleMouseUp}
           className='selection:bg-yellow-200'
         >
-          {HTMLReactParser(problem!)}
+          {HTMLReactParser(problemStatement!)}
         </TypographyStylesProvider>
       </Text>
       <Divider />
