@@ -17,16 +17,24 @@ const DesignPage = () => {
   const [highlightedChunk, setHighlightedChunk] = useState<string | undefined>(
     undefined
   );
-  const [inputValue, setInputValue] = useState<string | undefined>(undefined);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleMouseUp = () => {
-    console.log(`Highlighted:  ${window.getSelection()?.toString()!}`);
-    setHighlightedChunk(window.getSelection()?.toString()!);
-    highlightProblemChunk!(window.getSelection()?.toString()!);
+    const selection: string = window.getSelection()?.toString()!;
+    if (selection.length === 0) {
+      return;
+    }
+    setHighlightedChunk(selection);
+    setInputValue('');
+    highlightProblemChunk!(selection);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.currentTarget.value);
+  };
+
+  const handleSubmitAction = () => {
+    console.log(inputValue!);
   };
 
   return (
@@ -57,15 +65,17 @@ const DesignPage = () => {
           size='md'
           className='grow'
           classNames={{
-            input: 'font-mono rounded bg-gray-100 w-full',
+            input:
+              'font-mono rounded bg-gray-100 w-full focus:border-emerald-500',
           }}
           placeholder='Describe an action here...'
-          onChange={handleInputChange}
           value={inputValue}
+          onChange={handleInputChange}
         />
         <Button
           size='md'
           className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          onClick={handleSubmitAction}
         >
           Submit
         </Button>

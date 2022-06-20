@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import highlightChunkInText from '../pages/DesignPage/highlighter';
 
 interface IProblemContext {
   problemStatement: string;
@@ -32,10 +33,7 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
     useState<string>(initialProblem);
 
   const highlightProblemChunk = (chunk: string) => {
-    const highlightedProblem = problemStatement!.replace(
-      chunk,
-      `<mark className='bg-yellow-200'>${chunk}</mark>`
-    );
+    const highlightedProblem = highlightChunkInText(chunk, problemStatement);
     setProblemStatement(highlightedProblem);
   };
 
