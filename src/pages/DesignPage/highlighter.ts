@@ -40,12 +40,12 @@ const findIndices = (
   chunk: string
 ): number[] => {
   const startIndexes = textArray.reduce<number[]>((arr, element, index) => {
-    if (element === chunkArray[0]) arr.push(index);
+    if (element.includes(chunkArray[0])) arr.push(index);
     return arr;
   }, []);
 
   const endIndexes = textArray.reduce<number[]>((arr, element, index) => {
-    if (element === chunkArray[chunkArray.length - 1]) arr.push(index);
+    if (element.includes(chunkArray[chunkArray.length - 1])) arr.push(index);
     return arr;
   }, []);
   let smallestDistance = Infinity;
