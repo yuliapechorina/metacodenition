@@ -1,4 +1,8 @@
+import { doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { auth, db } from '../firebase';
 import {
   findHighlightInParent,
   applyHighlightToText,
@@ -35,6 +39,12 @@ type ProblemProviderProps = {
 };
 
 export const ProblemProvider = ({ children }: ProblemProviderProps) => {
+  const [user] = useAuthState(auth);
+
+  const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
+  const [userData] = useDocumentData(userDoc);
+  if (userData) console.log(userData.highlights);
+
   const [problemStatement] = useState<string>(initialProblem);
 
   const [highlights, setHighlights] = useState<Highlight[]>(initialHighlights);
