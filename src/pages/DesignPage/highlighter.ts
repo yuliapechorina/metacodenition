@@ -113,7 +113,6 @@ export const applyHighlightToText = (
 ) => {
   if (!highlights || highlights.length === 0) return text;
 
-  // const indices = highlights.reduce<IndexPair[]>((indexPairs, highlight) => [...indexPairs, highlight.indexPair], []);
 
   const sortedHighlights = orderAndCombineHighlights(highlights);
 
