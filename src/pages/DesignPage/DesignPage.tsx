@@ -10,6 +10,7 @@ import {
   Title,
   TypographyStylesProvider,
 } from '@mantine/core';
+import { arrayRemove } from 'firebase/firestore';
 import { arrayUnion } from 'firebase/firestore/lite';
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
@@ -65,10 +66,7 @@ const DesignPage = () => {
 
     if (user) {
       updateDocument('users', user.uid, {
-        highlights: arrayUnion({
-          highlightedText: highlightedChunk,
-          action: inputValue,
-        }),
+        highlights: arrayUnion(highlightedChunk),
       });
     }
   };
@@ -78,8 +76,13 @@ const DesignPage = () => {
       removeHighlightedChunk!(highlightedChunk);
       setHighlightedChunk(undefined);
       setInputValue('');
+
+      if (user) {
+        updateDocument('users', user.uid, {
+          highlights: arrayRemove(highlightedChunk),
+        });
+      }
     }
-    // TODO: Firebase things
   };
 
   return (
