@@ -19,8 +19,8 @@ import useUpdate from '../../hooks/useUpdate';
 
 const DesignPage = () => {
   const { getProblemStatement, highlightChunk } = useProblem();
-  const [highlightedChunk, setHighlightedChunk] = useState<Selection | null>(
-    null
+  const [highlightedChunk, setHighlightedChunk] = useState<string | undefined>(
+    undefined
   );
   const [inputValue, setInputValue] = useState<string>('');
   const [user] = useAuthState(auth);
@@ -42,10 +42,10 @@ const DesignPage = () => {
 
   const handleMouseUp = () => {
     const selection = window.getSelection();
-    if (!selection) {
+    if (!selection?.toString()) {
       return;
     }
-    setHighlightedChunk(selection);
+    setHighlightedChunk(selection.toString());
     setInputValue('');
     highlightChunk!(selection!);
   };
@@ -59,17 +59,14 @@ const DesignPage = () => {
       return;
     }
 
-    const addActionToUser = async () => {
-      if (user) {
-        updateDocument('users', user.uid, {
-          highlights: arrayUnion({
-            highlightedText: highlightedChunk,
-            action: inputValue,
-          }),
-        });
-      }
-    };
-    addActionToUser();
+    if (user) {
+      updateDocument('users', user.uid, {
+        highlights: arrayUnion({
+          highlightedText: highlightedChunk,
+          action: inputValue,
+        }),
+      });
+    }
   };
 
   return (
@@ -89,9 +86,9 @@ const DesignPage = () => {
         <Text>Nothing highlighted yet!</Text>
       ) : (
         <Text>
-          Highlighted text:{' '}
+          Highlighted text:{` `}
           <Text inherit component='span' className=' font-bold'>
-            {highlightedChunk?.toString()}
+            {highlightedChunk}
           </Text>
         </Text>
       )}

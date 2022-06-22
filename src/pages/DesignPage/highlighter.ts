@@ -69,7 +69,7 @@ const highlightAndCombineSlices = (
 ) =>
   textSlices.reduce((acc, curr, index) => {
     if (highlightSliceIndices.includes(index)) {
-      return `${acc}<mark>${curr}</mark>`;
+      return `${acc}<mark className='bg-yellow-200'>${curr}</mark>`;
     }
     return acc + curr;
   }, '');
