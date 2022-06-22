@@ -17,12 +17,14 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import useProblem from '../../context/ProblemContext';
 import { auth } from '../../firebase';
 import useUpdate from '../../hooks/useUpdate';
+import { Highlight } from './highlighter';
 
 const DesignPage = () => {
-  const { getProblemStatement, highlightChunk } = useProblem();
-  const [highlightedChunk, setHighlightedChunk] = useState<string | undefined>(
-    undefined
-  );
+  const { getProblemStatement, highlightChunk, removeHighlightedChunk } =
+    useProblem();
+  const [highlightedChunk, setHighlightedChunk] = useState<
+    Highlight | undefined
+  >();
   const [inputValue, setInputValue] = useState<string>('');
   const [user] = useAuthState(auth);
   const { isLoading, isError, updateDocument } = useUpdate();
@@ -43,12 +45,9 @@ const DesignPage = () => {
 
   const handleMouseUp = () => {
     const selection = window.getSelection();
-    if (!selection?.toString()) {
-      return;
-    }
-    setHighlightedChunk(selection.toString());
-    setInputValue('');
-    highlightChunk!(selection!);
+    const newHighlightedChunk = highlightChunk!(selection!);
+    setHighlightedChunk(newHighlightedChunk);
+    setInputValue(newHighlightedChunk?.action || '');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +59,10 @@ const DesignPage = () => {
       return;
     }
 
+    if (highlightedChunk) {
+      highlightedChunk.action = inputValue;
+    }
+
     if (user) {
       updateDocument('users', user.uid, {
         highlights: arrayUnion({
@@ -68,6 +71,15 @@ const DesignPage = () => {
         }),
       });
     }
+  };
+
+  const handleDeleteAction = () => {
+    if (highlightedChunk !== undefined) {
+      removeHighlightedChunk!(highlightedChunk);
+      setHighlightedChunk(undefined);
+      setInputValue('');
+    }
+    // TODO: Firebase things
   };
 
   return (
@@ -89,7 +101,7 @@ const DesignPage = () => {
         <Text>
           Highlighted text:{` `}
           <Text inherit component='span' className=' font-bold'>
-            {highlightedChunk}
+            {highlightedChunk.highlightedText}
           </Text>
         </Text>
       )}
@@ -112,6 +124,14 @@ const DesignPage = () => {
           disabled={isLoading}
         >
           Submit
+        </Button>
+        <Button
+          size='md'
+          className='bg-red-500 fill-red-50 hover:bg-red-600'
+          onClick={handleDeleteAction}
+          disabled={isLoading}
+        >
+          Delete
         </Button>
       </Group>
       {errorNotificationVisible && (

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
-  indexPair,
   findHighlightInParent,
   applyHighlightToText,
+  Highlight,
 } from '../pages/DesignPage/highlighter';
 
 interface IProblemContext {
   getProblemStatement: () => string;
-  highlightChunk: (chunk: Selection) => void;
+  highlightChunk: (chunk: Selection) => Highlight | undefined;
+  removeHighlightedChunk: (highlight: Highlight) => void;
 }
 
 const ProblemContext = React.createContext<Partial<IProblemContext>>({});
@@ -26,8 +27,8 @@ Only print the average if there was some rainfall, otherwise print “No rain”
 const initialProblem: string =
   JSON.parse(localStorage.getItem('problem') as string) || defaultProblem;
 
-const initialHighlightIndices: indexPair[] =
-  JSON.parse(localStorage.getItem('highlightIndices') as string) || [];
+const initialHighlights: Highlight[] =
+  JSON.parse(localStorage.getItem('highlights') as string) || [];
 
 type ProblemProviderProps = {
   children: React.ReactNode;
@@ -36,23 +37,46 @@ type ProblemProviderProps = {
 export const ProblemProvider = ({ children }: ProblemProviderProps) => {
   const [problemStatement] = useState<string>(initialProblem);
 
-  const [highlightIndices, setHighlightIndices] = useState<indexPair[]>(
-    initialHighlightIndices
-  );
+  const [highlights, setHighlights] = useState<Highlight[]>(initialHighlights);
 
-  const highlightChunk = (chunk: Selection) => {
-    if (chunk.toString() === '') return;
-    const newHighlightIndices = [
-      ...highlightIndices,
-      findHighlightInParent(chunk),
-    ];
-    setHighlightIndices(newHighlightIndices);
+  const highlightChunk = (chunk: Selection): Highlight | undefined => {
+    const indexPair = findHighlightInParent(chunk);
+
+    const selectedHighlight = highlights.find(
+      (highlight) =>
+        highlight.indexPair.start <= indexPair.start &&
+        highlight.indexPair.end >= indexPair.end,
+      indexPair
+    );
+
+    if (selectedHighlight || !chunk.toString) {
+      return selectedHighlight;
+    }
+
+    const newHighlight: Highlight = {
+      id: Math.floor(Math.random() * 100),
+      indexPair,
+      highlightedText: chunk.toString(),
+      action: '',
+    };
+
+    const newHighlights = [...highlights, newHighlight];
+    setHighlights(newHighlights);
+
+    return newHighlight;
+  };
+
+  const removeHighlightedChunk = (highlight: Highlight) => {
+    const newHighlights = highlights.filter(
+      (thisHighlight) => thisHighlight !== highlight
+    );
+    setHighlights(newHighlights);
   };
 
   const getProblemStatement = () =>
     `<p class='whitespace-pre-line'>${applyHighlightToText(
       problemStatement,
-      highlightIndices
+      highlights
     )}</p>`;
 
   const value = React.useMemo(
@@ -60,14 +84,15 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
       problemStatement,
       getProblemStatement,
       highlightChunk,
+      removeHighlightedChunk,
     }),
     [problemStatement, getProblemStatement, highlightChunk]
   );
 
   useEffect(() => {
     localStorage.setItem('problem', JSON.stringify(problemStatement));
-    localStorage.setItem('highlightIndices', JSON.stringify(highlightIndices));
-  }, [problemStatement, highlightIndices]);
+    localStorage.setItem('highlights', JSON.stringify(highlights));
+  }, [problemStatement, highlights]);
 
   return (
     <ProblemContext.Provider value={value}>{children}</ProblemContext.Provider>

@@ -1,6 +1,18 @@
-export type indexPair = {
+export type IndexPair = {
   start: number;
   end: number;
+};
+
+export type Highlight = {
+  id: number;
+  indexPair: IndexPair;
+  highlightedText: string;
+  action: string;
+};
+
+type Slice = {
+  text: string;
+  highlight?: Highlight;
 };
 
 const findOffsetOfNode = (node: Node | null) => {
@@ -12,24 +24,31 @@ const findOffsetOfNode = (node: Node | null) => {
   let currNode = node.previousSibling;
 
   while (currNode !== null) {
-    if (currNode.textContent) {
+    if (currNode.hasChildNodes()) {
+      offset += findOffsetOfNode(
+        currNode.childNodes[currNode.childNodes.length - 1]
+      );
+    } else if (currNode.textContent && currNode.nodeName !== 'SPAN') {
       offset += currNode.textContent.length;
     }
+
     currNode = currNode.previousSibling;
   }
 
   return offset;
 };
 
-const orderAndCombineIndices = (indices: indexPair[]) => {
-  const orderedIndices = indices.sort((a, b) => a.start - b.start);
+const orderAndCombineHighlights = (highlights: Highlight[]) => {
+  const orderedHighlights = highlights.sort(
+    (a, b) => a.indexPair.start - b.indexPair.start
+  );
 
-  const combinedIndices = orderedIndices.reduce(
-    (acc: { start: number; end: number }[], curr) => {
+  const combinedHighlights = orderedHighlights.reduce(
+    (acc: Highlight[], curr) => {
       if (acc.length === 0) return [curr];
       const last = acc[acc.length - 1];
-      if (curr.start <= last.end) {
-        last.end = Math.max(last.end, curr.end);
+      if (curr.indexPair.start <= last.indexPair.end) {
+        last.indexPair.end = Math.max(last.indexPair.end, curr.indexPair.end);
         return acc;
       }
       return [...acc, curr];
@@ -37,44 +56,47 @@ const orderAndCombineIndices = (indices: indexPair[]) => {
     []
   );
 
-  return combinedIndices;
+  return combinedHighlights;
 };
 
-const generateSlices = (text: string, combinedIndices: indexPair[]) => {
-  const textSlices: string[] = [];
-  const highlightSliceIndices: number[] = [];
+const generateSlices = (text: string, highlights: Highlight[]) => {
+  const slices: Slice[] = [];
 
-  textSlices.push(text.slice(0, combinedIndices[0].start));
+  slices.push({ text: text.slice(0, highlights[0].indexPair.start) });
 
-  combinedIndices.forEach((pair, i) => {
-    const { start, end } = pair;
+  highlights.forEach((highlight, i) => {
+    const { start, end } = highlight.indexPair;
 
-    const slice = text.slice(start, end);
-    textSlices.push(slice);
-    highlightSliceIndices.push(textSlices.length - 1);
+    const slice = { text: text.slice(start, end), highlight };
+    slices.push(slice);
 
-    const postSlice = text.slice(
+    const postSliceText = text.slice(
       end,
-      combinedIndices[i + 1] ? combinedIndices[i + 1].start : text.length
+      highlights[i + 1] ? highlights[i + 1].indexPair.start : text.length
     );
 
-    textSlices.push(postSlice);
+    const postSlice = { text: postSliceText };
+
+    slices.push(postSlice);
   }, []);
-  return { textSlices, highlightSliceIndices };
+  return slices;
 };
 
-const highlightAndCombineSlices = (
-  textSlices: string[],
-  highlightSliceIndices: number[]
-) =>
-  textSlices.reduce((acc, curr, index) => {
-    if (highlightSliceIndices.includes(index)) {
-      return `${acc}<mark className='bg-yellow-200'>${curr}</mark>`;
+const highlightAndCombineSlices = (slices: Slice[]) =>
+  slices.reduce((retString, slice) => {
+    if (slice.highlight) {
+      return `${retString}<mark className='bg-yellow-200 tooltip' id='${slice.highlight.id}'>${slice.text}<span class="tooltiptext">${slice.highlight.action}</span></mark>`;
     }
-    return acc + curr;
+    return retString + slice.text;
   }, '');
 
-export const findHighlightInParent = (chunk: Selection): indexPair => {
+export const findHighlightInParent = (chunk: Selection): IndexPair => {
+  if (chunk.anchorNode!.parentNode!.nodeName === 'MARK') {
+    const offset =
+      findOffsetOfNode(chunk.anchorNode?.parentNode!) + chunk.anchorOffset;
+    return { start: offset, end: offset };
+  }
+
   const offsetToAnchor =
     findOffsetOfNode(chunk.anchorNode) + chunk.anchorOffset;
   const offsetToFocus = findOffsetOfNode(chunk.focusNode) + chunk.focusOffset;
@@ -85,20 +107,16 @@ export const findHighlightInParent = (chunk: Selection): indexPair => {
   return { start, end };
 };
 
-export const applyHighlightToText = (text: string, indices: indexPair[]) => {
-  if (indices.length === 0) return text;
+export const applyHighlightToText = (text: string, highlights: Highlight[]) => {
+  if (highlights.length === 0) return text;
 
-  const sortedIndices = orderAndCombineIndices(indices);
+  // const indices = highlights.reduce<IndexPair[]>((indexPairs, highlight) => [...indexPairs, highlight.indexPair], []);
 
-  const { textSlices, highlightSliceIndices } = generateSlices(
-    text,
-    sortedIndices
-  );
+  const sortedHighlights = orderAndCombineHighlights(highlights);
 
-  const highlightedText = highlightAndCombineSlices(
-    textSlices,
-    highlightSliceIndices
-  );
+  const slices = generateSlices(text, sortedHighlights);
+
+  const highlightedText = highlightAndCombineSlices(slices);
 
   return highlightedText;
 };
