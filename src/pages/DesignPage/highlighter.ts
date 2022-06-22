@@ -1,86 +1,104 @@
-const stripTagsInArray = (array: string[]): string[] => {
-  const newArray: string[] = [...array];
-  const openIndexArray: number[] = [];
-  array.forEach((element, index) => {
-    if (element.includes('<') || element.includes('</')) {
-      openIndexArray.push(index);
+export type indexPair = {
+  start: number;
+  end: number;
+};
+
+const findOffsetOfNode = (node: Node | null) => {
+  if (!node) return 0;
+  const parent = node.parentNode;
+  if (!parent) return 0;
+
+  let offset = 0;
+  let currNode = node.previousSibling;
+
+  while (currNode !== null) {
+    if (currNode.textContent) {
+      offset += currNode.textContent.length;
     }
-    if (element.includes('>') || element.includes('/>')) {
-      const openIndex = openIndexArray.pop();
-      if (newArray[openIndex!] && newArray[index]) {
-        newArray[openIndex!] = newArray[openIndex!].slice(
-          0,
-          newArray[openIndex!].indexOf('<')!
-        );
-        newArray[index] = newArray[index].slice(
-          newArray[index].indexOf('>')!,
-          newArray[index].length - 1
-        );
-      }
-      newArray.splice(openIndex! + 1, index - openIndex!);
-    }
-  });
-  return newArray;
-};
-
-const getDistance = (
-  index1: number,
-  index2: number,
-  textArray: string[],
-  chunk: string
-) => {
-  const subArray = textArray.slice(index1, index2 + 1);
-  const subString = stripTagsInArray(subArray).join('');
-  return Math.abs(chunk.length - subString.length);
-};
-
-const findIndices = (
-  chunkArray: string[],
-  textArray: string[],
-  chunk: string
-): number[] => {
-  const startIndexes = textArray.reduce<number[]>((arr, element, index) => {
-    if (element.includes(chunkArray[0])) arr.push(index);
-    return arr;
-  }, []);
-
-  const endIndexes = textArray.reduce<number[]>((arr, element, index) => {
-    if (element.includes(chunkArray[chunkArray.length - 1])) arr.push(index);
-    return arr;
-  }, []);
-  let smallestDistance = Infinity;
-  let indices = [-1, -1];
-  startIndexes.forEach((startIndex) => {
-    endIndexes.forEach((endIndex) => {
-      if (startIndex <= endIndex) {
-        const distance = getDistance(startIndex, endIndex, textArray, chunk);
-        if (distance < smallestDistance) {
-          indices = [startIndex, endIndex];
-          smallestDistance = distance;
-        }
-      }
-    });
-  });
-
-  return indices;
-};
-
-const highlightChunkInText = (chunk: string, text: string): string => {
-  const chunkArray = chunk.match(/\w+|\s+|[^\s\w]+/g);
-  const textArray = text.match(/\w+|\s+|[^\s\w]+/g);
-
-  const [indexOfStart, indexOfEnd] = findIndices(
-    chunkArray!,
-    textArray!,
-    chunk
-  );
-  if (indexOfStart === -1 || indexOfEnd === -1) {
-    return text;
+    currNode = currNode.previousSibling;
   }
-  textArray?.splice(indexOfStart, 0, `<mark className='bg-yellow-200'> `);
-  textArray?.splice(indexOfEnd + 2, 0, '</mark> ');
-  console.log(textArray!.join(''));
-  return textArray!.join('');
+
+  return offset;
 };
 
-export default highlightChunkInText;
+const orderAndCombineIndices = (indices: indexPair[]) => {
+  const orderedIndices = indices.sort((a, b) => a.start - b.start);
+
+  const combinedIndices = orderedIndices.reduce(
+    (acc: { start: number; end: number }[], curr) => {
+      if (acc.length === 0) return [curr];
+      const last = acc[acc.length - 1];
+      if (curr.start <= last.end) {
+        last.end = Math.max(last.end, curr.end);
+        return acc;
+      }
+      return [...acc, curr];
+    },
+    []
+  );
+
+  return combinedIndices;
+};
+
+const generateSlices = (text: string, combinedIndices: indexPair[]) => {
+  const textSlices: string[] = [];
+  const highlightSliceIndices: number[] = [];
+
+  textSlices.push(text.slice(0, combinedIndices[0].start));
+
+  combinedIndices.forEach((pair, i) => {
+    const { start, end } = pair;
+
+    const slice = text.slice(start, end);
+    textSlices.push(slice);
+    highlightSliceIndices.push(textSlices.length - 1);
+
+    const postSlice = text.slice(
+      end,
+      combinedIndices[i + 1] ? combinedIndices[i + 1].start : text.length
+    );
+
+    textSlices.push(postSlice);
+  }, []);
+  return { textSlices, highlightSliceIndices };
+};
+
+const highlightAndCombineSlices = (
+  textSlices: string[],
+  highlightSliceIndices: number[]
+) =>
+  textSlices.reduce((acc, curr, index) => {
+    if (highlightSliceIndices.includes(index)) {
+      return `${acc}<mark>${curr}</mark>`;
+    }
+    return acc + curr;
+  }, '');
+
+export const findHighlightInParent = (chunk: Selection): indexPair => {
+  const offsetToAnchor =
+    findOffsetOfNode(chunk.anchorNode) + chunk.anchorOffset;
+  const offsetToFocus = findOffsetOfNode(chunk.focusNode) + chunk.focusOffset;
+
+  const start = Math.min(offsetToAnchor, offsetToFocus);
+  const end = Math.max(offsetToAnchor, offsetToFocus);
+
+  return { start, end };
+};
+
+export const applyHighlightToText = (text: string, indices: indexPair[]) => {
+  if (indices.length === 0) return text;
+
+  const sortedIndices = orderAndCombineIndices(indices);
+
+  const { textSlices, highlightSliceIndices } = generateSlices(
+    text,
+    sortedIndices
+  );
+
+  const highlightedText = highlightAndCombineSlices(
+    textSlices,
+    highlightSliceIndices
+  );
+
+  return highlightedText;
+};

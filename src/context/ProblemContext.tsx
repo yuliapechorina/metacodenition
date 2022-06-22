@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import highlightChunkInText from '../pages/DesignPage/highlighter';
+import {
+  indexPair,
+  findHighlightInParent,
+  applyHighlightToText,
+} from '../pages/DesignPage/highlighter';
 
 interface IProblemContext {
-  problemStatement: string;
-  highlightProblemChunk: (chunk: string) => void;
+  getProblemStatement: () => string;
+  highlightChunk: (chunk: Selection) => void;
 }
 
 const ProblemContext = React.createContext<Partial<IProblemContext>>({});
 
 const defaultProblem = `
-<p class='whitespace-pre'>
 Let's imagine that you have a list that contains amounts of rainfall for each day, collected by a meteorologist. Her rain gathering equipment occasionally makes a mistake and reports a negative amount for that day. We have to ignore those.
 We need to write a program to:
 
@@ -18,36 +21,53 @@ We need to write a program to:
   (c) print out the average rainfall at the end.
 
 Only print the average if there was some rainfall, otherwise print “No rain”.
-</p>
 `;
 
 const initialProblem: string =
   JSON.parse(localStorage.getItem('problem') as string) || defaultProblem;
+
+const initialHighlightIndices: indexPair[] =
+  JSON.parse(localStorage.getItem('highlightIndices') as string) || [];
 
 type ProblemProviderProps = {
   children: React.ReactNode;
 };
 
 export const ProblemProvider = ({ children }: ProblemProviderProps) => {
-  const [problemStatement, setProblemStatement] =
-    useState<string>(initialProblem);
+  const [problemStatement] = useState<string>(initialProblem);
 
-  const highlightProblemChunk = (chunk: string) => {
-    const highlightedProblem = highlightChunkInText(chunk, problemStatement);
-    setProblemStatement(highlightedProblem);
+  const [highlightIndices, setHighlightIndices] = useState<indexPair[]>(
+    initialHighlightIndices
+  );
+
+  const highlightChunk = (chunk: Selection) => {
+    if (chunk.toString() === '') return;
+    const newHighlightIndices = [
+      ...highlightIndices,
+      findHighlightInParent(chunk),
+    ];
+    setHighlightIndices(newHighlightIndices);
   };
+
+  const getProblemStatement = () =>
+    `<p class='whitespace-pre'>${applyHighlightToText(
+      problemStatement,
+      highlightIndices
+    )}</p>`;
 
   const value = React.useMemo(
     () => ({
       problemStatement,
-      highlightProblemChunk,
+      getProblemStatement,
+      highlightChunk,
     }),
-    [problemStatement, highlightProblemChunk]
+    [problemStatement, getProblemStatement, highlightChunk]
   );
 
   useEffect(() => {
     localStorage.setItem('problem', JSON.stringify(problemStatement));
-  }, [problemStatement]);
+    localStorage.setItem('highlightIndices', JSON.stringify(highlightIndices));
+  }, [problemStatement, highlightIndices]);
 
   return (
     <ProblemContext.Provider value={value}>{children}</ProblemContext.Provider>
