@@ -75,8 +75,13 @@ const highlightAndCombineSlices = (
   }, '');
 
 export const findHighlightInParent = (chunk: Selection): indexPair => {
-  const start = findOffsetOfNode(chunk.anchorNode) + chunk.anchorOffset;
-  const end = findOffsetOfNode(chunk.focusNode) + chunk.focusOffset;
+  const offsetToAnchor =
+    findOffsetOfNode(chunk.anchorNode) + chunk.anchorOffset;
+  const offsetToFocus = findOffsetOfNode(chunk.focusNode) + chunk.focusOffset;
+
+  const start = Math.min(offsetToAnchor, offsetToFocus);
+  const end = Math.max(offsetToAnchor, offsetToFocus);
+
   return { start, end };
 };
 
