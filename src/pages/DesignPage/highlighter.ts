@@ -107,8 +107,11 @@ export const findHighlightInParent = (chunk: Selection): IndexPair => {
   return { start, end };
 };
 
-export const applyHighlightToText = (text: string, highlights: Highlight[]) => {
-  if (highlights.length === 0) return text;
+export const applyHighlightToText = (
+  text: string,
+  highlights: Highlight[] | undefined
+) => {
+  if (!highlights || highlights.length === 0) return text;
 
   // const indices = highlights.reduce<IndexPair[]>((indexPairs, highlight) => [...indexPairs, highlight.indexPair], []);
 

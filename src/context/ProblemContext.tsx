@@ -31,9 +31,6 @@ Only print the average if there was some rainfall, otherwise print “No rain”
 const initialProblem: string =
   JSON.parse(localStorage.getItem('problem') as string) || defaultProblem;
 
-const initialHighlights: Highlight[] =
-  JSON.parse(localStorage.getItem('highlights') as string) || [];
-
 type ProblemProviderProps = {
   children: React.ReactNode;
 };
@@ -43,16 +40,27 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
 
   const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
   const [userData] = useDocumentData(userDoc);
-  if (userData) console.log(userData.highlights);
 
   const [problemStatement] = useState<string>(initialProblem);
 
-  const [highlights, setHighlights] = useState<Highlight[]>(initialHighlights);
+  const [highlights, setHighlights] = useState<Highlight[] | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (userData) {
+      setHighlights(userData.highlights);
+    }
+  }, [userData]);
 
   const highlightChunk = (chunk: Selection): Highlight | undefined => {
+    if (!highlights) {
+      return undefined;
+    }
+
     const indexPair = findHighlightInParent(chunk);
 
-    const selectedHighlight = highlights.find(
+    const selectedHighlight = highlights?.find(
       (highlight) =>
         highlight.indexPair.start <= indexPair.start &&
         highlight.indexPair.end >= indexPair.end,
@@ -77,6 +85,10 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
   };
 
   const removeHighlightedChunk = (highlight: Highlight) => {
+    if (!highlights) {
+      return;
+    }
+
     const newHighlights = highlights.filter(
       (thisHighlight) => thisHighlight !== highlight
     );
@@ -101,7 +113,6 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
 
   useEffect(() => {
     localStorage.setItem('problem', JSON.stringify(problemStatement));
-    localStorage.setItem('highlights', JSON.stringify(highlights));
   }, [problemStatement, highlights]);
 
   return (
