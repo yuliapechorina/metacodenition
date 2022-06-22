@@ -50,7 +50,7 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
   };
 
   const getProblemStatement = () =>
-    `<p class='whitespace-pre'>${applyHighlightToText(
+    `<p class='whitespace-pre-line'>${applyHighlightToText(
       problemStatement,
       highlightIndices
     )}</p>`;

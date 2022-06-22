@@ -4,6 +4,7 @@ import {
   Group,
   Input,
   Notification,
+  Space,
   Stack,
   Text,
   Title,
@@ -70,7 +71,7 @@ const DesignPage = () => {
   };
 
   return (
-    <Stack className='p-2 overflow-y-scroll'>
+    <Stack className='p-2 overflow-y-auto h-full'>
       <Title order={4}>Highlight a Key Phrase:</Title>
       <Text className='text-justify'>
         <TypographyStylesProvider
@@ -92,7 +93,7 @@ const DesignPage = () => {
           </Text>
         </Text>
       )}
-      <Group className='w-full'>
+      <Group className='w-full h-fit'>
         <Input
           size='md'
           className='grow'
@@ -117,12 +118,12 @@ const DesignPage = () => {
         <Notification
           title='Failed to submit action'
           color='red'
-          className='mb-10'
           onClose={() => setErrorNotifcationDismissed(true)}
         >
           Please try again.
         </Notification>
       )}
+      <Space h='xl' />
     </Stack>
   );
 };
