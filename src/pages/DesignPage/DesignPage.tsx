@@ -13,20 +13,20 @@ import React, { useState } from 'react';
 import useProblem from '../../context/ProblemContext';
 
 const DesignPage = () => {
-  const { problemStatement, highlightProblemChunk } = useProblem();
-  const [highlightedChunk, setHighlightedChunk] = useState<string | undefined>(
-    undefined
+  const { getProblemStatement, highlightChunk } = useProblem();
+  const [highlightedChunk, setHighlightedChunk] = useState<Selection | null>(
+    null
   );
   const [inputValue, setInputValue] = useState<string>('');
 
   const handleMouseUp = () => {
-    const selection: string = window.getSelection()?.toString()!;
-    if (selection.length === 0) {
+    const selection = window.getSelection();
+    if (!selection) {
       return;
     }
     setHighlightedChunk(selection);
     setInputValue('');
-    highlightProblemChunk!(selection);
+    highlightChunk!(selection!);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +45,7 @@ const DesignPage = () => {
           onMouseUp={handleMouseUp}
           className='selection:bg-yellow-200'
         >
-          {HTMLReactParser(problemStatement!)}
+          {HTMLReactParser(getProblemStatement!())}
         </TypographyStylesProvider>
       </Text>
       <Divider />
@@ -56,7 +56,7 @@ const DesignPage = () => {
         <Text>
           Highlighted text:{' '}
           <Text inherit component='span' className=' font-bold'>
-            {highlightedChunk}
+            {highlightedChunk?.toString()}
           </Text>
         </Text>
       )}

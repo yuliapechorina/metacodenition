@@ -10,14 +10,14 @@ import React from 'react';
 import useProblem from '../../context/ProblemContext';
 
 const ProblemPage = () => {
-  const { problemStatement } = useProblem();
+  const { getProblemStatement } = useProblem();
 
   return (
     <Stack className='p-2'>
       <Title order={4}>Problem:</Title>
       <Text className='text-justify'>
         <TypographyStylesProvider>
-          {HTMLReactParser(problemStatement!)}
+          {HTMLReactParser(getProblemStatement!())}
         </TypographyStylesProvider>
       </Text>
       <Divider />
