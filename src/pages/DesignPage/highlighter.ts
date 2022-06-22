@@ -1,29 +1,99 @@
+export type indexPair = {
+  start: number;
+  end: number;
+};
+
 const findOffsetOfNode = (node: Node | null) => {
   if (!node) return 0;
   const parent = node.parentNode;
   if (!parent) return 0;
-  // Sum the length of all the text nodes before the current node
+
   let offset = 0;
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < parent.childNodes.length; i++) {
-    const child = parent.childNodes[i];
-    if (child === node) {
-      break;
+  let currNode = node.previousSibling;
+
+  while (currNode !== null) {
+    if (currNode.textContent) {
+      offset += currNode.textContent.length;
     }
-    // eslint-disable-next-line no-continue
-    if (!child.textContent) continue;
-    offset += child.textContent.length;
+    currNode = currNode.previousSibling;
   }
-  // eslint-disable-next-line consistent-return
+
   return offset;
 };
 
-const findHighlightIndices = (
-  chunk: Selection
-): { start: number; end: number } => {
+const orderAndCombineIndices = (indices: indexPair[]) => {
+  const orderedIndices = indices.sort((a, b) => a.start - b.start);
+
+  const combinedIndices = orderedIndices.reduce(
+    (acc: { start: number; end: number }[], curr) => {
+      if (acc.length === 0) return [curr];
+      const last = acc[acc.length - 1];
+      if (curr.start <= last.end) {
+        last.end = Math.max(last.end, curr.end);
+        return acc;
+      }
+      return [...acc, curr];
+    },
+    []
+  );
+
+  return combinedIndices;
+};
+
+const generateSlices = (text: string, combinedIndices: indexPair[]) => {
+  const textSlices: string[] = [];
+  const highlightSliceIndices: number[] = [];
+
+  textSlices.push(text.slice(0, combinedIndices[0].start));
+
+  combinedIndices.forEach((pair, i) => {
+    const { start, end } = pair;
+
+    const slice = text.slice(start, end);
+    textSlices.push(slice);
+    highlightSliceIndices.push(textSlices.length - 1);
+
+    const postSlice = text.slice(
+      end,
+      combinedIndices[i + 1] ? combinedIndices[i + 1].start : text.length
+    );
+
+    textSlices.push(postSlice);
+  }, []);
+  return { textSlices, highlightSliceIndices };
+};
+
+const highlightAndCombineSlices = (
+  textSlices: string[],
+  highlightSliceIndices: number[]
+) =>
+  textSlices.reduce((acc, curr, index) => {
+    if (highlightSliceIndices.includes(index)) {
+      return `${acc}<mark>${curr}</mark>`;
+    }
+    return acc + curr;
+  }, '');
+
+export const findHighlightInParent = (chunk: Selection): indexPair => {
   const start = findOffsetOfNode(chunk.anchorNode) + chunk.anchorOffset;
   const end = findOffsetOfNode(chunk.focusNode) + chunk.focusOffset;
   return { start, end };
 };
 
-export default findHighlightIndices;
+export const applyHighlightToText = (text: string, indices: indexPair[]) => {
+  if (indices.length === 0) return text;
+
+  const sortedIndices = orderAndCombineIndices(indices);
+
+  const { textSlices, highlightSliceIndices } = generateSlices(
+    text,
+    sortedIndices
+  );
+
+  const highlightedText = highlightAndCombineSlices(
+    textSlices,
+    highlightSliceIndices
+  );
+
+  return highlightedText;
+};

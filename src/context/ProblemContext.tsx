@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import findHighlightIndices from '../pages/DesignPage/highlighter';
+import {
+  indexPair,
+  findHighlightInParent,
+  applyHighlightToText,
+} from '../pages/DesignPage/highlighter';
 
 interface IProblemContext {
   getProblemStatement: () => string;
@@ -22,7 +26,7 @@ Only print the average if there was some rainfall, otherwise print “No rain”
 const initialProblem: string =
   JSON.parse(localStorage.getItem('problem') as string) || defaultProblem;
 
-const initialHighlightIndices: { start: number; end: number }[] =
+const initialHighlightIndices: indexPair[] =
   JSON.parse(localStorage.getItem('highlightIndices') as string) || [];
 
 type ProblemProviderProps = {
@@ -32,77 +36,24 @@ type ProblemProviderProps = {
 export const ProblemProvider = ({ children }: ProblemProviderProps) => {
   const [problemStatement] = useState<string>(initialProblem);
 
-  const [highlightIndices, setHighlightIndices] = useState<
-    { start: number; end: number }[]
-  >(initialHighlightIndices);
+  const [highlightIndices, setHighlightIndices] = useState<indexPair[]>(
+    initialHighlightIndices
+  );
 
   const highlightChunk = (chunk: Selection) => {
     if (chunk.toString() === '') return;
     const newHighlightIndices = [
       ...highlightIndices,
-      findHighlightIndices(chunk),
+      findHighlightInParent(chunk),
     ];
     setHighlightIndices(newHighlightIndices);
   };
 
-  const getProblemStatement = () => {
-    if (highlightIndices.length === 0)
-      return `<p class='whitespace-pre'>${problemStatement}</p>`;
-
-    // Order the indices by start position
-    const orderedHighlightIndices = highlightIndices.sort(
-      (a, b) => a.start - b.start
-    );
-    // Combine where overlap of indices occurs
-    const combinedHighlightIndices = orderedHighlightIndices.reduce(
-      (acc: { start: number; end: number }[], curr) => {
-        if (acc.length === 0) return [curr];
-        const last = acc[acc.length - 1];
-        if (curr.start <= last.end) {
-          last.end = Math.max(last.end, curr.end);
-          return acc;
-        }
-        return [...acc, curr];
-      },
-      []
-    );
-
-    // Split the problemStatement into slices of text by indices
-    const problemStatementSlices: string[] = [];
-    const highlightIndexes: number[] = [];
-
-    problemStatementSlices.push(
-      problemStatement.slice(0, combinedHighlightIndices[0].start)
-    );
-
-    combinedHighlightIndices.forEach((highlightIndex, i) => {
-      const { start, end } = highlightIndex;
-      const slice = problemStatement.slice(start, end);
-      problemStatementSlices.push(slice);
-      highlightIndexes.push(problemStatementSlices.length - 1);
-
-      const postSlice = problemStatement.slice(
-        end,
-        combinedHighlightIndices[i + 1]
-          ? combinedHighlightIndices[i + 1].start
-          : problemStatement.length
-      );
-      problemStatementSlices.push(postSlice);
-    }, []);
-
-    // Create a new string with the highlighted chunks
-    const newProblemStatement = problemStatementSlices.reduce(
-      (acc, curr, index) => {
-        if (highlightIndexes.includes(index)) {
-          return `${acc}<mark>${curr}</mark>`;
-        }
-        return acc + curr;
-      },
-      ''
-    );
-
-    return `<p class='whitespace-pre'>${newProblemStatement}</p>`;
-  };
+  const getProblemStatement = () =>
+    `<p class='whitespace-pre'>${applyHighlightToText(
+      problemStatement,
+      highlightIndices
+    )}</p>`;
 
   const value = React.useMemo(
     () => ({
