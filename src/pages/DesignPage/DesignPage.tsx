@@ -3,14 +3,19 @@ import {
   Divider,
   Group,
   Input,
+  Notification,
   Stack,
   Text,
   Title,
   TypographyStylesProvider,
 } from '@mantine/core';
+import { arrayUnion } from 'firebase/firestore/lite';
 import HTMLReactParser from 'html-react-parser';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import useProblem from '../../context/ProblemContext';
+import { auth } from '../../firebase';
+import useUpdate from '../../hooks/useUpdate';
 
 const DesignPage = () => {
   const { problemStatement, highlightProblemChunk } = useProblem();
@@ -18,6 +23,22 @@ const DesignPage = () => {
     undefined
   );
   const [inputValue, setInputValue] = useState<string>('');
+  const [user] = useAuthState(auth);
+  const { isLoading, isError, updateDocument } = useUpdate();
+  const [errorNotificationVisible, setErrorNotificationVisible] =
+    useState(false);
+  const [errorNotificationDismissed, setErrorNotifcationDismissed] =
+    useState(false);
+
+  useEffect(() => {
+    if (isError) {
+      setErrorNotificationVisible(true);
+    }
+
+    if (errorNotificationDismissed) {
+      setErrorNotificationVisible(false);
+    }
+  }, [isError, errorNotificationDismissed]);
 
   const handleMouseUp = () => {
     const selection: string = window.getSelection()?.toString()!;
@@ -34,11 +55,25 @@ const DesignPage = () => {
   };
 
   const handleSubmitAction = () => {
-    console.log(inputValue!);
+    if (!inputValue) {
+      return;
+    }
+
+    const addActionToUser = async () => {
+      if (user) {
+        updateDocument('users', user.uid, {
+          highlights: arrayUnion({
+            highlightedText: highlightedChunk,
+            action: inputValue,
+          }),
+        });
+      }
+    };
+    addActionToUser();
   };
 
   return (
-    <Stack className='p-2'>
+    <Stack className='p-2 overflow-y-scroll'>
       <Title order={4}>Highlight a Key Phrase:</Title>
       <Text className='text-justify'>
         <TypographyStylesProvider
@@ -76,10 +111,21 @@ const DesignPage = () => {
           size='md'
           className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
           onClick={handleSubmitAction}
+          disabled={isLoading}
         >
           Submit
         </Button>
       </Group>
+      {errorNotificationVisible && (
+        <Notification
+          title='Failed to submit action'
+          color='red'
+          className='mb-10'
+          onClose={() => setErrorNotifcationDismissed(true)}
+        >
+          Please try again.
+        </Notification>
+      )}
     </Stack>
   );
 };
