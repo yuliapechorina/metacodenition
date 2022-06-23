@@ -152,13 +152,13 @@ const EvaluationPage = () => {
             setList={setUnusedListItems}
             group='design-parsons'
             animation={100}
-            className='flex flex-col space-y-8 h-full p-4 m-4 rounded-md'
+            className='flex flex-col space-y-6 h-full p-4 m-4 rounded-md'
           >
             {getUnusedParsonsFragments().map((fragment) => (
               <div key={fragment.listItem.id}>
                 <Card
                   shadow='sm'
-                  p='lg'
+                  p='md'
                   className={`bg-gray-100 cursor-grab h-fit${
                     fragment.userGenerated && ' font-bold'
                   }`}
@@ -176,13 +176,13 @@ const EvaluationPage = () => {
             setList={setUsedListItems}
             group='design-parsons'
             animation={100}
-            className='flex flex-col space-y-8 h-full p-4 m-4 rounded-md'
+            className='flex flex-col space-y-6 h-full p-4 m-4 rounded-md'
           >
             {getUsedParsonsFragments().map((fragment) => (
               <div key={fragment.listItem.id}>
                 <Card
                   shadow='sm'
-                  p='lg'
+                  p='md'
                   className={`bg-gray-100 cursor-grab h-fit${
                     fragment.userGenerated && ' font-bold'
                   }`}
@@ -196,7 +196,7 @@ const EvaluationPage = () => {
       </Group>
       <Button
         size='md'
-        className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 w-fit m-auto'
+        className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 m-auto'
         onClick={handleSubmitAction}
         disabled={isLoading}
       >
