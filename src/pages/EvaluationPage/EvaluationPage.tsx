@@ -1,5 +1,5 @@
 import { Button, Card, Group, Stack, Title } from '@mantine/core';
-import { arrayUnion, doc } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
