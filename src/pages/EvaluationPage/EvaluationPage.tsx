@@ -1,55 +1,131 @@
 import { Button, Card, Group, Stack, Title } from '@mantine/core';
 import { useState } from 'react';
-import { ReactSortable } from 'react-sortablejs';
+import { ReactSortable, ItemInterface } from 'react-sortablejs';
+import useProblem from '../../context/ProblemContext';
+import { Highlight } from '../DesignPage/highlighter';
 
-type ActionItem = {
-  id: number;
-  name: string;
+type ParsonsFragment = {
+  listItem: ItemInterface;
+  userGenerated: boolean;
 };
 
-export const EvaluationPage = () => {
-  const [unused, setUnused] = useState<ActionItem[]>([
-    { id: 1, name: 'Count Values' },
-    { id: 2, name: 'Parse Input' },
-    { id: 3, name: 'Map Values' },
-    { id: 4, name: 'Call a Function on Each' },
-    { id: 5, name: 'Create a Struct' },
-    { id: 6, name: 'Filter Values' },
-    { id: 7, name: 'Create a Helper Function' },
-    { id: 8, name: 'Perform a Calculation' },
-    { id: 9, name: 'Print an Output' },
-  ]);
+const defaultListItems: ItemInterface[] = [
+  { id: 'default-1', action: 'Count Values' },
+  { id: 'default-2', action: 'Parse Input' },
+  { id: 'default-3', action: 'Map Values' },
+  { id: 'default-4', action: 'Call a Function on Each' },
+  { id: 'default-5', action: 'Create a Struct' },
+  { id: 'default-6', action: 'Filter Values' },
+  { id: 'default-7', action: 'Create a Helper Function' },
+  { id: 'default-8', action: 'Perform a Calculation' },
+  { id: 'default-9', action: 'Print an Output' },
+];
 
-  const [used, setUsed] = useState<ActionItem[]>([]);
+const defaultUsedIds: (string | number)[] = ['default-3', 'user-1'];
+
+const getIdsFromFragments = (fragments: ParsonsFragment[]) =>
+  fragments.map<string | number>((fragment) => fragment.listItem.id);
+
+const getIdsFromItems = (items: ItemInterface[]) =>
+  items.map<string | number>((item) => item.id);
+
+const generateUnusedIds = (
+  usedIds: (string | number)[],
+  allIds: (string | number)[]
+) => allIds.filter((id) => !usedIds.includes(id));
+
+const defaultParsonsFragments = defaultListItems.map<ParsonsFragment>(
+  (listItem) => ({ listItem, userGenerated: false })
+);
+
+const generateUserFragments = (highlights: Highlight[]) =>
+  highlights.map<ParsonsFragment>((highlight: Highlight) => ({
+    listItem: { id: `user-${highlight.id}`, action: highlight.action },
+    userGenerated: true,
+  }));
+
+const getListItems = (fragments: ParsonsFragment[]) =>
+  fragments.map<ItemInterface>((fragment) => fragment.listItem);
+
+export const EvaluationPage = () => {
+  const { highlights } = useProblem();
+
+  const userParsonsFragments = generateUserFragments(highlights || []);
+
+  const [parsonsFragments] = useState<ParsonsFragment[]>(
+    userParsonsFragments.concat(defaultParsonsFragments)
+  );
+
+  const [unusedIds, setUnusedIds] = useState<(string | number)[]>(
+    generateUnusedIds(
+      defaultUsedIds,
+      getIdsFromFragments(userParsonsFragments.concat(defaultParsonsFragments))
+    )
+  );
+  const [usedIds, setUsedIds] = useState<(string | number)[]>(defaultUsedIds);
+
+  const getItemsFromIds = (ids: (string | number)[]) =>
+    ids
+      .map(
+        (id) =>
+          parsonsFragments.find((fragment) => fragment.listItem.id === id)
+            ?.listItem
+      )
+      .filter((item) => item) as ItemInterface[];
+
+  const getUnusedListItems = () => getItemsFromIds(unusedIds);
+
+  const getUsedListItems = () => getItemsFromIds(usedIds);
+
+  const getFragmentsFromItems = (items: ItemInterface[]) =>
+    items
+      .map((item) =>
+        parsonsFragments.find((fragment) => fragment.listItem === item)
+      )
+      .filter((item) => item) as ParsonsFragment[];
+
+  const getUnusedParsonsFragments = (): ParsonsFragment[] =>
+    getFragmentsFromItems(getUnusedListItems());
+
+  const getUsedParsonsFragments = (): ParsonsFragment[] =>
+    getFragmentsFromItems(getUsedListItems());
+
+  const setUnusedListItems = (newState: ItemInterface[]) =>
+    setUnusedIds(getIdsFromItems(newState));
+
+  const setUsedListItems = (newState: ItemInterface[]) =>
+    setUsedIds(getIdsFromItems(newState));
 
   const [loading, setLoading] = useState(false);
 
   const onSubmit = () => {
     setLoading(true);
     setTimeout(() => setLoading(false), 1000);
-    console.log(used);
+    console.log(getIdsFromItems(getUsedListItems()));
   };
 
   return (
     <Stack className='h-full pt-8 pb-20'>
-      <Group className='h-fit'>
+      <Group className='h-fit overflow-auto'>
         <Stack className='h-full flex-1'>
           <Title className='text-center'>Drag from here</Title>
           <ReactSortable
-            list={unused}
-            setList={setUnused}
+            list={getUnusedListItems()}
+            setList={setUnusedListItems}
             group='design-parsons'
             animation={100}
             className='flex flex-col space-y-8 h-full p-4 m-4 rounded-md'
           >
-            {unused.map((item) => (
-              <div key={item.id}>
+            {getUnusedParsonsFragments().map((fragment) => (
+              <div key={fragment.listItem.id}>
                 <Card
                   shadow='sm'
                   p='lg'
-                  className='bg-gray-100 cursor-grab h-fit'
+                  className={`bg-gray-100 cursor-grab h-fit${
+                    fragment.userGenerated && ' font-bold'
+                  }`}
                 >
-                  {item.name}
+                  {fragment.listItem.action}
                 </Card>
               </div>
             ))}
@@ -58,20 +134,22 @@ export const EvaluationPage = () => {
         <Stack className='h-full flex-1'>
           <Title className='text-center'>Drop in here</Title>
           <ReactSortable
-            list={used}
-            setList={setUsed}
+            list={getListItems(getUsedParsonsFragments())}
+            setList={setUsedListItems}
             group='design-parsons'
             animation={100}
             className='flex flex-col space-y-8 h-full p-4 m-4 rounded-md'
           >
-            {used.map((item) => (
-              <div key={item.id}>
+            {getUsedParsonsFragments().map((fragment) => (
+              <div key={fragment.listItem.id}>
                 <Card
                   shadow='sm'
                   p='lg'
-                  className='bg-gray-100 cursor-grab h-fit'
+                  className={`bg-gray-100 cursor-grab h-fit${
+                    fragment.userGenerated && ' font-bold'
+                  }`}
                 >
-                  {item.name}
+                  {fragment.listItem.action}
                 </Card>
               </div>
             ))}
