@@ -56,7 +56,7 @@ const EvaluationPage = () => {
   const [user] = useAuthState(auth);
   const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
   const [userData] = useDocumentData(userDoc);
-  const { isLoading, isError, updateDocument } = useUpdate();
+  const { isLoading, updateDocument } = useUpdate();
 
   const { highlights } = useProblem();
 
