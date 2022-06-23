@@ -15,6 +15,7 @@ import { arrayUnion } from 'firebase/firestore/lite';
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
 import { auth } from '../../firebase';
 import useUpdate from '../../hooks/useUpdate';
@@ -51,8 +52,8 @@ const DesignPage = () => {
     setInputValue(newHighlightedChunk?.action || '');
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.currentTarget.value);
+  const handleInputChange = (e?: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e!.currentTarget.value);
   };
 
   const handleSubmitAction = () => {
@@ -109,13 +110,7 @@ const DesignPage = () => {
         </Text>
       )}
       <Group className='w-full h-fit'>
-        <Input
-          size='md'
-          className='grow'
-          classNames={{
-            input:
-              'font-mono rounded bg-gray-100 w-full focus:border-emerald-500',
-          }}
+        <GenericInput
           placeholder='Describe an action here...'
           value={inputValue}
           onChange={handleInputChange}
