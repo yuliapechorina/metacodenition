@@ -10,7 +10,6 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core';
 import { arrayRemove } from 'firebase/firestore';
-import { arrayUnion } from 'firebase/firestore/lite';
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -21,8 +20,12 @@ import useUpdate from '../../hooks/useUpdate';
 import { Highlight } from './highlighter';
 
 const DesignPage = () => {
-  const { getProblemStatement, highlightChunk, removeHighlightedChunk } =
-    useProblem();
+  const {
+    highlights,
+    getProblemStatement,
+    highlightChunk,
+    removeHighlightedChunk,
+  } = useProblem();
   const [highlightedChunk, setHighlightedChunk] = useState<
     Highlight | undefined
   >();
@@ -60,13 +63,19 @@ const DesignPage = () => {
       return;
     }
 
-    if (highlightedChunk) {
-      highlightedChunk.action = inputValue;
-    }
-
-    if (user) {
+    if (user && highlights && highlightedChunk) {
+      const newHighlightedChunk = {
+        ...highlightedChunk,
+        action: inputValue,
+      };
+      setHighlightedChunk(newHighlightedChunk);
+      const newHighlights = highlights.map((highlight) =>
+        highlight.id === newHighlightedChunk.id
+          ? newHighlightedChunk
+          : highlight
+      );
       updateDocument('users', user.uid, {
-        highlights: arrayUnion(highlightedChunk),
+        highlights: newHighlights,
       });
     }
   };
