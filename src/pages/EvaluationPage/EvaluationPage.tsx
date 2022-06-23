@@ -143,7 +143,7 @@ const EvaluationPage = () => {
   };
 
   return (
-    <Stack className='h-full pt-8 pb-20'>
+    <Stack className='h-full pt-8 pb-16 overflow-auto'>
       <Group className='h-fit overflow-auto'>
         <Stack className='h-full flex-1'>
           <Title className='text-center'>Drag from here</Title>
@@ -196,7 +196,7 @@ const EvaluationPage = () => {
       </Group>
       <Button
         size='md'
-        className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 m-auto'
+        className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 m-auto flex-shrink-0'
         onClick={handleSubmitAction}
         disabled={isLoading}
       >
