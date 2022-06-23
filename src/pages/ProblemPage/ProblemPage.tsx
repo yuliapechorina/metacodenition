@@ -13,7 +13,7 @@ import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { HiOutlineRefresh } from 'react-icons/hi';
+import { HiOutlineRefresh, HiX } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
 import { auth, db } from '../../firebase';
@@ -40,6 +40,7 @@ const ProblemPage = () => {
   const [userData] = useDocumentData(userDoc);
 
   const [inputValue, setInputValue] = useState<string | undefined>(undefined);
+  const [incorrectAnswer, setIncorrectAnswer] = useState(false);
 
   useEffect(() => {
     if (questionData) {
@@ -86,6 +87,9 @@ const ProblemPage = () => {
           testCases.delete(currentTestCase);
           setCurrentTestCase(testCases?.keys().next().value);
         }
+        setIncorrectAnswer(false);
+      } else {
+        setIncorrectAnswer(true);
       }
     }
   };
@@ -145,6 +149,11 @@ const ProblemPage = () => {
               value={inputValue}
               onChange={(e?: React.ChangeEvent<HTMLInputElement>) =>
                 setInputValue(e!.target.value)
+              }
+              rightSection={
+                incorrectAnswer && (
+                  <HiX size='32px' className=' fill-red-500 p-1' />
+                )
               }
             />
             <Button
