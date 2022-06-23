@@ -172,7 +172,7 @@ const EvaluationPage = () => {
         <Stack className='h-full flex-1'>
           <Title className='text-center'>Drop in here</Title>
           <ReactSortable
-            list={getListItems(getUsedParsonsFragments())}
+            list={getUsedListItems()}
             setList={setUsedListItems}
             group='design-parsons'
             animation={100}
