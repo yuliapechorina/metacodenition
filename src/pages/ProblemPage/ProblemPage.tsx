@@ -6,12 +6,14 @@ import {
   Text,
   Title,
   TypographyStylesProvider,
+  UnstyledButton,
 } from '@mantine/core';
 import { arrayUnion, doc } from 'firebase/firestore';
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { HiOutlineRefresh } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
 import { auth, db } from '../../firebase';
@@ -54,7 +56,7 @@ const ProblemPage = () => {
 
       setTestCases(unsolvedTestCases);
     }
-  }, [questionData]);
+  }, [questionData, solvedTestCases]);
 
   useEffect(() => {
     if (userData && userData.solvedTestCases) {
@@ -88,6 +90,15 @@ const ProblemPage = () => {
     }
   };
 
+  const handleRefresh = () => {
+    let randomTestCase = currentTestCase;
+    while (randomTestCase === currentTestCase) {
+      const keys = Array.from(testCases.keys());
+      randomTestCase = keys[Math.floor(Math.random() * keys.length)];
+    }
+    setCurrentTestCase(randomTestCase);
+  };
+
   return (
     <Stack className='p-2'>
       <Title order={4}>Problem:</Title>
@@ -99,12 +110,23 @@ const ProblemPage = () => {
       <Divider />
       <Group className='w-full h-fit justify-between'>
         <Title order={4}>Check my understanding:</Title>
-        <Text>
-          Test cases solved:{' '}
-          <Text inherit component='span' className=' font-bold'>
-            {solvedTestCases.length}
+        <Group className='h-full w-fit'>
+          <Text>
+            Test cases solved:{' '}
+            <Text inherit component='span' className=' font-bold'>
+              {solvedTestCases.length}
+            </Text>
           </Text>
-        </Text>
+          <UnstyledButton
+            onClick={handleRefresh}
+            disabled={testCases.size === 0}
+          >
+            <HiOutlineRefresh
+              size='24px'
+              className=' bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+            />
+          </UnstyledButton>
+        </Group>
       </Group>
       {testCases.size === 0 ? (
         <Text>All test cases solved!</Text>
