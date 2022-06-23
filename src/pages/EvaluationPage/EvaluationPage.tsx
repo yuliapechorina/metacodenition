@@ -1,5 +1,5 @@
-import { Button, Card, Group, Stack, Title } from '@mantine/core';
-import { arrayUnion, doc } from 'firebase/firestore';
+import { Button, Card, Group, Stack, Title, Notification } from '@mantine/core';
+import { doc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -25,8 +25,6 @@ const defaultListItems: ItemInterface[] = [
   { id: 'default-8', action: 'Perform a Calculation' },
   { id: 'default-9', action: 'Print an Output' },
 ];
-
-// const defaultUsedIds: (string | number)[] = ['default-3', 'user-1'];
 
 const getIdsFromFragments = (fragments: ParsonsFragment[]) =>
   fragments.map<string | number>((fragment) => fragment.listItem.id);
@@ -57,6 +55,10 @@ const EvaluationPage = () => {
   const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
   const [userData] = useDocumentData(userDoc);
   const { isLoading, isError, updateDocument } = useUpdate();
+  const [errorNotificationVisible, setErrorNotificationVisible] =
+    useState(false);
+  const [errorNotificationDismissed, setErrorNotifcationDismissed] =
+    useState(false);
 
   const { highlights } = useProblem();
 
@@ -81,7 +83,20 @@ const EvaluationPage = () => {
         )
       );
     }
-  }, [userData, highlights, parsonsFragments]);
+    if (isError) {
+      setErrorNotificationVisible(true);
+    }
+
+    if (errorNotificationDismissed) {
+      setErrorNotificationVisible(false);
+    }
+  }, [
+    userData,
+    highlights,
+    parsonsFragments,
+    isError,
+    errorNotificationDismissed,
+  ]);
 
   const getItemsFromIds = (ids: (string | number)[]) =>
     ids
@@ -125,7 +140,6 @@ const EvaluationPage = () => {
         usedParsonsIds: getIdsFromItems(getUsedListItems()),
       });
     }
-    // console.log(getIdsFromItems(getUsedListItems()));
   };
 
   return (
@@ -188,6 +202,15 @@ const EvaluationPage = () => {
       >
         Submit
       </Button>
+      {errorNotificationVisible && (
+        <Notification
+          title='Failed to submit action'
+          color='red'
+          onClose={() => setErrorNotifcationDismissed(true)}
+        >
+          Please try again.
+        </Notification>
+      )}
     </Stack>
   );
 };
