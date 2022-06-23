@@ -44,9 +44,7 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
 
   const [problemStatement] = useState<string>(initialProblem);
 
-  const [highlights, setHighlights] = useState<Highlight[] | undefined>(
-    undefined
-  );
+  const [highlights, setHighlights] = useState<Highlight[] | undefined>([]);
 
   useEffect(() => {
     if (userData) {
@@ -55,21 +53,19 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
   }, [userData]);
 
   const highlightChunk = (chunk: Selection): Highlight | undefined => {
-    if (!highlights) {
-      return undefined;
-    }
-
     const indexPair = findHighlightInParent(chunk);
 
-    const selectedHighlight = highlights?.find(
-      (highlight) =>
-        highlight.indexPair.start <= indexPair.start &&
-        highlight.indexPair.end >= indexPair.end,
-      indexPair
-    );
+    if (highlights) {
+      const selectedHighlight = highlights?.find(
+        (highlight) =>
+          highlight.indexPair.start <= indexPair.start &&
+          highlight.indexPair.end >= indexPair.end,
+        indexPair
+      );
 
-    if (selectedHighlight || !chunk.toString) {
-      return selectedHighlight;
+      if (selectedHighlight || !chunk.toString) {
+        return selectedHighlight;
+      }
     }
 
     const newHighlight: Highlight = {
@@ -79,7 +75,11 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
       action: '',
     };
 
-    const newHighlights = [...highlights, newHighlight];
+    if (newHighlight.highlightedText === '') return undefined;
+
+    const newHighlights = highlights
+      ? [...highlights, newHighlight]
+      : [newHighlight];
     setHighlights(newHighlights);
 
     return newHighlight;
