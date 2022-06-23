@@ -1,3 +1,3 @@
-import { EvaluationPage } from './EvaluationPage';
+import EvaluationPage from './EvaluationPage';
 
 export default EvaluationPage;

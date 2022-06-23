@@ -1,7 +1,12 @@
 import { Button, Card, Group, Stack, Title } from '@mantine/core';
-import { useState } from 'react';
+import { arrayUnion, doc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { ReactSortable, ItemInterface } from 'react-sortablejs';
 import useProblem from '../../context/ProblemContext';
+import { auth, db } from '../../firebase';
+import useUpdate from '../../hooks/useUpdate';
 import { Highlight } from '../DesignPage/highlighter';
 
 type ParsonsFragment = {
@@ -21,7 +26,7 @@ const defaultListItems: ItemInterface[] = [
   { id: 'default-9', action: 'Print an Output' },
 ];
 
-const defaultUsedIds: (string | number)[] = ['default-3', 'user-1'];
+// const defaultUsedIds: (string | number)[] = ['default-3', 'user-1'];
 
 const getIdsFromFragments = (fragments: ParsonsFragment[]) =>
   fragments.map<string | number>((fragment) => fragment.listItem.id);
@@ -47,7 +52,12 @@ const generateUserFragments = (highlights: Highlight[]) =>
 const getListItems = (fragments: ParsonsFragment[]) =>
   fragments.map<ItemInterface>((fragment) => fragment.listItem);
 
-export const EvaluationPage = () => {
+const EvaluationPage = () => {
+  const [user] = useAuthState(auth);
+  const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
+  const [userData] = useDocumentData(userDoc);
+  const { isLoading, isError, updateDocument } = useUpdate();
+
   const { highlights } = useProblem();
 
   const userParsonsFragments = generateUserFragments(highlights || []);
@@ -57,12 +67,21 @@ export const EvaluationPage = () => {
   );
 
   const [unusedIds, setUnusedIds] = useState<(string | number)[]>(
-    generateUnusedIds(
-      defaultUsedIds,
-      getIdsFromFragments(userParsonsFragments.concat(defaultParsonsFragments))
-    )
+    getIdsFromFragments(userParsonsFragments.concat(defaultParsonsFragments))
   );
-  const [usedIds, setUsedIds] = useState<(string | number)[]>(defaultUsedIds);
+  const [usedIds, setUsedIds] = useState<(string | number)[]>([]);
+
+  useEffect(() => {
+    if (userData && userData.usedParsonsIds) {
+      setUsedIds(userData.usedParsonsIds);
+      setUnusedIds(
+        generateUnusedIds(
+          userData.usedParsonsIds,
+          getIdsFromFragments(parsonsFragments)
+        )
+      );
+    }
+  }, [userData, highlights, parsonsFragments]);
 
   const getItemsFromIds = (ids: (string | number)[]) =>
     ids
@@ -96,12 +115,17 @@ export const EvaluationPage = () => {
   const setUsedListItems = (newState: ItemInterface[]) =>
     setUsedIds(getIdsFromItems(newState));
 
-  const [loading, setLoading] = useState(false);
+  const handleSubmitAction = () => {
+    if (!getIdsFromItems(getUsedListItems())) {
+      return;
+    }
 
-  const onSubmit = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
-    console.log(getIdsFromItems(getUsedListItems()));
+    if (user) {
+      updateDocument('users', user.uid, {
+        usedParsonsIds: getIdsFromItems(getUsedListItems()),
+      });
+    }
+    // console.log(getIdsFromItems(getUsedListItems()));
   };
 
   return (
@@ -157,9 +181,10 @@ export const EvaluationPage = () => {
         </Stack>
       </Group>
       <Button
-        className='hover:scale-110 w-fit mx-auto bg-green-400 hover:bg-green-300'
-        onClick={onSubmit}
-        disabled={loading}
+        size='md'
+        className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 w-fit m-auto'
+        onClick={handleSubmitAction}
+        disabled={isLoading}
       >
         Submit
       </Button>
