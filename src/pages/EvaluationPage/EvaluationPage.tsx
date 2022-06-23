@@ -47,9 +47,6 @@ const generateUserFragments = (highlights: Highlight[]) =>
     userGenerated: true,
   }));
 
-const getListItems = (fragments: ParsonsFragment[]) =>
-  fragments.map<ItemInterface>((fragment) => fragment.listItem);
-
 const EvaluationPage = () => {
   const [user] = useAuthState(auth);
   const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
