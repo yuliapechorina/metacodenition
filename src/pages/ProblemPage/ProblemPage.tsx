@@ -57,7 +57,7 @@ const ProblemPage = () => {
   }, [questionData]);
 
   useEffect(() => {
-    if (userData) {
+    if (userData && userData.solvedTestCases) {
       setSolvedTestCases(userData.solvedTestCases);
     }
   }, [userData]);
