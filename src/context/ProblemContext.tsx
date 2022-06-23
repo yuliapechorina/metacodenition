@@ -10,6 +10,7 @@ import {
 } from '../pages/DesignPage/highlighter';
 
 interface IProblemContext {
+  highlights: Highlight[];
   getProblemStatement: () => string;
   highlightChunk: (chunk: Selection) => Highlight | undefined;
   removeHighlightedChunk: (highlight: Highlight) => void;
@@ -103,12 +104,19 @@ export const ProblemProvider = ({ children }: ProblemProviderProps) => {
 
   const value = React.useMemo(
     () => ({
+      highlights,
       problemStatement,
       getProblemStatement,
       highlightChunk,
       removeHighlightedChunk,
     }),
-    [problemStatement, getProblemStatement, highlightChunk]
+    [
+      highlights,
+      problemStatement,
+      getProblemStatement,
+      highlightChunk,
+      removeHighlightedChunk,
+    ]
   );
 
   useEffect(() => {
