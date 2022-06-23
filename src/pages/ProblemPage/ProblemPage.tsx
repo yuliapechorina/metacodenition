@@ -123,7 +123,7 @@ const ProblemPage = () => {
           </Text>
           <UnstyledButton
             onClick={handleRefresh}
-            disabled={testCases.size === 0}
+            disabled={testCases.size <= 1}
           >
             <HiOutlineRefresh
               size='24px'
