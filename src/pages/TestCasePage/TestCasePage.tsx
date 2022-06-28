@@ -1,4 +1,12 @@
-import { Stack, Table, Text, Title } from '@mantine/core';
+import {
+  Button,
+  Checkbox,
+  Group,
+  Stack,
+  Table,
+  Text,
+  Title,
+} from '@mantine/core';
 import { doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -35,11 +43,47 @@ const TestCasePage = () => {
     }
   }, [userData]);
 
+  const [checkboxStates, setCheckboxStates] = useState<Map<string, boolean>>(
+    new Map<string, boolean>([])
+  );
+
+  useEffect(() => {
+    if (checkboxStates.size === 0) {
+      setCheckboxStates(
+        new Map(Array.from(testCases).map(([key]) => [key, false]))
+      );
+    }
+  }, [testCases]);
+
+  const handleCheckboxChange = (key: string) => {
+    const newCheckBoxStates = checkboxStates;
+    newCheckBoxStates.set(key, !checkboxStates.get(key));
+    setCheckboxStates(newCheckBoxStates);
+  };
+
+  const [parentCheckboxState, setParentCheckboxState] =
+    useState<boolean>(false);
+
+  const handleParentCheckboxChange = () => {
+    setCheckboxStates(
+      new Map(
+        Array.from(checkboxStates).map(([key]) => [key, !parentCheckboxState])
+      )
+    );
+    setParentCheckboxState(!parentCheckboxState);
+  };
+
   const rows = Array.from(testCases).map(([key, value]) => {
     const solved = solvedTestCases.includes(key);
 
     return (
       <tr key={key}>
+        <td>
+          <Checkbox
+            checked={checkboxStates.get(key) ?? false}
+            onChange={() => handleCheckboxChange(key)}
+          />
+        </td>
         <td>{key}</td>
         <td>Not run yet!</td>
         <td>{solved ? value : 'Solve manually first!'}</td>
@@ -55,7 +99,7 @@ const TestCasePage = () => {
         in the
         <Text<typeof Link>
           component={Link}
-          to='step-1'
+          to='../step-1'
           className='text-blue-600'
         >
           {' '}
@@ -66,6 +110,13 @@ const TestCasePage = () => {
       <Table>
         <thead>
           <tr>
+            <th>
+              {' '}
+              <Checkbox
+                checked={parentCheckboxState}
+                onChange={handleParentCheckboxChange}
+              />
+            </th>
             <th>Input</th>
             <th>Output</th>
             <th>Expected</th>
@@ -73,6 +124,20 @@ const TestCasePage = () => {
         </thead>
         <tbody>{rows}</tbody>
       </Table>
+      <Group className='justify-center'>
+        <Button
+          size='md'
+          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+        >
+          Run
+        </Button>
+        <Button
+          size='md'
+          className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
+        >
+          Submit
+        </Button>
+      </Group>
     </Stack>
   );
 };
