@@ -65,11 +65,13 @@ const TestCasePage = () => {
     useState<boolean>(false);
 
   const handleParentCheckboxChange = () => {
-    setCheckboxStates(
-      new Map(
-        Array.from(checkboxStates).map(([key]) => [key, !parentCheckboxState])
-      )
+    const newCheckboxStates = new Map(
+      Array.from(checkboxStates).map(([key, value]) => {
+        const solved = solvedTestCases.includes(key);
+        return solved ? [key, !parentCheckboxState] : [key, value];
+      })
     );
+    setCheckboxStates(newCheckboxStates);
     setParentCheckboxState(!parentCheckboxState);
   };
 
@@ -82,6 +84,7 @@ const TestCasePage = () => {
           <Checkbox
             checked={checkboxStates.get(key) ?? false}
             onChange={() => handleCheckboxChange(key)}
+            disabled={!solved}
           />
         </td>
         <td>{key}</td>
