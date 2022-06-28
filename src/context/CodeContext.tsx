@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 type File = {
-  id: number;
-  name: string;
   content: string;
 };
 
 interface ICodeContext {
-  files: File[];
-  setFiles: (files: File[]) => void;
-  editFile: (fileId: number, content: string) => void;
+  file: File;
+  defaultFile: File;
+  setFile: (files: File) => void;
 }
 
 const CodeContext = React.createContext<Partial<ICodeContext>>({});
@@ -18,50 +16,28 @@ type CodeProviderProps = {
   children: React.ReactNode;
 };
 
-const defaultFiles: File[] = [
-  {
-    id: 0,
-    name: 'main.c',
-    content:
-      '#include "main.h"\n\nint main() {\n  printf("Hello, World!");\n  return 0;\n}',
-  },
-  {
-    id: 1,
-    name: 'main.h',
-    content: '#include <stdio.h>\n\nint main();',
-  },
-];
+const defaultFile: File = {
+  content: 'int main() {\n  printf("Hello, World!");\n  return 0;\n}',
+};
 
-const initialFiles: File[] =
-  JSON.parse(localStorage.getItem('files') as string) || defaultFiles;
+const initialFile: File =
+  JSON.parse(localStorage.getItem('file') as string) || defaultFile;
 
 export const CodeProvider = ({ children }: CodeProviderProps) => {
-  const [files, setFiles] = useState<File[]>(initialFiles);
-
-  const editFile = (fileId: number, content: string) => {
-    const newFiles = files.map((file) =>
-      file.id === fileId
-        ? {
-            ...file,
-            content,
-          }
-        : file
-    );
-    setFiles(newFiles);
-  };
+  const [file, setFile] = useState<File>(initialFile);
 
   const context = React.useMemo(
     () => ({
-      files,
-      setFiles,
-      editFile,
+      file,
+      defaultFile,
+      setFile,
     }),
-    [files, setFiles, editFile]
+    [file, setFile]
   );
 
   useEffect(() => {
-    localStorage.setItem('files', JSON.stringify(files));
-  }, [files]);
+    localStorage.setItem('file', JSON.stringify(file));
+  }, [file]);
 
   return (
     <CodeContext.Provider value={context}>{children}</CodeContext.Provider>
