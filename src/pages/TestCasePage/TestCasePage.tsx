@@ -56,7 +56,7 @@ const TestCasePage = () => {
   }, [testCases]);
 
   const handleCheckboxChange = (key: string) => {
-    const newCheckBoxStates = checkboxStates;
+    const newCheckBoxStates = new Map(checkboxStates);
     newCheckBoxStates.set(key, !checkboxStates.get(key));
     setCheckboxStates(newCheckBoxStates);
   };
