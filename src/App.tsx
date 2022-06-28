@@ -8,6 +8,7 @@ import ProblemPage from './pages/ProblemPage';
 import ImplementationPage from './pages/ImplementationPage';
 import DesignPage from './pages/DesignPage';
 import EvaluationPage from './pages/EvaluationPage';
+import TestCasePage from './pages/TestCasePage';
 
 const App = () => (
   <BrowserRouter>
@@ -21,7 +22,7 @@ const App = () => (
           <Route path='step-3' element={<DesignPage />} />
           <Route path='step-4' element={<EvaluationPage />} />
           <Route path='step-5' element={<ImplementationPage />} />
-          <Route path='step-6' element={<PlaceHolder elementName='Step 6' />} />
+          <Route path='step-6' element={<TestCasePage />} />
         </Route>
       </Route>
     </Routes>
