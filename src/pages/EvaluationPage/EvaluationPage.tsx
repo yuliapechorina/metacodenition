@@ -1,7 +1,7 @@
 import { Button, Card, Group, Stack, Title, Notification } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
-import useParsons from '../../context/ParsonsContext';
+import useParsons from '../../hooks/useParsons';
 
 const EvaluationPage = () => {
   const [errorNotificationVisible, setErrorNotificationVisible] =

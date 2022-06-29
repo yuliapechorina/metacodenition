@@ -16,7 +16,7 @@ import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { HiOutlineRefresh, HiX } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../util/firebase';
 import useUpdate from '../../hooks/useUpdate';
 
 const ProblemPage = () => {

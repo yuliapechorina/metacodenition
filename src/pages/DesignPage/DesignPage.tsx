@@ -15,9 +15,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
-import { auth } from '../../firebase';
+import { auth } from '../../util/firebase';
 import useUpdate from '../../hooks/useUpdate';
-import { Highlight } from './highlighter';
+import { Highlight } from '../../util/highlighter';
 
 const DesignPage = () => {
   const {

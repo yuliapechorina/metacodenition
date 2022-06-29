@@ -2,12 +2,12 @@ import { doc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { auth, db } from '../firebase';
+import { auth, db } from '../util/firebase';
 import {
   findHighlightInParent,
   applyHighlightToText,
   Highlight,
-} from '../pages/DesignPage/highlighter';
+} from '../util/highlighter';
 
 interface IProblemContext {
   highlights: Highlight[];

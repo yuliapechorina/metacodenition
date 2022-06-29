@@ -11,7 +11,8 @@ import Editor from '@monaco-editor/react';
 import { ReactNode, useState } from 'react';
 import { HiCheck, HiX } from 'react-icons/hi';
 import useCode, { Comment } from '../../context/CodeContext';
-import useParsons from '../../context/ParsonsContext';
+import useParsons from '../../hooks/useParsons';
+import getOutput from '../../util/comment-generator';
 
 type NotificationType = 'success' | 'failure';
 
@@ -65,41 +66,20 @@ const CodeEditor = () => {
     const firstLineBreakIndex = defaultFile?.content.search('\n');
     const firstLine = defaultFile?.content.slice(0, firstLineBreakIndex);
     if (file?.content.includes(firstLine!)) {
-      const newComments = getComments();
-      const newCommentIds = newComments.map((nC) => nC.id);
-      const duplicateComments =
-        file.comments?.filter((c) => newCommentIds.includes(c.id)) || [];
-      const usedCommentIds: (string | number)[] = [];
-
-      const newContentArray = file.content.split('\n');
-      duplicateComments.forEach((c) => {
-        const newText = newComments.find((nC) => nC.id === c.id)?.text;
-        const commentIndex = newContentArray.findIndex((s) => s === c.text);
-        if (
-          newText !== undefined &&
-          newContentArray[commentIndex] !== undefined
-        ) {
-          newContentArray[commentIndex] = newText;
-          usedCommentIds.push(c.id);
-        }
-      });
-
-      const commentBlock = newComments
-        ?.filter((nC) => !usedCommentIds.includes(nC.id))
-        .reduce((s, c) => `${s + c.text}\n`, '');
-      if (commentBlock) newContentArray.splice(1, 0, commentBlock);
+      const generatorOutput = getOutput(getComments, file);
       setFile!({
         ...file,
-        content: newContentArray.join('\n'),
-        comments: newComments,
+        content: generatorOutput.newContent,
+        comments: generatorOutput.newComments,
       });
       setNotification({
         type: 'success',
         content: (
           <Text>
-            Successfully generated {newComments.length} comments,
+            Successfully generated {generatorOutput.commentsGenerated} comments,
             <br />
-            of which {usedCommentIds.length} were generated in-place.
+            of which {generatorOutput.commentsUpdated} were re-generated and
+            updated.
           </Text>
         ),
       });
@@ -120,7 +100,7 @@ const CodeEditor = () => {
 
   return (
     <Stack className='overflow-hidden'>
-      <Group className='p-4'>
+      <Group className='justify-between'>
         <Title order={2}>Your Solution:</Title>
         <Button
           size='md'
