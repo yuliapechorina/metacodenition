@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
+export type Comment = {
+  id: string | number;
+  text: string;
+};
+
 type File = {
   content: string;
+  comments: Comment[];
 };
 
 interface ICodeContext {
@@ -18,6 +24,7 @@ type CodeProviderProps = {
 
 const defaultFile: File = {
   content: 'int main() {\n  printf("Hello, World!");\n  return 0;\n}',
+  comments: [],
 };
 
 const initialFile: File =
