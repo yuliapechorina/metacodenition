@@ -23,7 +23,7 @@ type CodeProviderProps = {
 };
 
 const defaultFile: File = {
-  content: 'int main() {\n  printf("Hello, World!");\n  return 0;\n}',
+  content: 'int main() {\n\tprintf("Hello, World!");\n\treturn 0;\n}',
   comments: [],
 };
 

@@ -84,7 +84,7 @@ export const ParsonsProvider = (props: ParsonsProviderProps) => {
 
   const userParsonsFragments = generateUserFragments(highlights || []);
 
-  const [parsonsFragments] = useState<ParsonsFragment[]>(
+  const [parsonsFragments, setParsonsFragments] = useState<ParsonsFragment[]>(
     userParsonsFragments.concat(defaultParsonsFragments)
   );
 
@@ -92,6 +92,12 @@ export const ParsonsProvider = (props: ParsonsProviderProps) => {
     getIdsFromFragments(userParsonsFragments.concat(defaultParsonsFragments))
   );
   const [usedIds, setUsedIds] = useState<(string | number)[]>([]);
+
+  useEffect(
+    () =>
+      setParsonsFragments(userParsonsFragments.concat(defaultParsonsFragments)),
+    [highlights]
+  );
 
   useEffect(() => {
     if (userData && userData.usedParsonsIds) {
@@ -103,7 +109,7 @@ export const ParsonsProvider = (props: ParsonsProviderProps) => {
         )
       );
     }
-  }, [userData, highlights, parsonsFragments]);
+  }, [userData, parsonsFragments]);
 
   const getItemsFromIds = (ids: (string | number)[]) =>
     ids

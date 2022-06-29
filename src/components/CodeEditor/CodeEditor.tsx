@@ -71,16 +71,18 @@ const CodeEditor = () => {
         file.comments?.filter((c) => newCommentIds.includes(c.id)) || [];
       const usedCommentIds: (string | number)[] = [];
 
-      const newContent = file.content;
+      const newContentArray = file.content.split('\n');
       duplicateComments.forEach((c) => {
         const newText = newComments.find((nC) => nC.id === c.id)?.text;
-        const contentIncludesComment = newContent.includes(c.text);
-        if (newText && contentIncludesComment) {
-          newContent.replace(c.text, newText);
+        const commentIndex = newContentArray.findIndex((s) => s === c.text);
+        if (
+          newText !== undefined &&
+          newContentArray[commentIndex] !== undefined
+        ) {
+          newContentArray[commentIndex] = newText;
           usedCommentIds.push(c.id);
         }
       });
-      const newContentArray = newContent.split('\n');
 
       const commentBlock = newComments
         ?.filter((nC) => !usedCommentIds.includes(nC.id))
