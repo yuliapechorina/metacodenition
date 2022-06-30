@@ -2,7 +2,7 @@ import { Button, Center, Stack, Text, Title } from '@mantine/core';
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, logIn } from '../../firebase';
+import { auth, logIn } from '../../util/firebase';
 
 const Login = () => {
   const [user, loading, error] = useAuthState(auth);

@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { Link } from 'react-router-dom';
-import { auth, db } from '../../firebase';
+import { auth, db } from '../../util/firebase';
 
 const TestCasePage = () => {
   const [user] = useAuthState(auth);

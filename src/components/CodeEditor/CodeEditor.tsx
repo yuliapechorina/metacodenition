@@ -1,42 +1,134 @@
-import { Stack, Tabs } from '@mantine/core';
+import {
+  Button,
+  Code,
+  Group,
+  Notification,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import Editor from '@monaco-editor/react';
-import { useState } from 'react';
-import useCode from '../../context/CodeContext';
+import { ReactNode, useState } from 'react';
+import { HiCheck, HiX } from 'react-icons/hi';
+import useCode, { Comment } from '../../context/CodeContext';
+import useParsons from '../../hooks/useParsons';
+import getOutput from '../../util/comment-generator';
 
-type CodeEditorProps = {
-  className?: string;
-};
+type NotificationType = 'success' | 'failure';
 
-const CodeEditor = (props: CodeEditorProps) => {
-  const { className } = props;
+interface INotification {
+  type: NotificationType;
+  content: ReactNode;
+}
 
-  const [activeFileIndex, setActiveFileIndex] = useState<number>(0);
-  const { files, editFile } = useCode();
+const CodeEditor = () => {
+  const { file, defaultFile, setFile } = useCode();
+  const { getUsedParsonsFragments } = useParsons();
+  const [notification, setNotification] = useState<INotification | undefined>();
 
   const handleFileEdit = (content?: string) => {
-    editFile!(files![activeFileIndex].id, content!);
+    if (content) setFile!({ ...file!, content });
+  };
+
+  const getNotificationIcon = () => {
+    switch (notification?.type) {
+      case 'success':
+        return <HiCheck size={18} />;
+      case 'failure':
+        return <HiX size={18} />;
+      default:
+        return null;
+    }
+  };
+
+  const getNotificationTitle = () =>
+    (notification!.type.at(0)?.toUpperCase() || '') +
+    notification!.type.slice(1);
+
+  const getNotificationColour = () => {
+    switch (notification?.type) {
+      case 'success':
+        return 'green';
+      case 'failure':
+        return 'red';
+      default:
+        return 'orange';
+    }
+  };
+
+  const getComments = () =>
+    getUsedParsonsFragments!().map<Comment>((fragment) => ({
+      id: fragment.listItem.id,
+      text: `\t// ${fragment.listItem.action}`,
+    }));
+
+  const generateComments = () => {
+    const firstLineBreakIndex = defaultFile?.content.search('\n');
+    const firstLine = defaultFile?.content.slice(0, firstLineBreakIndex);
+    if (file?.content.includes(firstLine!)) {
+      const generatorOutput = getOutput(getComments, file);
+      setFile!({
+        ...file,
+        content: generatorOutput.newContent,
+        comments: generatorOutput.newComments,
+      });
+      setNotification({
+        type: 'success',
+        content: (
+          <Text>
+            Successfully generated {generatorOutput.commentsGenerated} comments,
+            <br />
+            of which {generatorOutput.commentsUpdated} were re-generated and
+            updated.
+          </Text>
+        ),
+      });
+    } else
+      setNotification({
+        type: 'failure',
+        content: (
+          <Text>
+            Could not find the line
+            <br />
+            <Code className='text-md font-bold'>{firstLine}</Code>
+            <br /> Please ensure that this exists in your current solution, as
+            we can&apos;t generate comments without it!
+          </Text>
+        ),
+      });
   };
 
   return (
     <Stack className='overflow-hidden'>
-      <Tabs
-        active={activeFileIndex}
-        onTabChange={setActiveFileIndex}
-        variant='outline'
-        classNames={{ body: `${className}`, root: 'flex flex-col' }}
-        key={activeFileIndex}
-      >
-        {files?.map((file) => (
-          <Tabs.Tab label={file.name} key={file.id} />
-        ))}
-      </Tabs>
+      <Group className='justify-between p-2'>
+        <Title order={2}>Your Solution:</Title>
+        <Button
+          size='md'
+          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          onClick={() => generateComments()}
+        >
+          Auto-Generate Comments
+        </Button>
+      </Group>
       <Editor
         theme='vs'
         language='c'
-        value={files?.[activeFileIndex].content}
+        value={file?.content}
         className='shrink'
         onChange={handleFileEdit}
       />
+      {notification && (
+        <Notification
+          icon={getNotificationIcon()}
+          title={getNotificationTitle()}
+          color={getNotificationColour()}
+          className='fixed right-0 top-0 m-4 max-w-md'
+          classNames={{ title: 'text-lg' }}
+          onClose={() => setNotification(undefined)}
+        >
+          {notification.content}
+        </Notification>
+      )}
     </Stack>
   );
 };

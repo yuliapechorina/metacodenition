@@ -12,7 +12,7 @@ import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import MainLinks from '../../components/MainLinks/MainLinks';
 import { ReactComponent as TitleIcon } from './title.svg';
-import { auth } from '../../firebase';
+import { auth } from '../../util/firebase';
 
 const paths = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5', 'step-6'];
 

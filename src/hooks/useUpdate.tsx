@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { doc, updateDoc } from 'firebase/firestore/lite';
-import { db } from '../firebase';
+import { db } from '../util/firebase';
 
 const useUpdate = () => {
   const [isLoading, setLoading] = useState(false);

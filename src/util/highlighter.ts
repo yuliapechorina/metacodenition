@@ -113,7 +113,6 @@ export const applyHighlightToText = (
 ) => {
   if (!highlights || highlights.length === 0) return text;
 
-
   const sortedHighlights = orderAndCombineHighlights(highlights);
 
   const slices = generateSlices(text, sortedHighlights);
