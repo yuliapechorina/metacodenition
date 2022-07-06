@@ -102,10 +102,10 @@ const EvaluationPage = () => {
           </Stack>
         </Group>
       </ScrollArea>
-      <Center className='absolute bottom-0 w-full p-4 -translate-y-1/2 backdrop-blur-sm bg-white/60 shadow-[35px_0px_30px_-20px_rgba(0,0,0,0.3)]'>
+      <Center className='absolute bottom-0 w-full p-4 -translate-y-1/2 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
         <Button
           size='md'
-          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 drop-shadow-md'
           onClick={() => submitParsons!()}
           disabled={isLoading}
         >
