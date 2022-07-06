@@ -1,5 +1,5 @@
-import { Stack } from '@mantine/core';
-import { useState } from 'react';
+import { Notification, Stack } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { submitRun } from '../../api/codeRunner.api';
 import useCode from '../../context/CodeContext';
 import InputArea from './InputArea';
@@ -14,6 +14,19 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { file } = useCode();
   const [isError, setIsError] = useState<boolean>(false);
+  const [errorNotificationVisible, setErrorNotificationVisible] =
+    useState(false);
+  const [errorNotificationDismissed, setErrorNotifcationDismissed] =
+    useState(false);
+
+  useEffect(() => {
+    if (isError) {
+      setErrorNotificationVisible(true);
+    }
+    if (errorNotificationDismissed) {
+      setErrorNotificationVisible(false);
+    }
+  }, [isError, errorNotificationDismissed]);
 
   const run = () => {
     setLoading(true);
@@ -29,6 +42,7 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
         setIsError(false);
       } catch (error: any) {
         setIsError(true);
+        setErrorNotifcationDismissed(false);
       }
     };
     runCode();
@@ -38,6 +52,16 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
     <Stack className={className}>
       <InputArea loading={loading} runCallback={run} />
       <OutputArea loading={loading} />
+      {errorNotificationVisible && (
+        <Notification
+          title='Failed to run code'
+          color='red'
+          className='fixed top-0 right-0 m-4 max-w-md'
+          onClose={() => setErrorNotifcationDismissed(true)}
+        >
+          Please try again.
+        </Notification>
+      )}
     </Stack>
   );
 };

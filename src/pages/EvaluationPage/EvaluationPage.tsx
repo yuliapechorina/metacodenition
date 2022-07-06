@@ -130,7 +130,7 @@ const EvaluationPage = () => {
       </Center>
       {errorNotificationVisible && (
         <Notification
-          title='Failed to submit action'
+          title='Failed to submit'
           color='red'
           onClose={() => setErrorNotifcationDismissed(true)}
         >
