@@ -18,12 +18,10 @@ export const submitRun = async (
       'Content-Type': 'application/json; charset-utf-8',
     },
   };
-  const response = await axios.put(
+  const response = await axios.post(
     'https://code-runner-oxrju5up5q-ts.a.run.app/jobe/index.php/restapi/runs',
     runParameters,
     config
   );
-  console.log('SUBMIT RUN RESPONSE', response);
-  console.log('SUBMIT RUN RESPONSE DATA', response.data);
   return response.data;
 };

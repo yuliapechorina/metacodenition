@@ -1,6 +1,6 @@
 import { Stack } from '@mantine/core';
 import { useState } from 'react';
-import { submitRun } from '../../api/CodeRunnerAPI';
+import { submitRun } from '../../api/codeRunner.api';
 import useCode from '../../context/CodeContext';
 import InputArea from './InputArea';
 import OutputArea from './OutputArea';
@@ -13,6 +13,7 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   const { className } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const { file } = useCode();
+  const [isError, setIsError] = useState<boolean>(false);
 
   const run = () => {
     setLoading(true);
@@ -25,8 +26,9 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
             sourcecode: file!.content,
           },
         });
+        setIsError(false);
       } catch (error: any) {
-        console.log(error);
+        setIsError(true);
       }
     };
     runCode();
