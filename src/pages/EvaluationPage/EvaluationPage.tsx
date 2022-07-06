@@ -5,9 +5,7 @@ import {
   Stack,
   Title,
   Notification,
-  Container,
   ScrollArea,
-  Overlay,
   Center,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
