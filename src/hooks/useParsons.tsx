@@ -10,7 +10,6 @@ import useUpdate from './useUpdate';
 export type ParsonsFragment = {
   listItem: ItemInterface;
   userGenerated: boolean;
-  nestedList?: ItemInterface[];
 };
 
 const getIdsFromFragments = (fragments: ParsonsFragment[]) =>
