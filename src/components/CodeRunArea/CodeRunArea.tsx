@@ -18,6 +18,7 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
     useState(false);
   const [errorNotificationDismissed, setErrorNotifcationDismissed] =
     useState(false);
+  const [output, setOutput] = useState<string>('');
 
   useEffect(() => {
     if (isError) {
@@ -32,13 +33,14 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
     setLoading(true);
     const runCode = async () => {
       try {
-        await submitRun({
+        const result = await submitRun({
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
             sourcecode: file!.content,
           },
         });
+        setOutput(result.stdout);
         setIsError(false);
       } catch (error: any) {
         setIsError(true);
@@ -46,12 +48,12 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
       }
     };
     runCode();
-    setTimeout(setLoading, 1000, false);
+    setLoading(false);
   };
   return (
     <Stack className={className}>
       <InputArea loading={loading} runCallback={run} />
-      <OutputArea loading={loading} />
+      <OutputArea loading={loading} text={output} />
       {errorNotificationVisible && (
         <Notification
           title='Failed to run code'
