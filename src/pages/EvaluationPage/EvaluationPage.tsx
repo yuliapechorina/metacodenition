@@ -1,4 +1,13 @@
-import { Button, Card, Group, Stack, Title, Notification } from '@mantine/core';
+import {
+  Button,
+  Card,
+  Group,
+  Stack,
+  Title,
+  Notification,
+  ScrollArea,
+  Center,
+} from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import useParsons from '../../hooks/useParsons';
@@ -32,65 +41,75 @@ const EvaluationPage = () => {
   }, [isError, errorNotificationDismissed]);
 
   return (
-    <Stack className='h-full pt-8 pb-16 overflow-auto'>
-      <Group className='h-fit overflow-auto'>
-        <Stack className='h-full flex-1'>
-          <Title className='text-center'>Drag from here</Title>
-          <ReactSortable
-            list={getUnusedListItems!()}
-            setList={setUnusedListItems}
-            group='design-parsons'
-            animation={100}
-            className='flex flex-col space-y-6 h-full p-4 m-4 rounded-md'
-          >
-            {getUnusedParsonsFragments!().map((fragment) => (
-              <div key={fragment.listItem.id}>
-                <Card
-                  shadow='sm'
-                  p='md'
-                  className={`bg-gray-100 cursor-grab h-fit${
-                    fragment.userGenerated && ' font-bold'
-                  }`}
-                >
-                  {fragment.listItem.action}
-                </Card>
-              </div>
-            ))}
-          </ReactSortable>
-        </Stack>
-        <Stack className='h-full flex-1'>
-          <Title className='text-center'>Drop in here</Title>
-          <ReactSortable
-            list={getUsedListItems!()}
-            setList={setUsedListItems}
-            group='design-parsons'
-            animation={100}
-            className='flex flex-col space-y-6 h-full p-4 m-4 rounded-md'
-          >
-            {getUsedParsonsFragments!().map((fragment) => (
-              <div key={fragment.listItem.id}>
-                <Card
-                  shadow='sm'
-                  p='md'
-                  className={`bg-gray-100 cursor-grab h-fit${
-                    fragment.userGenerated && ' font-bold'
-                  }`}
-                >
-                  {fragment.listItem.action}
-                </Card>
-              </div>
-            ))}
-          </ReactSortable>
-        </Stack>
-      </Group>
-      <Button
-        size='md'
-        className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 m-auto flex-shrink-0'
-        onClick={() => submitParsons!()}
-        disabled={isLoading}
-      >
-        Submit
-      </Button>
+    <Stack className='h-full p-0 bg-gray-100 z-10 relative'>
+      <ScrollArea className=''>
+        <Group className='items-start pb-32'>
+          <Stack spacing={0} className='h-full flex-1'>
+            <Title order={2} className='text-center my-2'>
+              Drag from here
+            </Title>
+            <ReactSortable
+              list={getUnusedListItems!()}
+              setList={setUnusedListItems}
+              group='design-parsons'
+              animation={100}
+              className='flex flex-col space-y-4 h-full px-4 mx-4'
+            >
+              {getUnusedParsonsFragments!().map((fragment) => (
+                <div key={fragment.listItem.id}>
+                  <Card
+                    shadow='sm'
+                    radius='md'
+                    p='md'
+                    className={`bg-gray-50 cursor-grab h-fit ${
+                      fragment.userGenerated && ' font-bold'
+                    }`}
+                  >
+                    {fragment.listItem.action}
+                  </Card>
+                </div>
+              ))}
+            </ReactSortable>
+          </Stack>
+          <Stack spacing={0} className='h-full flex-1 space-y-0'>
+            <Title order={2} className='my-2 text-center'>
+              Drop in here
+            </Title>
+            <ReactSortable
+              list={getUsedListItems!()}
+              setList={setUsedListItems}
+              group='design-parsons'
+              animation={100}
+              className='flex flex-col space-y-4 h-full px-4 mx-4'
+            >
+              {getUsedParsonsFragments!().map((fragment) => (
+                <div key={fragment.listItem.id}>
+                  <Card
+                    shadow='sm'
+                    radius='md'
+                    p='md'
+                    className={`bg-white cursor-grab h-fit${
+                      fragment.userGenerated && ' font-bold'
+                    }`}
+                  >
+                    {fragment.listItem.action}
+                  </Card>
+                </div>
+              ))}
+            </ReactSortable>
+          </Stack>
+        </Group>
+      </ScrollArea>
+      <Center className='absolute bottom-0 w-full p-4 -translate-y-1/2 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
+        <Button
+          size='md'
+          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 drop-shadow-md'
+          onClick={() => submitParsons!()}
+          disabled={isLoading}
+        >
+          Submit
+        </Button>
+      </Center>
       {errorNotificationVisible && (
         <Notification
           title='Failed to submit action'
