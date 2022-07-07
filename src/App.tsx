@@ -13,6 +13,7 @@ import AssignmentPage from './pages/AssignmentPage';
 import AssignmentSubmit from './pages/AssignmentSubmit';
 import useInterventions from './hooks/useInterventions';
 import PageNotFound from './pages/PageNotFound';
+import FirebaseAnalytics from './components/FirebaseAnalytics';
 
 const App = () => {
   const { interventions } = useInterventions();
@@ -89,6 +90,7 @@ const App = () => {
           <Route path='*' element={<PageNotFound />} />
         </Route>
       </Routes>
+      <FirebaseAnalytics />
     </BrowserRouter>
   );
 };

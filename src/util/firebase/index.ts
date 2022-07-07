@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { initializeAnalytics } from 'firebase/analytics';
 import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
@@ -13,6 +14,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+initializeAnalytics(app, {
+  config: {
+    send_page_view: false,
+  },
+});
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
