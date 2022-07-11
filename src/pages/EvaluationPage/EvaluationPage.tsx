@@ -61,7 +61,7 @@ const EvaluationPage = () => {
                     shadow='sm'
                     radius='md'
                     p='md'
-                    className={`bg-gray-50 cursor-grab h-fit ${
+                    className={`bg-white cursor-grab h-fit ${
                       fragment.userGenerated && ' font-bold'
                     }`}
                   >
