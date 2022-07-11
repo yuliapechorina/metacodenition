@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { Link } from 'react-router-dom';
+import ProblemPopover from '../../components/ProblemPopover';
 import { auth, db } from '../../util/firebase';
 
 const TestCasePage = () => {
@@ -27,6 +28,8 @@ const TestCasePage = () => {
 
   const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
   const [userData] = useDocumentData(userDoc);
+
+  const [isProblemOpened, setProblemOpened] = useState(false);
 
   useEffect(() => {
     if (questionData) {
@@ -96,7 +99,10 @@ const TestCasePage = () => {
 
   return (
     <Stack className='p-2 overflow-y-auto h-full'>
-      <Title order={4}>Run test cases</Title>
+      <Group className='justify-between p-2'>
+        <Title order={4}>Run test cases</Title>
+        <ProblemPopover opened={isProblemOpened} setOpened={setProblemOpened} />
+      </Group>
       <Text>
         You&apos;ll only be able to run test cases you&apos;ve previously solved
         in the

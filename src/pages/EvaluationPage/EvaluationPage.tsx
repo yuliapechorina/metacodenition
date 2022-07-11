@@ -7,9 +7,11 @@ import {
   Notification,
   ScrollArea,
   Center,
+  Text,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
+import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
 
 const EvaluationPage = () => {
@@ -17,6 +19,7 @@ const EvaluationPage = () => {
     useState(false);
   const [errorNotificationDismissed, setErrorNotifcationDismissed] =
     useState(false);
+  const [isProblemOpened, setProblemOpened] = useState(false);
 
   const {
     submitParsons,
@@ -42,7 +45,18 @@ const EvaluationPage = () => {
 
   return (
     <Stack className='h-full p-0 bg-gray-100 z-10 relative'>
-      <ScrollArea className=''>
+      <ScrollArea>
+        <Group className='justify-between p-2'>
+          <Text className='p-2'>
+            Task: Design your program by dragging and dropping lines to the
+            right.
+          </Text>
+          <ProblemPopover
+            className='pr-4'
+            opened={isProblemOpened}
+            setOpened={setProblemOpened}
+          />
+        </Group>
         <Group className='items-start pb-32'>
           <Stack spacing={0} className='h-full flex-1'>
             <Title order={2} className='text-center my-2'>

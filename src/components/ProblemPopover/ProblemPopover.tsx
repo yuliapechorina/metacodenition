@@ -12,9 +12,14 @@ import useProblem from '../../context/ProblemContext';
 type ProblemPopoverProps = {
   opened: boolean;
   setOpened: (value: React.SetStateAction<boolean>) => void;
+  className?: string;
 };
 
-const ProblemPopover = ({ opened, setOpened }: ProblemPopoverProps) => {
+const ProblemPopover = ({
+  opened,
+  setOpened,
+  className,
+}: ProblemPopoverProps) => {
   const { getProblemStatement } = useProblem();
 
   const handleClickOpenProblem = () => {
@@ -43,6 +48,7 @@ const ProblemPopover = ({ opened, setOpened }: ProblemPopoverProps) => {
       withArrow
       title='Problem:'
       classNames={{
+        root: className,
         body: 'border-gray-300 border-sm',
         header: 'border-gray-300 border-sm',
         popover: 'bg-transparent backdrop-blur-md',
@@ -56,6 +62,10 @@ const ProblemPopover = ({ opened, setOpened }: ProblemPopoverProps) => {
       </Text>
     </Popover>
   );
+};
+
+ProblemPopover.defaultProps = {
+  className: '',
 };
 
 export default ProblemPopover;
