@@ -51,8 +51,8 @@ const ProblemPopover = ({
         root: className,
         body: 'border-gray-300 border-sm',
         header: 'border-gray-300 border-sm',
-        popover: 'bg-transparent backdrop-blur-md',
-        arrow: 'bg-transparent backdrop-blur-md border-gray-300 border-sm mr-1',
+        popover: 'bg-white/30 backdrop-blur-md',
+        arrow: 'bg-white/30 backdrop-blur-md border-gray-300 border-sm mr-1',
       }}
     >
       <Text className='text-justify'>

@@ -98,8 +98,8 @@ const TestCasePage = () => {
   });
 
   return (
-    <Stack className='p-2 overflow-y-auto h-full'>
-      <Group className='justify-between p-2'>
+    <Stack className='p-4 overflow-y-auto h-full'>
+      <Group className='justify-between'>
         <Title order={4}>Run test cases</Title>
         <ProblemPopover opened={isProblemOpened} setOpened={setProblemOpened} />
       </Group>

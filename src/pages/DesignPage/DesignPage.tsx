@@ -95,7 +95,19 @@ const DesignPage = () => {
   };
 
   return (
-    <Stack className='p-2 overflow-y-auto h-full'>
+    <Stack className='p-4 overflow-y-auto h-full'>
+      <Text>
+        <Text inherit component='span' className='font-bold'>
+          Task:{' '}
+        </Text>
+        Identify and highlight key phrases of the problem statement and assign
+        an action to achieve it.
+        <br />
+        <Text inherit component='span' className='italic'>
+          Hint: Highlight the parts of the problem statement that require code
+          to achieve, for example &quot;multiply the result by 3&quot;.
+        </Text>
+      </Text>
       <Title order={4}>Highlight a Key Phrase:</Title>
       <Text className='text-justify'>
         <TypographyStylesProvider

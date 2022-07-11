@@ -102,8 +102,8 @@ const CodeEditor = () => {
 
   return (
     <Stack className='overflow-hidden'>
-      <Group className='justify-between p-2'>
-        <Title order={2}>Your Solution:</Title>
+      <Group className='justify-between p-4'>
+        <Title order={4}>Your Solution:</Title>
         <Group>
           <Button
             size='xs'

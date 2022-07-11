@@ -104,7 +104,7 @@ const ProblemPage = () => {
   };
 
   return (
-    <Stack className='p-2'>
+    <Stack className='p-4'>
       <Title order={4}>Problem:</Title>
       <Text className='text-justify'>
         <TypographyStylesProvider>

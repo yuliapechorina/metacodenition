@@ -2,7 +2,6 @@ import { Stack } from '@mantine/core';
 import React from 'react';
 import {
   HiOutlineQuestionMarkCircle,
-  HiOutlineDocumentDuplicate,
   HiOutlineLightBulb,
   HiOutlineClipboardList,
   HiOutlineTerminal,
