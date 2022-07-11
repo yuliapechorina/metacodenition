@@ -19,17 +19,7 @@ const data = [
       />
     ),
     label: 'Understanding the problem',
-    pathName: 'step-1',
-  },
-  {
-    icon: (
-      <HiOutlineDocumentDuplicate
-        size={24}
-        className='bg-pink-100 stroke-pink-600 rounded-md p-0.5'
-      />
-    ),
-    label: 'Searching for similar problems',
-    pathName: 'step-2',
+    pathName: 'problem',
   },
   {
     icon: (
@@ -39,7 +29,7 @@ const data = [
       />
     ),
     label: 'Designing a solution',
-    pathName: 'step-3',
+    pathName: 'design',
   },
   {
     icon: (
@@ -49,7 +39,7 @@ const data = [
       />
     ),
     label: 'Evaluating a solution',
-    pathName: 'step-4',
+    pathName: 'evaluation',
   },
   {
     icon: (
@@ -59,7 +49,7 @@ const data = [
       />
     ),
     label: 'Implementing a solution',
-    pathName: 'step-5',
+    pathName: 'implementation',
   },
   {
     icon: (
@@ -69,7 +59,7 @@ const data = [
       />
     ),
     label: 'Evaluating implemented solution',
-    pathName: 'step-6',
+    pathName: 'test-cases',
   },
 ];
 

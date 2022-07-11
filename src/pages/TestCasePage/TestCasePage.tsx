@@ -102,7 +102,7 @@ const TestCasePage = () => {
         in the
         <Text<typeof Link>
           component={Link}
-          to='../step-1'
+          to='../problem'
           className='text-blue-600'
         >
           {' '}
