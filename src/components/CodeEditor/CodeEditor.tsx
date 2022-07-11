@@ -13,6 +13,7 @@ import { HiCheck, HiX } from 'react-icons/hi';
 import useCode, { Comment } from '../../context/CodeContext';
 import useParsons from '../../hooks/useParsons';
 import getOutput from '../../util/comment-generator';
+import ProblemPopover from '../ProblemPopover';
 
 type NotificationType = 'success' | 'failure';
 
@@ -25,6 +26,7 @@ const CodeEditor = () => {
   const { file, defaultFile, setFile } = useCode();
   const { getUsedParsonsFragments } = useParsons();
   const [notification, setNotification] = useState<INotification | undefined>();
+  const [isProblemOpened, setProblemOpened] = useState(false);
 
   const handleFileEdit = (content?: string) => {
     if (content) setFile!({ ...file!, content });
@@ -102,13 +104,19 @@ const CodeEditor = () => {
     <Stack className='overflow-hidden'>
       <Group className='justify-between p-2'>
         <Title order={2}>Your Solution:</Title>
-        <Button
-          size='md'
-          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-          onClick={() => generateComments()}
-        >
-          Auto-Generate Comments
-        </Button>
+        <Group>
+          <Button
+            size='xs'
+            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+            onClick={() => generateComments()}
+          >
+            Auto-Generate Comments
+          </Button>
+          <ProblemPopover
+            opened={isProblemOpened}
+            setOpened={setProblemOpened}
+          />
+        </Group>
       </Group>
       <Editor
         theme='vs'
