@@ -1,11 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
 
 export type NotificationType = 'success' | 'failure';
 
@@ -35,8 +28,6 @@ export const NotificationProvider = ({
     setNotifications([...notifications, notification]);
   const removeNotification = (notification: INotification) =>
     setNotifications(notifications.filter((n) => n !== notification));
-
-  useEffect(() => console.log(notifications), [notifications]);
 
   const value = useMemo(
     () => ({
