@@ -12,7 +12,8 @@ import {
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { HiOutlineArrowRight, HiOutlineRefresh, HiX } from 'react-icons/hi';
+import { HiOutlineRefresh, HiX } from 'react-icons/hi';
+import { IoShuffle } from 'react-icons/io5';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
 import { auth } from '../../util/firebase';
@@ -94,7 +95,10 @@ const ProblemPage = () => {
             <Text>
               Test cases solved:{' '}
               <Text inherit component='span' className=' font-bold'>
-                {testCases.filter((tc) => tc.solved).length}
+                {
+                  testCases.filter((tc) => tc.solved && !tc.student_generated)
+                    .length
+                }
               </Text>
             </Text>
             <UnstyledButton onClick={handleReset} disabled={noneSolved}>
@@ -108,7 +112,7 @@ const ProblemPage = () => {
               />
             </UnstyledButton>
             <UnstyledButton onClick={handleNext} disabled={allSolved}>
-              <HiOutlineArrowRight
+              <IoShuffle
                 size='24px'
                 className={
                   allSolved

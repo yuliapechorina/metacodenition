@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Button,
   Center,
   Checkbox,
@@ -10,12 +9,15 @@ import {
   Text,
   TextInput,
   Title,
-  Notification,
+  UnstyledButton,
 } from '@mantine/core';
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import ProblemPopover from '../../components/ProblemPopover';
+import useNotifications, {
+  INotification,
+} from '../../context/NotificationContext';
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
 
 const TestCasePage = () => {
@@ -24,19 +26,14 @@ const TestCasePage = () => {
   const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
   const [loading, setLoading] = useState(false);
 
-  type NotificationType = 'success' | 'failure';
-  interface INotification {
-    type: NotificationType;
-    content: ReactNode;
-  }
-  const [notifications, setNotifications] = useState<INotification[]>([]);
-
   const [isProblemOpened, setProblemOpened] = useState(false);
 
   const [displayInputRow, setDisplayInputRow] = useState(false);
 
   const [parentCheckboxState, setParentCheckboxState] =
     useState<boolean>(false);
+
+  const { addNotification } = useNotifications();
 
   const handleParentCheckboxChange = (value: boolean) => {
     setSelectedTestCases(
@@ -56,46 +53,21 @@ const TestCasePage = () => {
 
     const notification: INotification =
       passCount === selectedTestCases.length
-        ? { type: 'success', content: 'All selected test cases passed!' }
+        ? {
+            type: 'success',
+            content: <Text>All selected test cases passed!</Text>,
+          }
         : {
             type: 'failure',
-            content: `${selectedTestCases.length - passCount}/${
-              selectedTestCases.length
-            } test cases failed!`,
+            content: (
+              <Text>{`${selectedTestCases.length - passCount}/${
+                selectedTestCases.length
+              } test cases failed!`}</Text>
+            ),
           };
 
-    setNotifications([...notifications, notification]);
+    addNotification!(notification);
     setLoading(false);
-  };
-
-  const getNotificationIcon = (notification: INotification) => {
-    switch (notification?.type) {
-      case 'success':
-        return <HiCheck size={18} />;
-      case 'failure':
-        return <HiX size={18} />;
-      default:
-        return null;
-    }
-  };
-
-  const getNotificationTitle = (notification: INotification) =>
-    (notification!.type.at(0)?.toUpperCase() || '') +
-    notification!.type.slice(1);
-
-  const getNotificationColour = (notification: INotification) => {
-    switch (notification?.type) {
-      case 'success':
-        return 'green';
-      case 'failure':
-        return 'red';
-      default:
-        return 'orange';
-    }
-  };
-
-  const removeNotification = (notification: INotification) => {
-    setNotifications(notifications.filter((n) => n !== notification));
   };
 
   const handleCheckboxChange = (testCase: ITestCase, selected: boolean) =>
@@ -145,6 +117,7 @@ const TestCasePage = () => {
             onChange={(e) =>
               setInput({ ...inputTestCase, input: e.currentTarget.value })
             }
+            className='max-w-md'
           />
         </td>
         <td className='whitespace-pre'>
@@ -156,22 +129,23 @@ const TestCasePage = () => {
             onChange={(e) =>
               setInput({ ...inputTestCase, expected: e.currentTarget.value })
             }
+            className='max-w-md'
           />
         </td>
       </tr>
       <tr>
         <td colSpan={4}>
-          <Center>
+          <Center className='space-x-4'>
             <Button
               size='sm'
-              className='bg-green-500 fill-green-50 hover:bg-green-600'
+              className='bg-emerald-500 fill-green-50 hover:bg-emerald-600'
               onClick={() => saveTestCase()}
             >
               <HiCheck />
             </Button>
             <Button
               size='sm'
-              className='bg-red-500 fill-red-50 hover:bg-red-600'
+              className='bg-rose-500 fill-red-50 hover:bg-rose-600'
               onClick={() => removeTestCase()}
             >
               <HiX />
@@ -206,14 +180,19 @@ const TestCasePage = () => {
           <td>{testCase.input}</td>
           <td className='whitespace-pre'>{testCase.output || 'not run yet'}</td>
           <td>
-            <Center>
-              {testCase.solved ? testCase.expected : 'Solve manually first!'}
+            <Group className='inline-flex items-center '>
+              <Text size='sm'>
+                {testCase.solved ? testCase.expected : 'Solve manually first!'}
+              </Text>
               {testCase.student_generated && (
-                <ActionIcon onClick={() => deleteUserTestCase(testCase)}>
+                <UnstyledButton
+                  onClick={() => deleteUserTestCase(testCase)}
+                  className='hover:bg-gray-100 p-2'
+                >
                   <HiTrash />
-                </ActionIcon>
+                </UnstyledButton>
               )}
-            </Center>
+            </Group>
           </td>
         </tr>
       ))}
@@ -223,9 +202,13 @@ const TestCasePage = () => {
         <tr>
           <td colSpan={4}>
             <Center>
-              <ActionIcon size='lg' onClick={() => addTestCase()}>
+              <UnstyledButton
+                onClick={() => addTestCase()}
+                className='hover:bg-gray-100 inline-flex items-center p-2 text-sm space-x-1'
+              >
+                <Text size='sm'>Add your own</Text>
                 <HiPlus />
-              </ActionIcon>
+              </UnstyledButton>
             </Center>
           </td>
         </tr>
@@ -293,27 +276,6 @@ const TestCasePage = () => {
             Submit
           </Button>
         </Group>
-        <ScrollArea
-          type='hover'
-          className='!fixed right-0 top-0 mt-4 mb-4 pb-8 ml-8 mr-4 pr-4 max-w-md h-full'
-        >
-          <Stack className='h-full'>
-            {notifications.map((notification, i) => (
-              <Notification
-                icon={getNotificationIcon(notification)}
-                title={getNotificationTitle(notification)}
-                color={getNotificationColour(notification)}
-                className='backdrop-blur-sm bg-transparent'
-                classNames={{ title: 'text-lg' }}
-                onClose={() => removeNotification(notification)}
-                // eslint-disable-next-line react/no-array-index-key
-                key={i}
-              >
-                {notification.content}
-              </Notification>
-            ))}
-          </Stack>
-        </ScrollArea>
       </Stack>
     </ScrollArea>
   );
