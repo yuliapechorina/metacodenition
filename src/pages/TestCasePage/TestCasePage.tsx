@@ -200,7 +200,7 @@ const TestCasePage = () => {
               {testCase.student_generated && (
                 <UnstyledButton
                   onClick={() => deleteUserTestCase(testCase)}
-                  className='hover:bg-gray-100 p-2'
+                  className='hover:bg-gray-100 p-2 rounded-md'
                 >
                   <HiTrash />
                 </UnstyledButton>
@@ -217,7 +217,7 @@ const TestCasePage = () => {
             <Center>
               <UnstyledButton
                 onClick={() => addTestCase()}
-                className='hover:bg-gray-100 inline-flex items-center p-2 text-sm space-x-1'
+                className='hover:bg-gray-100 inline-flex items-center p-3 text-sm space-x-1 rounded-md'
               >
                 <Text size='sm'>Add your own</Text>
                 <HiPlus />

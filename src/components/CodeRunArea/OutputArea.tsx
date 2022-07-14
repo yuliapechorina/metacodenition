@@ -12,7 +12,7 @@ const OutputArea = (props: OutputAreaProps) => {
     <Stack className='h-full pb-12'>
       <LoadingOverlay visible={loading} />
       <Text className='text-lg'>Output</Text>
-      <Code className='text-base bg-gray-100 p-4 rounded-md overflow-y-auto overflow-x-hidden fit-content mb-14 whitespace-pre'>
+      <Code className='text-base min-h-10 bg-gray-100 p-4 rounded-md overflow-y-auto overflow-x-hidden fit-content mb-14 whitespace-pre'>
         {text}
       </Code>
     </Stack>
