@@ -9,66 +9,33 @@ import {
   TypographyStylesProvider,
   UnstyledButton,
 } from '@mantine/core';
-import { arrayUnion, doc } from 'firebase/firestore';
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { HiOutlineRefresh, HiX } from 'react-icons/hi';
+import { HiOutlineArrowRight, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
-import { auth, db } from '../../util/firebase';
+import { auth } from '../../util/firebase';
 import useUpdate from '../../hooks/useUpdate';
+import useTestCases, { ITestCase } from '../../hooks/useTestCases';
 
 const ProblemPage = () => {
   const { getProblemStatement } = useProblem();
   const [user] = useAuthState(auth);
   const { isLoading, updateDocument } = useUpdate();
 
-  const [testCases, setTestCases] = useState<Map<string, number>>(
-    new Map<string, number>([])
-  );
+  const { testCases, getRandomUnsolvedTestCase, markAsSolved } = useTestCases();
 
-  const [currentTestCase, setCurrentTestCase] = useState<string | undefined>(
+  const [currentTestCase, setCurrentTestCase] = useState<ITestCase | undefined>(
     undefined
   );
-  const [solvedTestCases, setSolvedTestCases] = useState<string[]>([]);
-
-  const questionDoc = doc(db, 'questions', 'wIK4Zf2d0ZKLpnnzsfxp');
-  const [questionData] = useDocumentData(questionDoc);
-
-  const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
-  const [userData] = useDocumentData(userDoc);
 
   const [inputValue, setInputValue] = useState<string | undefined>(undefined);
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
 
   useEffect(() => {
-    if (questionData) {
-      const availableTestCases = new Map<string, number>(
-        Object.entries(questionData.testCases)
-      );
-      const unsolvedTestCases = new Map<string, number>([]);
-
-      availableTestCases.forEach((value, key) => {
-        if (!solvedTestCases.includes(key)) {
-          unsolvedTestCases.set(key, value);
-        }
-      });
-
-      setTestCases(unsolvedTestCases);
-    }
-  }, [questionData, solvedTestCases]);
-
-  useEffect(() => {
-    if (userData && userData.solvedTestCases) {
-      setSolvedTestCases(userData.solvedTestCases);
-    }
-  }, [userData]);
-
-  useEffect(() => {
-    if (testCases.size !== 0) {
-      setCurrentTestCase(testCases?.keys().next().value);
+    if (testCases.length !== 0) {
+      setCurrentTestCase(getRandomUnsolvedTestCase());
     }
   }, [testCases]);
 
@@ -77,17 +44,19 @@ const ProblemPage = () => {
       return;
     }
 
-    const answer = testCases.get(currentTestCase);
-    if (answer) {
-      if (Number(inputValue) === Number(answer)) {
+    const { expected } = currentTestCase;
+    if (expected) {
+      if (inputValue === expected && currentTestCase !== undefined) {
+        const solvedTestCases = [
+          ...testCases.filter((tc) => tc.solved).map((tc) => tc.input),
+          currentTestCase.input,
+        ];
         updateDocument('users', user!.uid, {
-          solvedTestCases: arrayUnion(currentTestCase),
+          solvedTestCases,
         });
+        markAsSolved(currentTestCase);
         setInputValue('');
-        if (testCases.size !== 0) {
-          testCases.delete(currentTestCase);
-          setCurrentTestCase(testCases?.keys().next().value);
-        }
+        setCurrentTestCase(getRandomUnsolvedTestCase());
         setIncorrectAnswer(false);
       } else {
         setIncorrectAnswer(true);
@@ -95,17 +64,22 @@ const ProblemPage = () => {
     }
   };
 
-  const handleRefresh = () => {
-    let randomTestCase = currentTestCase;
-    while (randomTestCase === currentTestCase) {
-      const keys = Array.from(testCases.keys());
-      randomTestCase = keys[Math.floor(Math.random() * keys.length)];
-    }
-    setCurrentTestCase(randomTestCase);
+  const handleNext = () => {
+    setCurrentTestCase(getRandomUnsolvedTestCase());
   };
 
+  const handleReset = () => {
+    updateDocument('users', user!.uid, {
+      solvedTestCases: '',
+    });
+    setCurrentTestCase(getRandomUnsolvedTestCase());
+  };
+
+  const noneSolved = testCases.filter((tc) => tc.solved).length === 0;
+  const allSolved = testCases.filter((tc) => !tc.solved).length === 0;
+
   return (
-    <ScrollArea className='h-full'>
+    <ScrollArea>
       <Stack className='p-4'>
         <Title order={4}>Problem:</Title>
         <Text className='text-justify'>
@@ -120,28 +94,39 @@ const ProblemPage = () => {
             <Text>
               Test cases solved:{' '}
               <Text inherit component='span' className=' font-bold'>
-                {solvedTestCases.length}
+                {testCases.filter((tc) => tc.solved).length}
               </Text>
             </Text>
-            <UnstyledButton
-              onClick={handleRefresh}
-              disabled={testCases.size <= 1}
-            >
+            <UnstyledButton onClick={handleReset} disabled={noneSolved}>
               <HiOutlineRefresh
                 size='24px'
-                className=' bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                className={
+                  noneSolved
+                    ? 'bg-emerald-50 stroke-emerald-500 rounded-full p-1'
+                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                }
+              />
+            </UnstyledButton>
+            <UnstyledButton onClick={handleNext} disabled={allSolved}>
+              <HiOutlineArrowRight
+                size='24px'
+                className={
+                  allSolved
+                    ? 'bg-emerald-50 stroke-emerald-500 rounded-full p-1'
+                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                }
               />
             </UnstyledButton>
           </Group>
         </Group>
-        {testCases.size === 0 ? (
+        {allSolved ? (
           <Text>All test cases solved!</Text>
         ) : (
           <>
             <Text>
               Given input:{' '}
               <Text inherit component='span' className=' font-bold'>
-                {currentTestCase}
+                {currentTestCase?.input}
               </Text>
             </Text>
             <Text>What is the output? </Text>

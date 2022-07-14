@@ -4,6 +4,7 @@ export interface IRunSpec {
   language_id: string;
   sourcefilename: string;
   sourcecode: string;
+  input?: string;
 }
 
 export interface IRunParameters {

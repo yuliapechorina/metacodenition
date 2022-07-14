@@ -1,5 +1,5 @@
 import { Notification, Stack } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { submitRun } from '../../api/codeRunner.api';
 import useCode from '../../context/CodeContext';
 import InputArea from './InputArea';
@@ -12,13 +12,18 @@ type CodeRunAreaProps = {
 const CodeRunArea = (props: CodeRunAreaProps) => {
   const { className } = props;
   const [loading, setLoading] = useState<boolean>(false);
-  const { file } = useCode();
+  const { getRunFile } = useCode();
   const [isError, setIsError] = useState<boolean>(false);
   const [errorNotificationVisible, setErrorNotificationVisible] =
     useState(false);
   const [errorNotificationDismissed, setErrorNotifcationDismissed] =
     useState(false);
   const [output, setOutput] = useState<string>('');
+  const [input, setInput] = useState('');
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInput(event.target.value);
+  };
 
   useEffect(() => {
     if (isError) {
@@ -37,10 +42,11 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
-            sourcecode: file!.content,
+            sourcecode: getRunFile!(),
+            input,
           },
         });
-        setOutput(result.stdout);
+        setOutput(result.stdout || result.stderr || result.cmpinfo);
         setIsError(false);
       } catch (error: any) {
         setIsError(true);
@@ -52,7 +58,12 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   };
   return (
     <Stack className={className}>
-      <InputArea loading={loading} runCallback={run} />
+      <InputArea
+        loading={loading}
+        value={input}
+        onChange={handleInputChange}
+        runCallback={run}
+      />
       <OutputArea loading={loading} text={output} />
       {errorNotificationVisible && (
         <Notification
