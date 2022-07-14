@@ -12,7 +12,7 @@ import {
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { HiOutlineRefresh, HiX } from 'react-icons/hi';
+import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
 import GenericInput from '../../components/generics/GenericInput';
 import useProblem from '../../context/ProblemContext';
@@ -35,7 +35,7 @@ const ProblemPage = () => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
 
   useEffect(() => {
-    if (testCases.length !== 0) {
+    if (testCases.length !== 0 && currentTestCase === undefined) {
       setCurrentTestCase(getRandomUnsolvedTestCase());
     }
   }, [testCases]);
@@ -56,8 +56,7 @@ const ProblemPage = () => {
           solvedTestCases,
         });
         markAsSolved(currentTestCase);
-        setInputValue('');
-        setCurrentTestCase(getRandomUnsolvedTestCase());
+        setCurrentTestCase({ ...currentTestCase, solved: true });
         setIncorrectAnswer(false);
       } else {
         setIncorrectAnswer(true);
@@ -66,6 +65,7 @@ const ProblemPage = () => {
   };
 
   const handleNext = () => {
+    setInputValue('');
     setCurrentTestCase(getRandomUnsolvedTestCase());
   };
 
@@ -80,7 +80,7 @@ const ProblemPage = () => {
   const allSolved = testCases.filter((tc) => !tc.solved).length === 0;
 
   return (
-    <ScrollArea>
+    <ScrollArea className='h-full'>
       <Stack className='p-4'>
         <Title order={4}>Problem:</Title>
         <Text className='text-justify'>
@@ -106,7 +106,7 @@ const ProblemPage = () => {
                 size='24px'
                 className={
                   noneSolved
-                    ? 'bg-emerald-50 stroke-emerald-500 rounded-full p-1'
+                    ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
                     : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
                 }
               />
@@ -116,7 +116,7 @@ const ProblemPage = () => {
                 size='24px'
                 className={
                   allSolved
-                    ? 'bg-emerald-50 stroke-emerald-500 rounded-full p-1'
+                    ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
                     : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
                 }
               />
@@ -142,19 +142,33 @@ const ProblemPage = () => {
                   setInputValue(e!.target.value)
                 }
                 rightSection={
-                  incorrectAnswer && (
+                  (incorrectAnswer && (
                     <HiX size='32px' className=' fill-red-500 p-1' />
-                  )
+                  )) ||
+                  (currentTestCase?.solved && (
+                    <HiCheck size='32px' className=' fill-green-500 p-1' />
+                  ))
                 }
               />
-              <Button
-                size='md'
-                className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-                onClick={handleSubmitInput}
-                disabled={isLoading}
-              >
-                Submit
-              </Button>
+              {currentTestCase?.solved ? (
+                <Button
+                  size='md'
+                  className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+                  onClick={handleNext}
+                  disabled={isLoading}
+                >
+                  Next Question
+                </Button>
+              ) : (
+                <Button
+                  size='md'
+                  className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+                  onClick={handleSubmitInput}
+                  disabled={isLoading}
+                >
+                  Submit
+                </Button>
+              )}
             </Group>
           </>
         )}
