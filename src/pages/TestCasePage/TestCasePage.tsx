@@ -98,6 +98,19 @@ const TestCasePage = () => {
   };
 
   const saveTestCase = () => {
+    if (
+      testCases.filter(
+        (tc) => tc.student_generated && tc.input === inputTestCase.input
+      ).length > 0
+    ) {
+      addNotification!({
+        type: 'failure',
+        content: (
+          <Text>Can&apos;t add two test cases with the same input!</Text>
+        ),
+      });
+      return;
+    }
     addUserTestCase(inputTestCase);
     setDisplayInputRow(false);
     setInput(defaultUserTestCase);

@@ -11,14 +11,14 @@ type CodeRunAreaProps = {
 
 const CodeRunArea = (props: CodeRunAreaProps) => {
   const { className } = props;
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const { getRunFile } = useCode();
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isError, setIsError] = useState(false);
   const [errorNotificationVisible, setErrorNotificationVisible] =
     useState(false);
   const [errorNotificationDismissed, setErrorNotifcationDismissed] =
     useState(false);
-  const [output, setOutput] = useState<string>('');
+  const [output, setOutput] = useState('');
   const [input, setInput] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
