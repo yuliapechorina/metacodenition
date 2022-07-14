@@ -4,7 +4,6 @@ import {
   Group,
   Notification,
   ScrollArea,
-  Space,
   Stack,
   Text,
   Title,
