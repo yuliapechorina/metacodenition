@@ -218,7 +218,7 @@ const TestCasePage = () => {
 
   return (
     <ScrollArea className='h-full'>
-      <Stack className='p-4 h-full'>
+      <Stack className='p-4 pb-24 h-full'>
         <Group className='justify-between'>
           <Title order={4}>Run test cases</Title>
           <ProblemPopover
@@ -259,24 +259,24 @@ const TestCasePage = () => {
           </thead>
           <tbody>{rows}</tbody>
         </Table>
-        <Group className='justify-center'>
-          <Button
-            size='md'
-            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-            onClick={handleRunButtonPress}
-            disabled={loading}
-            loading={loading}
-          >
-            Run
-          </Button>
-          <Button
-            size='md'
-            className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
-          >
-            Submit
-          </Button>
-        </Group>
       </Stack>
+      <Group className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px] justify-center'>
+        <Button
+          size='md'
+          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          onClick={handleRunButtonPress}
+          disabled={loading}
+          loading={loading}
+        >
+          Run
+        </Button>
+        <Button
+          size='md'
+          className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
+        >
+          Submit
+        </Button>
+      </Group>
     </ScrollArea>
   );
 };

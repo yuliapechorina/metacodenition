@@ -46,7 +46,7 @@ const EvaluationPage = () => {
   return (
     <Stack className='h-full p-0 z-10 relative'>
       <ScrollArea>
-        <Group className='justify-between p-2 ppb-0 align-top'>
+        <Group className='justify-between p-2 align-top'>
           <Text className='p-2'>
             <Text inherit component='span' className='font-bold'>
               Task:{' '}
