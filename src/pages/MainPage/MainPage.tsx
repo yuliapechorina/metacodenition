@@ -14,7 +14,13 @@ import MainLinks from '../../components/MainLinks/MainLinks';
 import { ReactComponent as TitleIcon } from './title.svg';
 import { auth } from '../../util/firebase';
 
-const paths = ['step-1', 'step-2', 'step-3', 'step-4', 'step-5', 'step-6'];
+const paths = [
+  'problem',
+  'design',
+  'evaluation',
+  'implementation',
+  'test-cases',
+];
 
 const MainPage = () => {
   const [user] = useAuthState(auth);
@@ -22,7 +28,7 @@ const MainPage = () => {
   const [currentPathIndex, setCurrentPathIndex] = useState(0);
 
   useEffect(() => {
-    navigate('step-1');
+    navigate('problem');
   }, []);
 
   useEffect(() => {
@@ -30,7 +36,7 @@ const MainPage = () => {
   }, [currentPathIndex]);
 
   const handleClickNext = () => {
-    if (currentPathIndex !== 5) {
+    if (currentPathIndex !== 4) {
       setCurrentPathIndex(currentPathIndex + 1);
     }
   };
@@ -75,8 +81,8 @@ const MainPage = () => {
         </Navbar>
       }
       classNames={{
-        root: 'h-screen w-screen overflow-hidden',
-        body: 'h-full w-screen flex-row',
+        root: 'h-screen w-screen flex flex-col overflow-hidden',
+        body: 'min-h-0 w-screen flex flex-row flex-shrink',
         main: 'flex-auto p-0 w-48',
       }}
     >

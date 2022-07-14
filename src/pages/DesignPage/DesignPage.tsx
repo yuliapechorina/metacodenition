@@ -3,7 +3,7 @@ import {
   Divider,
   Group,
   Notification,
-  Space,
+  ScrollArea,
   Stack,
   Text,
   Title,
@@ -95,62 +95,75 @@ const DesignPage = () => {
   };
 
   return (
-    <Stack className='p-2 overflow-y-auto h-full'>
-      <Title order={4}>Highlight a Key Phrase:</Title>
-      <Text className='text-justify'>
-        <TypographyStylesProvider
-          onMouseUp={handleMouseUp}
-          className='selection:bg-yellow-200'
-        >
-          {HTMLReactParser(getProblemStatement!())}
-        </TypographyStylesProvider>
-      </Text>
-      <Divider />
-      <Title order={4}>Describe an action:</Title>
-      {highlightedChunk === undefined ? (
-        <Text>Nothing highlighted yet!</Text>
-      ) : (
+    <ScrollArea className='h-full'>
+      <Stack className='p-4 h-full'>
         <Text>
-          Highlighted text:{` `}
-          <Text inherit component='span' className=' font-bold'>
-            {highlightedChunk.highlightedText}
+          <Text inherit component='span' className='font-bold'>
+            Task:{' '}
+          </Text>
+          Identify and highlight key phrases of the problem statement and assign
+          an action to achieve it.
+          <br />
+          <Text inherit component='span' className='italic'>
+            Hint: Highlight the parts of the problem statement that require code
+            to achieve, for example &quot;multiply the result by 3&quot;.
           </Text>
         </Text>
-      )}
-      <Group className='w-full h-fit'>
-        <GenericInput
-          placeholder='Describe an action here...'
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <Button
-          size='md'
-          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-          onClick={handleSubmitAction}
-          disabled={isLoading}
-        >
-          Submit
-        </Button>
-        <Button
-          size='md'
-          className='bg-red-500 fill-red-50 hover:bg-red-600'
-          onClick={handleDeleteAction}
-          disabled={isLoading}
-        >
-          Delete
-        </Button>
-      </Group>
-      {errorNotificationVisible && (
-        <Notification
-          title='Failed to submit action'
-          color='red'
-          onClose={() => setErrorNotifcationDismissed(true)}
-        >
-          Please try again.
-        </Notification>
-      )}
-      <Space h='xl' />
-    </Stack>
+        <Title order={4}>Highlight a Key Phrase:</Title>
+        <Text className='text-justify'>
+          <TypographyStylesProvider
+            onMouseUp={handleMouseUp}
+            className='selection:bg-yellow-200'
+          >
+            {HTMLReactParser(getProblemStatement!())}
+          </TypographyStylesProvider>
+        </Text>
+        <Divider />
+        <Title order={4}>Describe an action:</Title>
+        {highlightedChunk === undefined ? (
+          <Text>Nothing highlighted yet!</Text>
+        ) : (
+          <Text>
+            Highlighted text:{` `}
+            <Text inherit component='span' className=' font-bold'>
+              {highlightedChunk.highlightedText}
+            </Text>
+          </Text>
+        )}
+        <Group className='w-full h-fit'>
+          <GenericInput
+            placeholder='Describe an action here...'
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+          <Button
+            size='md'
+            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+            onClick={handleSubmitAction}
+            disabled={isLoading}
+          >
+            Submit
+          </Button>
+          <Button
+            size='md'
+            className='bg-red-500 fill-red-50 hover:bg-red-600'
+            onClick={handleDeleteAction}
+            disabled={isLoading}
+          >
+            Delete
+          </Button>
+        </Group>
+        {errorNotificationVisible && (
+          <Notification
+            title='Failed to submit action'
+            color='red'
+            onClose={() => setErrorNotifcationDismissed(true)}
+          >
+            Please try again.
+          </Notification>
+        )}
+      </Stack>
+    </ScrollArea>
   );
 };
 

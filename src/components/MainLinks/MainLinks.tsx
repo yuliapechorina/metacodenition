@@ -2,7 +2,6 @@ import { Stack } from '@mantine/core';
 import React from 'react';
 import {
   HiOutlineQuestionMarkCircle,
-  HiOutlineDocumentDuplicate,
   HiOutlineLightBulb,
   HiOutlineClipboardList,
   HiOutlineTerminal,
@@ -15,61 +14,51 @@ const data = [
     icon: (
       <HiOutlineQuestionMarkCircle
         size={24}
-        className='bg-violet-100 stroke-violet-600 rounded-md p-0.5'
+        className='bg-blue-100 stroke-blue-600 rounded-md p-0.5'
       />
     ),
     label: 'Understanding the problem',
-    pathName: 'step-1',
-  },
-  {
-    icon: (
-      <HiOutlineDocumentDuplicate
-        size={24}
-        className='bg-pink-100 stroke-pink-600 rounded-md p-0.5'
-      />
-    ),
-    label: 'Searching for similar problems',
-    pathName: 'step-2',
+    pathName: 'problem',
   },
   {
     icon: (
       <HiOutlineLightBulb
         size={24}
-        className='bg-orange-100 stroke-orange-600 rounded-md p-0.5'
+        className='bg-violet-100 stroke-violet-600 rounded-md p-0.5'
       />
     ),
     label: 'Designing a solution',
-    pathName: 'step-3',
+    pathName: 'design',
   },
   {
     icon: (
       <HiOutlineClipboardList
         size={24}
-        className='bg-cyan-100 stroke-cyan-600 rounded-md p-0.5'
+        className='bg-pink-100 stroke-pink-600 rounded-md p-0.5'
       />
     ),
     label: 'Evaluating a solution',
-    pathName: 'step-4',
+    pathName: 'evaluation',
   },
   {
     icon: (
       <HiOutlineTerminal
         size={24}
-        className='bg-fuchsia-100 stroke-fuchsia-600 rounded-md p-0.5'
+        className='bg-red-100 stroke-red-600 rounded-md p-0.5'
       />
     ),
     label: 'Implementing a solution',
-    pathName: 'step-5',
+    pathName: 'implementation',
   },
   {
     icon: (
       <HiOutlineClipboardCheck
         size={24}
-        className='bg-red-100 stroke-red-600 rounded-md p-0.5'
+        className='bg-orange-100 stroke-orange-600 rounded-md p-0.5'
       />
     ),
     label: 'Evaluating implemented solution',
-    pathName: 'step-6',
+    pathName: 'test-cases',
   },
 ];
 

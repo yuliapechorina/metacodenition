@@ -7,9 +7,11 @@ import {
   Notification,
   ScrollArea,
   Center,
+  Text,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
+import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
 
 const EvaluationPage = () => {
@@ -17,6 +19,7 @@ const EvaluationPage = () => {
     useState(false);
   const [errorNotificationDismissed, setErrorNotifcationDismissed] =
     useState(false);
+  const [isProblemOpened, setProblemOpened] = useState(false);
 
   const {
     submitParsons,
@@ -41,11 +44,26 @@ const EvaluationPage = () => {
   }, [isError, errorNotificationDismissed]);
 
   return (
-    <Stack className='h-full p-0 bg-gray-100 z-10 relative'>
-      <ScrollArea className=''>
-        <Group className='items-start pb-32'>
+    <Stack className='h-full p-0 z-10 relative'>
+      <ScrollArea>
+        <Group className='justify-between p-2 ppb-0 align-top'>
+          <Text className='p-2'>
+            <Text inherit component='span' className='font-bold'>
+              Task:{' '}
+            </Text>
+            Design your solution by dragging and dropping blocks to the design
+            area on the right. <br />
+            You can add your own blocks on the previous page.
+          </Text>
+          <ProblemPopover
+            className='pr-4'
+            opened={isProblemOpened}
+            setOpened={setProblemOpened}
+          />
+        </Group>
+        <Group className='items-start pb-32 bg-gray-100 shadow-inner mx-4 rounded-lg'>
           <Stack spacing={0} className='h-full flex-1'>
-            <Title order={2} className='text-center my-2'>
+            <Title order={4} className='text-center py-4 '>
               Drag from here
             </Title>
             <ReactSortable
@@ -53,7 +71,7 @@ const EvaluationPage = () => {
               setList={setUnusedListItems}
               group='design-parsons'
               animation={100}
-              className='flex flex-col space-y-4 h-full px-4 mx-4'
+              className='flex flex-col space-y-4 h-full pl-8 pr-2'
             >
               {getUnusedParsonsFragments!().map((fragment) => (
                 <div key={fragment.listItem.id}>
@@ -61,7 +79,7 @@ const EvaluationPage = () => {
                     shadow='sm'
                     radius='md'
                     p='md'
-                    className={`bg-gray-50 cursor-grab h-fit ${
+                    className={`bg-white cursor-grab h-fit ${
                       fragment.userGenerated && ' font-bold'
                     }`}
                   >
@@ -72,15 +90,15 @@ const EvaluationPage = () => {
             </ReactSortable>
           </Stack>
           <Stack spacing={0} className='h-full flex-1 space-y-0'>
-            <Title order={2} className='my-2 text-center'>
-              Drop in here
+            <Title order={4} className='py-4 text-center'>
+              Design your solution here
             </Title>
             <ReactSortable
               list={getUsedListItems!()}
               setList={setUsedListItems}
               group='design-parsons'
               animation={100}
-              className='flex flex-col space-y-4 h-full px-4 mx-4'
+              className='flex flex-col space-y-4 h-full pl-2 pr-8'
             >
               {getUsedParsonsFragments!().map((fragment) => (
                 <div key={fragment.listItem.id}>
@@ -100,7 +118,7 @@ const EvaluationPage = () => {
           </Stack>
         </Group>
       </ScrollArea>
-      <Center className='absolute bottom-0 w-full p-4 -translate-y-1/2 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
+      <Center className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
         <Button
           size='md'
           className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 drop-shadow-md'

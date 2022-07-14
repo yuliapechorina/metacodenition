@@ -29,12 +29,12 @@ const InputArea = (props: InputAreaProps) => {
         <UnstyledButton className='hover:scale-110' onClick={runCallback}>
           {loading ? (
             <HiDotsHorizontal
-              size='48px'
+              size='36px'
               className=' bg-white fill-emerald-500 rounded-full'
             />
           ) : (
             <HiPlay
-              size='48px'
+              size='36px'
               className=' bg-white fill-emerald-500 rounded-full'
             />
           )}
