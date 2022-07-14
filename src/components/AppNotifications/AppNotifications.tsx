@@ -49,7 +49,7 @@ const AppNotifications = () => {
             icon={getNotificationIcon(notification)}
             title={getNotificationTitle(notification)}
             color={getNotificationColour(notification)}
-            className='backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'
+            className='bg-white/30 backdrop-blur-md'
             classNames={{ title: 'text-lg' }}
             onClose={() => removeNotification!(notification)}
             // eslint-disable-next-line react/no-array-index-key
