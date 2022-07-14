@@ -2,6 +2,7 @@ import {
   Button,
   Divider,
   Group,
+  ScrollArea,
   Stack,
   Text,
   Title,
@@ -104,70 +105,72 @@ const ProblemPage = () => {
   };
 
   return (
-    <Stack className='p-4'>
-      <Title order={4}>Problem:</Title>
-      <Text className='text-justify'>
-        <TypographyStylesProvider>
-          {HTMLReactParser(getProblemStatement!())}
-        </TypographyStylesProvider>
-      </Text>
-      <Divider />
-      <Group className='w-full h-fit justify-between'>
-        <Title order={4}>Check my understanding:</Title>
-        <Group className='h-full w-fit'>
-          <Text>
-            Test cases solved:{' '}
-            <Text inherit component='span' className=' font-bold'>
-              {solvedTestCases.length}
+    <ScrollArea className='h-full'>
+      <Stack className='p-4'>
+        <Title order={4}>Problem:</Title>
+        <Text className='text-justify'>
+          <TypographyStylesProvider>
+            {HTMLReactParser(getProblemStatement!())}
+          </TypographyStylesProvider>
+        </Text>
+        <Divider />
+        <Group className='w-full h-fit justify-between'>
+          <Title order={4}>Check my understanding:</Title>
+          <Group className='h-full w-fit'>
+            <Text>
+              Test cases solved:{' '}
+              <Text inherit component='span' className=' font-bold'>
+                {solvedTestCases.length}
+              </Text>
             </Text>
-          </Text>
-          <UnstyledButton
-            onClick={handleRefresh}
-            disabled={testCases.size <= 1}
-          >
-            <HiOutlineRefresh
-              size='24px'
-              className=' bg-emerald-500 stroke-emerald-50 rounded-full p-1'
-            />
-          </UnstyledButton>
-        </Group>
-      </Group>
-      {testCases.size === 0 ? (
-        <Text>All test cases solved!</Text>
-      ) : (
-        <>
-          <Text>
-            Given input:{' '}
-            <Text inherit component='span' className=' font-bold'>
-              {currentTestCase}
-            </Text>
-          </Text>
-          <Text>What is the output? </Text>
-          <Group className='w-full h-fit'>
-            <GenericInput
-              placeholder='Enter your expected output'
-              value={inputValue}
-              onChange={(e?: React.ChangeEvent<HTMLInputElement>) =>
-                setInputValue(e!.target.value)
-              }
-              rightSection={
-                incorrectAnswer && (
-                  <HiX size='32px' className=' fill-red-500 p-1' />
-                )
-              }
-            />
-            <Button
-              size='md'
-              className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-              onClick={handleSubmitInput}
-              disabled={isLoading}
+            <UnstyledButton
+              onClick={handleRefresh}
+              disabled={testCases.size <= 1}
             >
-              Submit
-            </Button>
+              <HiOutlineRefresh
+                size='24px'
+                className=' bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+              />
+            </UnstyledButton>
           </Group>
-        </>
-      )}
-    </Stack>
+        </Group>
+        {testCases.size === 0 ? (
+          <Text>All test cases solved!</Text>
+        ) : (
+          <>
+            <Text>
+              Given input:{' '}
+              <Text inherit component='span' className=' font-bold'>
+                {currentTestCase}
+              </Text>
+            </Text>
+            <Text>What is the output? </Text>
+            <Group className='w-full h-fit'>
+              <GenericInput
+                placeholder='Enter your expected output'
+                value={inputValue}
+                onChange={(e?: React.ChangeEvent<HTMLInputElement>) =>
+                  setInputValue(e!.target.value)
+                }
+                rightSection={
+                  incorrectAnswer && (
+                    <HiX size='32px' className=' fill-red-500 p-1' />
+                  )
+                }
+              />
+              <Button
+                size='md'
+                className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+                onClick={handleSubmitInput}
+                disabled={isLoading}
+              >
+                Submit
+              </Button>
+            </Group>
+          </>
+        )}
+      </Stack>
+    </ScrollArea>
   );
 };
 

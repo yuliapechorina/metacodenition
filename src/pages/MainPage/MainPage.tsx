@@ -81,8 +81,8 @@ const MainPage = () => {
         </Navbar>
       }
       classNames={{
-        root: 'h-screen w-screen overflow-hidden',
-        body: 'h-full w-screen flex-row',
+        root: 'h-screen w-screen flex flex-col overflow-hidden',
+        body: 'min-h-0 w-screen flex flex-row flex-shrink',
         main: 'flex-auto p-0 w-48',
       }}
     >

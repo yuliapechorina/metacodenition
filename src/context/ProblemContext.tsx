@@ -18,8 +18,7 @@ interface IProblemContext {
 
 const ProblemContext = React.createContext<Partial<IProblemContext>>({});
 
-const defaultProblem = `
-Let's imagine that you have a list that contains amounts of rainfall for each day, collected by a meteorologist. Her rain gathering equipment occasionally makes a mistake and reports a negative amount for that day. We have to ignore those.
+const defaultProblem = `Let's imagine that you have a list that contains amounts of rainfall for each day, collected by a meteorologist. Her rain gathering equipment occasionally makes a mistake and reports a negative amount for that day. We have to ignore those.
 We need to write a program to:
 
   (a) calculate the total rainfall by adding up all the positive integers (and only the positive integers), 

@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   Group,
+  ScrollArea,
   Stack,
   Table,
   Text,
@@ -98,56 +99,61 @@ const TestCasePage = () => {
   });
 
   return (
-    <Stack className='p-4 overflow-y-auto h-full'>
-      <Group className='justify-between'>
-        <Title order={4}>Run test cases</Title>
-        <ProblemPopover opened={isProblemOpened} setOpened={setProblemOpened} />
-      </Group>
-      <Text>
-        You&apos;ll only be able to run test cases you&apos;ve previously solved
-        in the
-        <Text<typeof Link>
-          component={Link}
-          to='../problem'
-          className='text-blue-600'
-        >
-          {' '}
-          understanding the problem{' '}
+    <ScrollArea className='h-full'>
+      <Stack className='p-4 h-full'>
+        <Group className='justify-between'>
+          <Title order={4}>Run test cases</Title>
+          <ProblemPopover
+            opened={isProblemOpened}
+            setOpened={setProblemOpened}
+          />
+        </Group>
+        <Text>
+          You&apos;ll only be able to run test cases you&apos;ve previously
+          solved in the
+          <Text<typeof Link>
+            component={Link}
+            to='../problem'
+            className='text-blue-600'
+          >
+            {' '}
+            understanding the problem{' '}
+          </Text>
+          stage
         </Text>
-        stage
-      </Text>
-      <Table>
-        <thead>
-          <tr>
-            <th>
-              {' '}
-              <Checkbox
-                checked={parentCheckboxState}
-                onChange={handleParentCheckboxChange}
-              />
-            </th>
-            <th>Input</th>
-            <th>Output</th>
-            <th>Expected</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
-      <Group className='justify-center'>
-        <Button
-          size='md'
-          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-        >
-          Run
-        </Button>
-        <Button
-          size='md'
-          className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
-        >
-          Submit
-        </Button>
-      </Group>
-    </Stack>
+        <Table>
+          <thead>
+            <tr>
+              <th>
+                {' '}
+                <Checkbox
+                  checked={parentCheckboxState}
+                  onChange={handleParentCheckboxChange}
+                />
+              </th>
+              <th>Input</th>
+              <th>Output</th>
+              <th>Expected</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </Table>
+        <Group className='justify-center'>
+          <Button
+            size='md'
+            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          >
+            Run
+          </Button>
+          <Button
+            size='md'
+            className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
+          >
+            Submit
+          </Button>
+        </Group>
+      </Stack>
+    </ScrollArea>
   );
 };
 

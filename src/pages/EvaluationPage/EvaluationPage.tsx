@@ -46,7 +46,7 @@ const EvaluationPage = () => {
   return (
     <Stack className='h-full p-0 z-10 relative'>
       <ScrollArea>
-        <Group className='justify-between p-2 align-top'>
+        <Group className='justify-between p-2 ppb-0 align-top'>
           <Text className='p-2'>
             <Text inherit component='span' className='font-bold'>
               Task:{' '}
@@ -118,7 +118,7 @@ const EvaluationPage = () => {
           </Stack>
         </Group>
       </ScrollArea>
-      <Center className='absolute bottom-0 w-full p-4 -translate-y-1/2 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
+      <Center className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
         <Button
           size='md'
           className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 drop-shadow-md'
