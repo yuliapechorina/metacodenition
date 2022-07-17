@@ -6,6 +6,7 @@ import App from './App';
 import theme from './theme';
 import { ProblemProvider } from './context/ProblemContext';
 import { CodeProvider } from './context/CodeContext';
+import { NotificationProvider } from './context/NotificationContext';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -15,7 +16,9 @@ root.render(
     <MantineProvider theme={theme}>
       <ProblemProvider>
         <CodeProvider>
-          <App />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
         </CodeProvider>
       </ProblemProvider>
     </MantineProvider>

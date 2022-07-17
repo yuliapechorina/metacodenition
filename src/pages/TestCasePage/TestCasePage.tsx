@@ -1,106 +1,237 @@
 import {
   Button,
+  Center,
   Checkbox,
   Group,
   ScrollArea,
   Stack,
   Table,
   Text,
+  TextInput,
   Title,
+  UnstyledButton,
 } from '@mantine/core';
-import { doc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useState } from 'react';
+import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import ProblemPopover from '../../components/ProblemPopover';
-import { auth, db } from '../../util/firebase';
+import useNotifications, {
+  INotification,
+} from '../../context/NotificationContext';
+import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
 
 const TestCasePage = () => {
-  const [user] = useAuthState(auth);
-
-  const [testCases, setTestCases] = useState<Map<string, number>>(
-    new Map<string, number>([])
-  );
-  const [solvedTestCases, setSolvedTestCases] = useState<string[]>([]);
-
-  const questionDoc = doc(db, 'questions', 'wIK4Zf2d0ZKLpnnzsfxp');
-  const [questionData] = useDocumentData(questionDoc);
-
-  const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
-  const [userData] = useDocumentData(userDoc);
+  const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
+    useTestCases();
+  const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const [isProblemOpened, setProblemOpened] = useState(false);
 
-  useEffect(() => {
-    if (questionData) {
-      const availableTestCases = new Map<string, number>(
-        Object.entries(questionData.testCases)
-      );
-      setTestCases(availableTestCases);
-    }
-  }, [questionData, solvedTestCases]);
-
-  useEffect(() => {
-    if (userData && userData.solvedTestCases) {
-      setSolvedTestCases(userData.solvedTestCases);
-    }
-  }, [userData]);
-
-  const [checkboxStates, setCheckboxStates] = useState<Map<string, boolean>>(
-    new Map<string, boolean>([])
-  );
-
-  useEffect(() => {
-    if (checkboxStates.size === 0) {
-      setCheckboxStates(
-        new Map(Array.from(testCases).map(([key]) => [key, false]))
-      );
-    }
-  }, [testCases]);
-
-  const handleCheckboxChange = (key: string) => {
-    const newCheckBoxStates = new Map(checkboxStates);
-    newCheckBoxStates.set(key, !checkboxStates.get(key));
-    setCheckboxStates(newCheckBoxStates);
-  };
+  const [displayInputRow, setDisplayInputRow] = useState(false);
 
   const [parentCheckboxState, setParentCheckboxState] =
     useState<boolean>(false);
 
-  const handleParentCheckboxChange = () => {
-    const newCheckboxStates = new Map(
-      Array.from(checkboxStates).map(([key, value]) => {
-        const solved = solvedTestCases.includes(key);
-        return solved ? [key, !parentCheckboxState] : [key, value];
-      })
+  const { addNotification } = useNotifications();
+
+  const handleParentCheckboxChange = (value: boolean) => {
+    setSelectedTestCases(
+      testCases.filter((testCase) => testCase.solved && value)
     );
-    setCheckboxStates(newCheckboxStates);
-    setParentCheckboxState(!parentCheckboxState);
+    setParentCheckboxState(value);
   };
 
-  const rows = Array.from(testCases).map(([key, value]) => {
-    const solved = solvedTestCases.includes(key);
+  const handleRunButtonPress = async () => {
+    setLoading(true);
+    const testCaseResults = await runCases(selectedTestCases);
+    setSelectedTestCases(testCaseResults);
+    const passCount = testCaseResults.reduce(
+      (a, c) => (c.result === 'pass' ? a + 1 : a),
+      0
+    );
 
-    return (
-      <tr key={key}>
+    const notification: INotification =
+      passCount === selectedTestCases.length
+        ? {
+            type: 'success',
+            content: <Text>All selected test cases passed!</Text>,
+          }
+        : {
+            type: 'failure',
+            content: (
+              <Text>{`${selectedTestCases.length - passCount}/${
+                selectedTestCases.length
+              } test cases failed!`}</Text>
+            ),
+          };
+
+    addNotification!(notification);
+    setLoading(false);
+  };
+
+  const handleCheckboxChange = (testCase: ITestCase, selected: boolean) =>
+    selected
+      ? setSelectedTestCases([...selectedTestCases, testCase])
+      : setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
+
+  const defaultResult: ResultType = 'unrun';
+  const defaultUserTestCase = {
+    input: '',
+    expected: '',
+    output: '',
+    solved: true,
+    result: defaultResult,
+    student_generated: true,
+  };
+
+  const [inputTestCase, setInput] = useState<ITestCase>(defaultUserTestCase);
+
+  const addTestCase = () => {
+    setDisplayInputRow(true);
+    setInput(defaultUserTestCase);
+  };
+
+  const removeTestCase = () => {
+    setDisplayInputRow(false);
+    setInput(defaultUserTestCase);
+  };
+
+  const saveTestCase = () => {
+    if (
+      testCases.filter(
+        (tc) => tc.student_generated && tc.input === inputTestCase.input
+      ).length > 0
+    ) {
+      addNotification!({
+        type: 'failure',
+        content: (
+          <Text>Can&apos;t add two test cases with the same input!</Text>
+        ),
+      });
+      return;
+    }
+    addUserTestCase(inputTestCase);
+    setDisplayInputRow(false);
+    setInput(defaultUserTestCase);
+  };
+
+  const inputRow = (
+    <>
+      <tr>
+        <td className='min-w-0 w-fit'>
+          <Center>
+            <Checkbox disabled />
+          </Center>
+        </td>
         <td>
-          <Checkbox
-            checked={checkboxStates.get(key) ?? false}
-            onChange={() => handleCheckboxChange(key)}
-            disabled={!solved}
+          <TextInput
+            value={inputTestCase.input}
+            onChange={(e) =>
+              setInput({ ...inputTestCase, input: e.currentTarget.value })
+            }
+            className='max-w-md'
           />
         </td>
-        <td>{key}</td>
-        <td>Not run yet!</td>
-        <td>{solved ? value : 'Solve manually first!'}</td>
+        <td className='whitespace-pre'>
+          {inputTestCase.output || 'not run yet'}
+        </td>
+        <td>
+          <TextInput
+            value={inputTestCase.expected}
+            onChange={(e) =>
+              setInput({ ...inputTestCase, expected: e.currentTarget.value })
+            }
+            className='max-w-md'
+          />
+        </td>
       </tr>
-    );
-  });
+      <tr>
+        <td colSpan={4}>
+          <Center className='space-x-4'>
+            <Button
+              size='sm'
+              className='bg-emerald-500 fill-green-50 hover:bg-emerald-600'
+              onClick={() => saveTestCase()}
+            >
+              <HiCheck />
+            </Button>
+            <Button
+              size='sm'
+              className='bg-rose-500 fill-red-50 hover:bg-rose-600'
+              onClick={() => removeTestCase()}
+            >
+              <HiX />
+            </Button>
+          </Center>
+        </td>
+      </tr>
+    </>
+  );
+  const rows = (
+    <>
+      {testCases.map((testCase, i) => (
+        <tr
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          className={`${
+            testCase.result !== 'unrun' &&
+            (testCase.result === 'pass' ? 'bg-green-100' : 'bg-red-100')
+          } ${testCase.student_generated ? 'font-bold' : ''}`}
+        >
+          <td>
+            <Center>
+              <Checkbox
+                checked={selectedTestCases.includes(testCase)}
+                onChange={(e) =>
+                  handleCheckboxChange(testCase, e.currentTarget.checked)
+                }
+                disabled={!testCase.solved}
+              />
+            </Center>
+          </td>
+          <td>{testCase.input}</td>
+          <td className='whitespace-pre'>{testCase.output || 'not run yet'}</td>
+          <td>
+            <Group className='inline-flex items-center '>
+              <Text size='sm'>
+                {testCase.solved ? testCase.expected : 'Solve manually first!'}
+              </Text>
+              {testCase.student_generated && (
+                <UnstyledButton
+                  onClick={() => deleteUserTestCase(testCase)}
+                  className='hover:bg-gray-100 p-2 rounded-md'
+                >
+                  <HiTrash />
+                </UnstyledButton>
+              )}
+            </Group>
+          </td>
+        </tr>
+      ))}
+      {displayInputRow ? (
+        inputRow
+      ) : (
+        <tr>
+          <td colSpan={4}>
+            <Center>
+              <UnstyledButton
+                onClick={() => addTestCase()}
+                className='hover:bg-gray-100 inline-flex items-center p-3 text-sm space-x-1 rounded-md'
+              >
+                <Text size='sm'>Add your own</Text>
+                <HiPlus />
+              </UnstyledButton>
+            </Center>
+          </td>
+        </tr>
+      )}
+    </>
+  );
 
   return (
     <ScrollArea className='h-full'>
-      <Stack className='p-4 h-full'>
+      <Stack className='p-4 pb-24 h-full'>
         <Group className='justify-between'>
           <Title order={4}>Run test cases</Title>
           <ProblemPopover
@@ -113,7 +244,7 @@ const TestCasePage = () => {
           solved in the
           <Text<typeof Link>
             component={Link}
-            to='../problem'
+            to='../step-1'
             className='text-blue-600'
           >
             {' '}
@@ -124,12 +255,15 @@ const TestCasePage = () => {
         <Table>
           <thead>
             <tr>
-              <th>
-                {' '}
-                <Checkbox
-                  checked={parentCheckboxState}
-                  onChange={handleParentCheckboxChange}
-                />
+              <th className='min-w-fit w-12'>
+                <Center>
+                  <Checkbox
+                    checked={parentCheckboxState}
+                    onChange={(e) =>
+                      handleParentCheckboxChange(e.currentTarget.checked)
+                    }
+                  />
+                </Center>
               </th>
               <th>Input</th>
               <th>Output</th>
@@ -138,21 +272,24 @@ const TestCasePage = () => {
           </thead>
           <tbody>{rows}</tbody>
         </Table>
-        <Group className='justify-center'>
-          <Button
-            size='md'
-            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-          >
-            Run
-          </Button>
-          <Button
-            size='md'
-            className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
-          >
-            Submit
-          </Button>
-        </Group>
       </Stack>
+      <Group className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px] justify-center'>
+        <Button
+          size='md'
+          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          onClick={handleRunButtonPress}
+          disabled={loading}
+          loading={loading}
+        >
+          Run
+        </Button>
+        <Button
+          size='md'
+          className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
+        >
+          Submit
+        </Button>
+      </Group>
     </ScrollArea>
   );
 };

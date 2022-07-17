@@ -1,61 +1,20 @@
-import {
-  Button,
-  Code,
-  Group,
-  Notification,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Button, Code, Group, Stack, Text, Title } from '@mantine/core';
 import Editor from '@monaco-editor/react';
-import { ReactNode, useState } from 'react';
-import { HiCheck, HiX } from 'react-icons/hi';
+import { useState } from 'react';
 import useCode, { Comment } from '../../context/CodeContext';
+import useNotifications from '../../context/NotificationContext';
 import useParsons from '../../hooks/useParsons';
 import getOutput from '../../util/comment-generator';
 import ProblemPopover from '../ProblemPopover';
 
-type NotificationType = 'success' | 'failure';
-
-interface INotification {
-  type: NotificationType;
-  content: ReactNode;
-}
-
 const CodeEditor = () => {
   const { file, defaultFile, setFile } = useCode();
   const { getUsedParsonsFragments } = useParsons();
-  const [notification, setNotification] = useState<INotification | undefined>();
+  const { addNotification } = useNotifications();
   const [isProblemOpened, setProblemOpened] = useState(false);
 
   const handleFileEdit = (content?: string) => {
     if (content) setFile!({ ...file!, content });
-  };
-
-  const getNotificationIcon = () => {
-    switch (notification?.type) {
-      case 'success':
-        return <HiCheck size={18} />;
-      case 'failure':
-        return <HiX size={18} />;
-      default:
-        return null;
-    }
-  };
-
-  const getNotificationTitle = () =>
-    (notification!.type.at(0)?.toUpperCase() || '') +
-    notification!.type.slice(1);
-
-  const getNotificationColour = () => {
-    switch (notification?.type) {
-      case 'success':
-        return 'green';
-      case 'failure':
-        return 'red';
-      default:
-        return 'orange';
-    }
   };
 
   const getComments = () =>
@@ -74,7 +33,7 @@ const CodeEditor = () => {
         content: generatorOutput.newContent,
         comments: generatorOutput.newComments,
       });
-      setNotification({
+      addNotification!({
         type: 'success',
         content: (
           <Text>
@@ -86,7 +45,7 @@ const CodeEditor = () => {
         ),
       });
     } else
-      setNotification({
+      addNotification!({
         type: 'failure',
         content: (
           <Text>
@@ -125,18 +84,6 @@ const CodeEditor = () => {
         className='shrink'
         onChange={handleFileEdit}
       />
-      {notification && (
-        <Notification
-          icon={getNotificationIcon()}
-          title={getNotificationTitle()}
-          color={getNotificationColour()}
-          className='fixed right-0 top-0 m-4 max-w-md'
-          classNames={{ title: 'text-lg' }}
-          onClose={() => setNotification(undefined)}
-        >
-          {notification.content}
-        </Notification>
-      )}
     </Stack>
   );
 };

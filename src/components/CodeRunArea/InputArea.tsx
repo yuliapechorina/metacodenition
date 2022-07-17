@@ -1,20 +1,17 @@
 import { Group, Stack, Text, UnstyledButton } from '@mantine/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { HiDotsHorizontal, HiPlay } from 'react-icons/hi';
 import CodeInput from '../CodeInput';
 
 type InputAreaProps = {
   loading: boolean;
   runCallback: () => void;
+  value: string;
+  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
 };
 
 const InputArea = (props: InputAreaProps) => {
-  const { loading, runCallback } = props;
-  const [input, setInput] = useState('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
+  const { loading, runCallback, value, onChange } = props;
 
   return (
     <Stack>
@@ -23,8 +20,8 @@ const InputArea = (props: InputAreaProps) => {
         <CodeInput
           className='grow rounded'
           placeholder='Input'
-          value={input}
-          onChange={handleInputChange}
+          value={value}
+          onChange={onChange}
         />
         <UnstyledButton className='hover:scale-110' onClick={runCallback}>
           {loading ? (
