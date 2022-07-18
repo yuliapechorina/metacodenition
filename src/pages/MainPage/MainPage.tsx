@@ -85,7 +85,7 @@ const MainPage = () => {
         }
         classNames={{
           root: 'h-screen w-screen flex flex-col overflow-hidden',
-          body: 'min-h-0 w-screen flex flex-row flex-shrink',
+          body: 'h-[calc(100%-40px)] min-h-0 w-screen flex flex-row flex-shrink',
           main: 'flex-auto p-0 w-48',
         }}
       >
