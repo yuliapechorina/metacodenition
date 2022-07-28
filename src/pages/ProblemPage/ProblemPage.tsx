@@ -15,13 +15,13 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
 import GenericInput from '../../components/generics/GenericInput';
-import useProblem from '../../context/ProblemContext';
 import { auth } from '../../util/firebase';
 import useUpdate from '../../hooks/useUpdate';
 import useTestCases, { ITestCase } from '../../hooks/useTestCases';
+import useQuestion from '../../hooks/useQuestion';
 
 const ProblemPage = () => {
-  const { getProblemStatement } = useProblem();
+  const { getProblemStatement } = useQuestion();
   const [user] = useAuthState(auth);
   const { isLoading, updateDocument } = useUpdate();
 

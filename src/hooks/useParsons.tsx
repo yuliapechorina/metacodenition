@@ -1,11 +1,7 @@
-import { doc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { ItemInterface } from 'react-sortablejs';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { auth, db } from '../util/firebase';
 import { Highlight } from '../util/highlighter';
-import useUpdate from './useUpdate';
+import useQuestion from './useQuestion';
 
 export type ParsonsFragment = {
   listItem: ItemInterface;
@@ -36,14 +32,14 @@ const generateUserFragments = (highlights: Highlight[]) =>
   }));
 
 const useParsons = () => {
-  const [user] = useAuthState(auth);
-  const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
-  const questionDoc = user
-    ? doc(db, 'questions', 'wIK4Zf2d0ZKLpnnzsfxp')
-    : undefined;
-  const [userData] = useDocumentData(userDoc);
-  const [questionData] = useDocumentData(questionDoc);
-  const { isLoading, isError, updateDocument } = useUpdate();
+  const {
+    defaultListItems,
+    highlights,
+    usedParsonsIds,
+    isLoading,
+    isError,
+    updateUserQuestionDocument,
+  } = useQuestion();
 
   const [parsonsFragments, setParsonsFragments] = useState<ParsonsFragment[]>(
     []
@@ -55,37 +51,32 @@ const useParsons = () => {
   const [usedIds, setUsedIds] = useState<(string | number)[]>([]);
 
   useEffect(() => {
-    if (userData && userData.usedParsonsIds && questionData) {
-      const newDefaultListItems =
-        (questionData.defaultListItems as ItemInterface[]) || [];
-      const newUserFragments = generateUserFragments(
-        userData.highlights ? userData.highlights : []
-      );
-      const newParsonsFragments = newUserFragments.concat(
-        generateDefaultFragments(newDefaultListItems)
-      );
-      const newIds = getIdsFromFragments(newParsonsFragments);
-      const newUsedIds = userData.usedParsonsIds;
-      const newUnusedIds = generateUnusedIds(newUsedIds, newIds);
-      setParsonsFragments(newParsonsFragments);
-      setUsedIds(newUsedIds);
-      setUnusedIds(newUnusedIds);
-    }
-    if (user && userData && !userData?.usedParsonsIds.length) {
-      updateDocument('users', user.uid, {
-        usedParsonsIds: getIdsFromItems([]),
-      });
-    }
-  }, [userData, questionData]);
+    const newDefaultListItems = (defaultListItems as ItemInterface[]) || [];
+    const newUserFragments = generateUserFragments(highlights || []);
+    const newParsonsFragments = newUserFragments.concat(
+      generateDefaultFragments(newDefaultListItems)
+    );
+    const newIds = getIdsFromFragments(newParsonsFragments);
+    const newUsedIds = usedParsonsIds;
+    const newUnusedIds =
+      newUsedIds !== undefined && newIds !== undefined
+        ? generateUnusedIds(newUsedIds, newIds)
+        : [];
+    setParsonsFragments(newParsonsFragments);
+    setUsedIds(newUsedIds);
+    setUnusedIds(newUnusedIds);
+  }, [defaultListItems, highlights]);
 
   const getItemsFromIds = (ids: (string | number)[]) =>
     ids
-      .map(
-        (id) =>
-          parsonsFragments.find((fragment) => fragment.listItem.id === id)
-            ?.listItem
-      )
-      .filter((item) => item) as ItemInterface[];
+      ? (ids
+          .map(
+            (id) =>
+              parsonsFragments.find((fragment) => fragment.listItem.id === id)
+                ?.listItem
+          )
+          .filter((item) => item) as ItemInterface[])
+      : [];
 
   const getUnusedListItems = () => getItemsFromIds(unusedIds);
 
@@ -115,11 +106,9 @@ const useParsons = () => {
       return;
     }
 
-    if (user) {
-      updateDocument('users', user.uid, {
-        usedParsonsIds: getIdsFromItems(getUsedListItems()),
-      });
-    }
+    updateUserQuestionDocument({
+      usedParsonsIds: getIdsFromItems(getUsedListItems()),
+    });
   };
 
   return {

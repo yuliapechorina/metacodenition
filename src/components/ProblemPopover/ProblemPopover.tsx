@@ -7,7 +7,7 @@ import {
 import HTMLReactParser from 'html-react-parser';
 import React from 'react';
 import { HiQuestionMarkCircle } from 'react-icons/hi';
-import useProblem from '../../context/ProblemContext';
+import useQuestion from '../../hooks/useQuestion';
 
 type ProblemPopoverProps = {
   opened: boolean;
@@ -20,7 +20,7 @@ const ProblemPopover = ({
   setOpened,
   className,
 }: ProblemPopoverProps) => {
-  const { getProblemStatement } = useProblem();
+  const { getProblemStatement } = useQuestion();
 
   const handleClickOpenProblem = () => {
     setOpened(!opened);

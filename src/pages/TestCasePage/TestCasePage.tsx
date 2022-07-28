@@ -19,12 +19,16 @@ import useNotifications, {
   INotification,
 } from '../../context/NotificationContext';
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
+import useQuestion from '../../hooks/useQuestion';
+import useCode from '../../context/CodeContext';
 
 const TestCasePage = () => {
+  const { isLoading, updateUserQuestionDocument } = useQuestion();
+  const { file } = useCode();
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
   const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [running, setRunning] = useState(false);
 
   const [isProblemOpened, setProblemOpened] = useState(false);
 
@@ -43,7 +47,7 @@ const TestCasePage = () => {
   };
 
   const handleRunButtonPress = async () => {
-    setLoading(true);
+    setRunning(true);
     const testCaseResults = await runCases(selectedTestCases);
     setSelectedTestCases(testCaseResults);
     const passCount = testCaseResults.reduce(
@@ -67,7 +71,11 @@ const TestCasePage = () => {
           };
 
     addNotification!(notification);
-    setLoading(false);
+    setRunning(false);
+  };
+
+  const handleSubmitButtonPress = async () => {
+    updateUserQuestionDocument({ submitted: true, userCode: file });
   };
 
   const handleCheckboxChange = (testCase: ITestCase, selected: boolean) =>
@@ -244,7 +252,7 @@ const TestCasePage = () => {
           solved in the
           <Text<typeof Link>
             component={Link}
-            to='../step-1'
+            to='../problem'
             className='text-blue-600'
           >
             {' '}
@@ -278,14 +286,17 @@ const TestCasePage = () => {
           size='md'
           className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
           onClick={handleRunButtonPress}
-          disabled={loading}
-          loading={loading}
+          disabled={running || isLoading}
+          loading={running || isLoading}
         >
           Run
         </Button>
         <Button
           size='md'
           className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
+          onClick={handleSubmitButtonPress}
+          disabled={running || isLoading}
+          loading={running || isLoading}
         >
           Submit
         </Button>
