@@ -1,6 +1,6 @@
-import { AppShell, Group, Header, Text } from '@mantine/core';
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { AppShell, Group, Header, Text } from '@mantine/core';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ReactComponent as TitleIcon } from './title.svg';
 import { auth } from '../../util/firebase';
@@ -8,6 +8,7 @@ import AppNotifications from '../../components/AppNotifications';
 import NavBar from '../../components/NavBar';
 
 const ApplicationShell = () => {
+  const location = useLocation();
   const [user] = useAuthState(auth);
 
   return (
@@ -22,7 +23,9 @@ const ApplicationShell = () => {
             </Group>
           </Header>
         }
-        navbar={window.location.pathname === '/' ? undefined : <NavBar />}
+        navbar={
+          location.pathname.startsWith('/assignment') ? <NavBar /> : undefined
+        }
         classNames={{
           root: 'h-screen w-screen flex flex-col overflow-hidden',
           body: 'h-[calc(100%-40px)] min-h-0 w-screen flex flex-row flex-shrink',
