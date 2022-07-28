@@ -12,7 +12,7 @@ const MainLink = ({ icon, label, pathName }: LinkProps) => {
   const location = useLocation();
 
   return (
-    <Link to={pathName}>
+    <Link to={`/assignment/${pathName}`}>
       <UnstyledButton
         className={
           location.pathname === `/assignment/${pathName}`
