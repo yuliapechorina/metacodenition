@@ -36,4 +36,14 @@ const signIn = async (
   }
 };
 
-export default signIn;
+const signOutAndNavigateHome = async (authenticator: Auth) => {
+  try {
+    await signOut(authenticator);
+    document.location.href = '/';
+  } catch (error: any) {
+    console.error(error);
+    alert(error.message);
+  }
+};
+
+export { signIn, signOutAndNavigateHome };

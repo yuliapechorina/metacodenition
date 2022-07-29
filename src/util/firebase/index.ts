@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import signIn from './authentication';
+import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -25,5 +25,9 @@ const logIn = () => {
   signIn(auth, googleProvider, db);
 };
 
-export { db, auth, logIn };
+const logOut = () => {
+  signOutAndNavigateHome(auth);
+};
+
+export { db, auth, logIn, logOut };
 export default app;

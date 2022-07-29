@@ -6,6 +6,7 @@ import { ReactComponent as TitleIcon } from './title.svg';
 import { auth } from '../../util/firebase';
 import AppNotifications from '../../components/AppNotifications';
 import NavBar from '../../components/NavBar';
+import LogOutButton from '../../components/LogOutButton';
 
 const ApplicationShell = () => {
   const location = useLocation();
@@ -19,7 +20,10 @@ const ApplicationShell = () => {
           <Header height={40} className='p-3'>
             <Group position='apart'>
               <TitleIcon />
-              <Text>{user?.displayName}</Text>
+              <Group>
+                <Text>{user?.displayName}</Text>
+                {user && <LogOutButton />}
+              </Group>
             </Group>
           </Header>
         }
