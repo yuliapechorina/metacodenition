@@ -2,16 +2,14 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import useAssignment from '../context/AssignmentContext';
 import useNotifications from '../context/NotificationContext';
 import { auth, db } from '../util/firebase';
 import { applyHighlightToText } from '../util/highlighter';
 import useUpdate from './useUpdate';
 
 const useQuestion = () => {
-  const [questionId, setQuestionId] = useState<string | undefined>(
-    'wIK4Zf2d0ZKLpnnzsfxp'
-  );
-
+  const { questionId } = useAssignment();
   const [user] = useAuthState(auth);
   const questionDoc = user ? doc(db, 'questions', questionId || '') : undefined;
   const [questionData] = useDocumentData(questionDoc);
@@ -103,7 +101,6 @@ const useQuestion = () => {
 
   return {
     questionId,
-    setQuestionId,
     defaultTestCases,
     defaultListItems,
     initialCode,

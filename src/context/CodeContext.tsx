@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useQuestion from '../hooks/useQuestion';
 
 export type Comment = {
@@ -26,18 +26,24 @@ type CodeProviderProps = {
 
 export const CodeProvider = ({ children }: CodeProviderProps) => {
   const { initialCode, codeTemplate } = useQuestion();
+
   const defaultCode = initialCode
     ? initialCode.replaceAll('\\t', '\t').replaceAll('\\n', '\n')
     : '';
   const template = codeTemplate
     ? codeTemplate.replaceAll('\\t', '\t').replaceAll('\\n', '\n')
     : '';
+
   const [file, setFile] = useState<File>();
 
   useEffect(() => {
     if (file === undefined) {
       const localFile = JSON.parse(localStorage.getItem('file') as string);
-      if (localFile && localFile.content.length > 0) {
+      if (
+        localFile !== undefined &&
+        localFile.content !== undefined &&
+        localFile.content.length > 0
+      ) {
         setFile(localFile);
       } else if (initialCode) {
         const initialFile = { comments: [], content: defaultCode };
@@ -46,11 +52,20 @@ export const CodeProvider = ({ children }: CodeProviderProps) => {
     }
   }, [initialCode, file]);
 
-  const getRunFile = () =>
-    template.replace(
-      '/** STUDENT CODE BEGINS **/\n\n/** STUDENT CODE ENDS **/',
-      `/** STUDENT CODE BEGINS **/\n${file?.content}\n/** STUDENT CODE ENDS **/`
-    );
+  const getRunFile = useCallback(
+    () =>
+      template.replace(
+        '/** STUDENT CODE BEGINS **/\n\n/** STUDENT CODE ENDS **/',
+        `/** STUDENT CODE BEGINS **/\n${file?.content}\n/** STUDENT CODE ENDS **/`
+      ),
+    [template, file]
+  );
+
+  useEffect(() => {
+    if (file !== undefined) {
+      localStorage.setItem('file', JSON.stringify(file));
+    }
+  }, [file]);
 
   const context = React.useMemo(
     () => ({
@@ -59,14 +74,8 @@ export const CodeProvider = ({ children }: CodeProviderProps) => {
       setFile,
       getRunFile,
     }),
-    [file, setFile]
+    [file, setFile, getRunFile, initialCode, codeTemplate]
   );
-
-  useEffect(() => {
-    if (file !== undefined) {
-      localStorage.setItem('file', JSON.stringify(file));
-    }
-  }, [file]);
 
   return (
     <CodeContext.Provider value={context}>{children}</CodeContext.Provider>
