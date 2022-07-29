@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
-import { getAuth, GoogleAuthProvider, signOut } from 'firebase/auth';
-import signIn from './authentication';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -16,6 +16,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+});
 const auth = getAuth(app);
 
 const logIn = () => {
@@ -23,7 +26,7 @@ const logIn = () => {
 };
 
 const logOut = () => {
-  signOut(auth);
+  signOutAndNavigateHome(auth);
 };
 
 export { db, auth, logIn, logOut };
