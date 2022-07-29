@@ -13,16 +13,19 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProblemPopover from '../../components/ProblemPopover';
 import useNotifications, {
   INotification,
 } from '../../context/NotificationContext';
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
+import useAssignment from '../../context/AssignmentContext';
 import useQuestion from '../../hooks/useQuestion';
 import useCode from '../../context/CodeContext';
 
 const TestCasePage = () => {
+  const navigate = useNavigate();
+  const { setNextQuestion } = useAssignment();
   const { isLoading, updateUserQuestionDocument } = useQuestion();
   const { file } = useCode();
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
@@ -76,6 +79,8 @@ const TestCasePage = () => {
 
   const handleSubmitButtonPress = async () => {
     updateUserQuestionDocument({ submitted: true, userCode: file });
+    setNextQuestion!();
+    navigate('/assignment');
   };
 
   const handleCheckboxChange = (testCase: ITestCase, selected: boolean) =>
