@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Group, Stack, Text } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import GenericButton from '../../components/generics/GenericButton';
 import { ReactComponent as ErrorIcon } from './error-icon.svg';
