@@ -16,6 +16,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+  prompt: 'select_account',
+});
 const auth = getAuth(app);
 
 const logIn = () => {
