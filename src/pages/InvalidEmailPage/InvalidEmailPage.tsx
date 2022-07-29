@@ -12,11 +12,9 @@ const InvalidEmailPage = () => {
   };
 
   return (
-    <Group className='grid grid-cols-2 items-center h-full'>
-      <Container className='object-contain w-full justify-end my-auto p-4'>
-        <ErrorIcon className='ml-auto w-[180px]' />
-      </Container>
-      <Stack className='my-auto p-4 w-fit'>
+    <Group className='items-center h-full justify-center'>
+      <ErrorIcon className='w-[180px]' />
+      <Stack className='p-4 w-fit'>
         <Text className='font-bold -mb-4 text-lg'>Invalid Email</Text>
         <Text>Please log in again with a University of Auckland email.</Text>
         <GenericButton
