@@ -10,7 +10,7 @@ const AuthRoute = () => {
     return <Outlet />;
   }
 
-  return <Navigate to='/login' />;
+  return <Navigate to='/' />;
 };
 
 export default AuthRoute;
