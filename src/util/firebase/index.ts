@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
-import { getAuth, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import signIn from './authentication';
 
 const firebaseConfig = {
@@ -22,9 +22,5 @@ const logIn = () => {
   signIn(auth, googleProvider, db);
 };
 
-const logOut = () => {
-  signOut(auth);
-};
-
-export { db, auth, logIn, logOut };
+export { db, auth, logIn };
 export default app;

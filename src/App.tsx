@@ -8,6 +8,7 @@ import DesignPage from './pages/DesignPage';
 import EvaluationPage from './pages/EvaluationPage';
 import TestCasePage from './pages/TestCasePage';
 import HomePage from './pages/HomePage';
+import InvalidEmailPage from './pages/InvalidEmailPage/InvalidEmailPage';
 
 const App = () => (
   <BrowserRouter>
@@ -22,6 +23,7 @@ const App = () => (
           <Route path='implementation' element={<ImplementationPage />} />
           <Route path='test-cases' element={<TestCasePage />} />
         </Route>
+        <Route path='/invalid-email' element={<InvalidEmailPage />} />
       </Route>
     </Routes>
   </BrowserRouter>

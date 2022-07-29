@@ -1,17 +1,11 @@
 import React, { useEffect } from 'react';
-import {
-  Group,
-  Stack,
-  Text,
-  Button,
-  Container,
-  LoadingOverlay,
-} from '@mantine/core';
+import { Group, Stack, Text, Container, LoadingOverlay } from '@mantine/core';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth, logIn } from '../../util/firebase';
 import { ReactComponent as ProgrammingEducationImage } from './programming-education.svg';
 import { ReactComponent as GoogleGLogo } from './google-g-logo.svg';
+import GenericButton from '../../components/generics/GenericButton';
 
 const HomePage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -36,15 +30,12 @@ const HomePage = () => {
           Please use your university email to log in with Google
         </Text>
         <LoadingOverlay visible={loading} />
-        <Button
-          uppercase
-          size='md'
+        <GenericButton
+          text='Log in with Google'
           onClick={() => logIn()}
-          className='bg-emerald-500 hover:bg-emerald-600 rounded-xl mt-4 w-auto'
+          className='mt-4 w-auto'
           leftIcon={<GoogleGLogo />}
-        >
-          Login with Google
-        </Button>
+        />
         {error && <Text className='text-red-600'>Error: {error!.message}</Text>}
       </Stack>
     </Group>
