@@ -9,9 +9,12 @@ import { applyHighlightToText } from '../util/highlighter';
 import useUpdate from './useUpdate';
 
 const useQuestion = () => {
-  const { questionId } = useAssignment();
+  const { questionId, setNextQuestion } = useAssignment();
   const [user] = useAuthState(auth);
-  const questionDoc = user ? doc(db, 'questions', questionId || '') : undefined;
+  const questionDoc =
+    user && questionId !== undefined
+      ? doc(db, 'questions', questionId || '')
+      : undefined;
   const [questionData] = useDocumentData(questionDoc);
   const userQuestionDoc =
     user && questionId
@@ -61,9 +64,15 @@ const useQuestion = () => {
   }, [userQuestionData]);
 
   useEffect(() => {
-    if (userQuestionDoc !== undefined)
+    if (submitted === true) {
+      setNextQuestion!();
+    }
+  }, [submitted]);
+
+  useEffect(() => {
+    if (userQuestionDoc) {
       getDoc(userQuestionDoc).then((d) => {
-        if (!d.exists) {
+        if (!d.exists()) {
           setDoc(userQuestionDoc, {
             highlights: [],
             solvedTestCases: [],
@@ -74,16 +83,15 @@ const useQuestion = () => {
           });
         }
       });
-  }, [userQuestionDoc]);
+    }
+  }, [userQuestionDoc, questionId]);
 
-  const { isLoading, isError, updateDocument } = useUpdate();
+  const { isLoading, isError, updateDocumentRef } = useUpdate();
 
   const { addNotification } = useNotifications();
 
   const updateUserQuestionDocument = async (data: { [x: string]: any }) =>
-    user &&
-    questionId &&
-    updateDocument(`users/${user!.uid}/questions`, questionId, data);
+    userQuestionDoc && updateDocumentRef(userQuestionDoc, data);
 
   const getProblemStatement = () =>
     `<p class='whitespace-pre-line'>${applyHighlightToText(

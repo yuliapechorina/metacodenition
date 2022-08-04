@@ -3,9 +3,10 @@ import { Button } from '@mantine/core';
 
 type GenericButtonProps = {
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   leftIcon?: React.ReactNode;
+  type?: 'button' | 'submit' | 'reset' | undefined;
 };
 
 const GenericButton = ({
@@ -13,6 +14,7 @@ const GenericButton = ({
   onClick,
   leftIcon,
   className,
+  type,
 }: GenericButtonProps) => (
   <Button
     uppercase
@@ -20,14 +22,17 @@ const GenericButton = ({
     onClick={onClick}
     className={`w-fit bg-emerald-500 hover:bg-emerald-600 rounded-xl ${className}`}
     leftIcon={leftIcon}
+    type={type}
   >
     {text}
   </Button>
 );
 
 GenericButton.defaultProps = {
+  onClick: undefined,
   className: '',
   leftIcon: undefined,
+  type: undefined,
 };
 
 export default GenericButton;

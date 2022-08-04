@@ -11,19 +11,15 @@ import {
 } from '@mantine/core';
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
 import GenericInput from '../../components/generics/GenericInput';
-import { auth } from '../../util/firebase';
-import useUpdate from '../../hooks/useUpdate';
 import useTestCases, { ITestCase } from '../../hooks/useTestCases';
 import useQuestion from '../../hooks/useQuestion';
 
 const ProblemPage = () => {
-  const { getProblemStatement } = useQuestion();
-  const [user] = useAuthState(auth);
-  const { isLoading, updateDocument } = useUpdate();
+  const { getProblemStatement, updateUserQuestionDocument, isLoading } =
+    useQuestion();
 
   const { testCases, getRandomUnsolvedTestCase, markAsSolved } = useTestCases();
 
@@ -52,7 +48,7 @@ const ProblemPage = () => {
           ...testCases.filter((tc) => tc.solved).map((tc) => tc.input),
           currentTestCase.input,
         ];
-        updateDocument('users', user!.uid, {
+        updateUserQuestionDocument({
           solvedTestCases,
         });
         markAsSolved(currentTestCase);
@@ -70,7 +66,7 @@ const ProblemPage = () => {
   };
 
   const handleReset = () => {
-    updateDocument('users', user!.uid, {
+    updateUserQuestionDocument({
       solvedTestCases: '',
     });
     setCurrentTestCase(getRandomUnsolvedTestCase());

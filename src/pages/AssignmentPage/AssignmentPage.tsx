@@ -49,10 +49,10 @@ const AssignmentPage = () => {
         {assignmentsData?.map((d: DocumentData) => (
           <UnstyledButton
             key={d.name}
-            className='bg-gray-100 max-w-md rounded-md p-4'
+            className='bg-gray-100 w-96 h-12 rounded-xl'
             onClick={() => handleAssignmentSelect(d.name)}
           >
-            <Group className=' justify-between'>
+            <Group className='justify-between px-4'>
               {d.name}
               <HiChevronDoubleRight size={32} className='text-gray-600' />
             </Group>

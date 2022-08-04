@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useQuestion from '../hooks/useQuestion';
+import useAssignment from './AssignmentContext';
 
 export type Comment = {
   id: string | number;
@@ -14,7 +15,7 @@ type File = {
 interface ICodeContext {
   file: File;
   defaultCode: string;
-  setFile: (files: File) => void;
+  setFile: (files: File | undefined) => void;
   getRunFile: () => string;
 }
 
@@ -25,6 +26,7 @@ type CodeProviderProps = {
 };
 
 export const CodeProvider = ({ children }: CodeProviderProps) => {
+  const { questionId } = useAssignment();
   const { initialCode, codeTemplate } = useQuestion();
 
   const defaultCode = initialCode
@@ -34,16 +36,20 @@ export const CodeProvider = ({ children }: CodeProviderProps) => {
     ? codeTemplate.replaceAll('\\t', '\t').replaceAll('\\n', '\n')
     : '';
 
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<File | undefined>();
 
   useEffect(() => {
-    if (file === undefined) {
-      const localFile = JSON.parse(localStorage.getItem('file') as string);
-      if (
-        localFile !== undefined &&
-        localFile.content !== undefined &&
-        localFile.content.length > 0
-      ) {
+    if (questionId) {
+      setFile(undefined);
+    }
+  }, [initialCode]);
+
+  useEffect(() => {
+    if (file === undefined && questionId !== undefined) {
+      const localFile = JSON.parse(
+        localStorage.getItem(`file-${questionId}`) as string
+      );
+      if (localFile && localFile.content) {
         setFile(localFile);
       } else if (initialCode) {
         const initialFile = { comments: [], content: defaultCode };
@@ -62,8 +68,8 @@ export const CodeProvider = ({ children }: CodeProviderProps) => {
   );
 
   useEffect(() => {
-    if (file !== undefined) {
-      localStorage.setItem('file', JSON.stringify(file));
+    if (file !== undefined && questionId !== undefined) {
+      localStorage.setItem(`file-${questionId}`, JSON.stringify(file));
     }
   }, [file]);
 

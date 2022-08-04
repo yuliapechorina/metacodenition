@@ -1,5 +1,6 @@
 import { AppShell, Group, Header, Text } from '@mantine/core';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ReactComponent as TitleIcon } from './title.svg';
 import { auth } from '../../util/firebase';
@@ -10,9 +11,15 @@ import useAssignment from '../../context/AssignmentContext';
 import ChangeAssignmentButton from '../../components/ChangeAssignmentButton';
 
 const ApplicationShell = () => {
+  const { assignmentComplete } = useAssignment();
   const location = useLocation();
   const [user] = useAuthState(auth);
   const { assignmentName, questionNumber, questionsLength } = useAssignment();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (assignmentComplete && assignmentName) navigate('/submit');
+  }, [assignmentComplete, assignmentName]);
 
   return (
     <>

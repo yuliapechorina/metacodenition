@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { doc, updateDoc } from 'firebase/firestore/lite';
+import { doc, DocumentReference, updateDoc } from 'firebase/firestore/lite';
 import { db } from '../util/firebase';
 
 const useUpdate = () => {
@@ -24,7 +24,23 @@ const useUpdate = () => {
       });
   };
 
-  return { isLoading, isError, updateDocument };
+  const updateDocumentRef = async (
+    docRef: DocumentReference,
+    data: { [x: string]: any }
+  ) => {
+    setLoading(true);
+    await updateDoc(docRef, data)
+      .then(() => {
+        setLoading(false);
+        setError(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  };
+
+  return { isLoading, isError, updateDocument, updateDocumentRef };
 };
 
 export default useUpdate;
