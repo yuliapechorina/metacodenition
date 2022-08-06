@@ -100,7 +100,6 @@ const AssignmentFeedbackForm = () => {
               thumb: 'border-blue-600',
               markLabel: 'font-bold text-gray-800',
             }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...form.getInputProps('easiness')}
           />
         </InputWrapper>
@@ -125,7 +124,6 @@ const AssignmentFeedbackForm = () => {
               thumb: 'border-blue-600',
               markLabel: 'font-bold text-gray-800',
             }}
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...form.getInputProps('usefulness')}
           />
         </InputWrapper>
@@ -144,7 +142,6 @@ const AssignmentFeedbackForm = () => {
           size='lg'
           classNames={{ input: 'focus:border-blue-600' }}
           placeholder='I found this feature useful. I liked that it was easy to do this.'
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...form.getInputProps('whatWorkedWell')}
         />
         <TextInput
