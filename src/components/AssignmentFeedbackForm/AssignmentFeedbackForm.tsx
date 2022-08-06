@@ -66,7 +66,7 @@ const AssignmentFeedbackForm = () => {
   };
 
   return (
-    <Stack>
+    <Stack className='gap-y-8'>
       <Title order={2}>Please rate your experience</Title>
       <Text size='xl'>
         Please complete this <b>optional</b>, short questionaire. Your answers
@@ -153,14 +153,12 @@ const AssignmentFeedbackForm = () => {
           size='lg'
           classNames={{ input: 'focus:border-blue-600' }}
           placeholder='This page was completely broken. I found using this feature frustrating.'
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...form.getInputProps('whatWentWrong')}
         />
         <Checkbox
           label='I would use this tool again if it was optional'
           size='lg'
           classNames={{ input: 'focus:border-blue-600' }}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...form.getInputProps('useAgain')}
         />
         <GenericButton size='lg' type='submit' text='Submit' />

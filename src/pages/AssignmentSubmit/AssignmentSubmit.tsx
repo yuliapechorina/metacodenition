@@ -31,13 +31,13 @@ const AssignmentSubmit = () => {
 
   return (
     <ScrollArea className='h-full' classNames={{ viewport: ' scroll-smooth' }}>
-      <Stack className='p-16 max-w-5xl gap-y-8'>
+      <Stack className='p-16 max-w-5xl gap-y-0'>
         <Title>Thanks for using our IDE!</Title>
         {!assignmentSubmitted && <AssignmentFeedbackForm />}
         {assignmentSubmitted && (
           <Title order={4}>Thank you for your feedback!</Title>
         )}
-        <Space h={4} />
+        <Space h={68} />
         <Stack ref={codeStackRef}>
           <Title order={2} ref={codeTitleRef}>
             Please find your answers to the questions below:
