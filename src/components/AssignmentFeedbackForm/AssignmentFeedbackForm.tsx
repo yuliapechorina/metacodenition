@@ -1,34 +1,45 @@
 import {
   InputWrapper,
   Slider,
-  Space,
   TextInput,
   Checkbox,
   Text,
+  Title,
+  Select,
+  Group,
+  Stack,
 } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
 import useAssignment from '../../context/AssignmentContext';
 import GenericButton from '../generics/GenericButton';
 
-const easyMarks = [
-  { value: 0, label: 'Extremely Difficult' },
-  { value: 25, label: 'Difficult' },
-  { value: 50, label: 'Neutral' },
-  { value: 75, label: 'Easy' },
-  { value: 100, label: 'Extremely Easy' },
+const marks = [
+  { value: 0, label: '0' },
+  { value: 20, label: '1' },
+  { value: 40, label: '2' },
+  { value: 60, label: '3' },
+  { value: 80, label: '4' },
+  { value: 100, label: '5' },
 ];
 
-const usefulMarks = [
-  { value: 0, label: 'Extremely Useless' },
-  { value: 25, label: 'Useless' },
-  { value: 50, label: 'Neutral' },
-  { value: 75, label: 'Useful' },
-  { value: 100, label: 'Extremely Useful' },
+const interventions = [
+  { value: 'understanding', label: 'Understanding the problem' },
+  { value: 'designing', label: 'Designing a solution' },
+  { value: 'evaluating', label: 'Evaluating a solution' },
+  { value: 'implementing', label: 'Implementing a solution' },
+  { value: 'testing', label: 'Evaluating implemented solution' },
 ];
 
 interface IFormValues {
   easiness: number;
   usefulness: number;
+  intervention:
+    | 'understanding'
+    | 'designing'
+    | 'evaluating'
+    | 'implementing'
+    | 'testing'
+    | undefined;
   whatWorkedWell: string;
   whatWentWrong: string;
   useAgain: boolean;
@@ -37,6 +48,7 @@ interface IFormValues {
 const initialValues: IFormValues = {
   easiness: 0,
   usefulness: 0,
+  intervention: undefined,
   whatWorkedWell: '',
   whatWentWrong: '',
   useAgain: false,
@@ -54,59 +66,106 @@ const AssignmentFeedbackForm = () => {
   };
 
   return (
-    <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
-      <Text>
-        Please complete this short questionaire. Once you&apos;re done we will
-        let you download your answers so you can submit to coderunner.
+    <Stack>
+      <Title order={2}>Please rate your experience</Title>
+      <Text size='xl'>
+        Please complete this <b>optional</b>, short questionaire. Your answers
+        are below the questionaire.
         <br />
-        Important: you must submit to coderunner to get your marks for this
-        course!
+        Important: you must submit your answers to coderunner to get your marks
+        for this course!
       </Text>
-      <InputWrapper label='How easy was it to use this tool?' required>
-        <Slider
-          label={(val) => easyMarks?.find((mark) => mark.value === val)?.label}
-          step={5}
-          marks={easyMarks}
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...form.getInputProps('easiness')}
+      <form
+        onSubmit={form.onSubmit((values) => onSubmit(values))}
+        className='flex flex-col gap-y-8'
+      >
+        <InputWrapper
+          className='mb-4'
+          label='How easy was it to use this tool?'
+          classNames={{ label: 'text-lg' }}
+          required
+        >
+          <Group className='justify-between'>
+            <Text size='sm'>Extremely Difficult</Text>
+            <Text size='sm'>Extremely Easy</Text>
+          </Group>
+          <Slider
+            label={(val) => marks?.find((mark) => mark.value === val)?.label}
+            size='lg'
+            step={5}
+            marks={marks}
+            classNames={{
+              bar: 'bg-blue-600',
+              markFilled: 'border-blue-600',
+              thumb: 'border-blue-600',
+              markLabel: 'font-bold text-gray-800',
+            }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...form.getInputProps('easiness')}
+          />
+        </InputWrapper>
+        <InputWrapper
+          className='mb-4'
+          label='How helpful was the problem-solving assistance?'
+          classNames={{ label: 'text-lg' }}
+          required
+        >
+          <Group className=' justify-between'>
+            <Text size='sm'>Extremely Unhelpful</Text>
+            <Text size='sm'>Extremely Helpful</Text>
+          </Group>
+          <Slider
+            label={(val) => marks?.find((mark) => mark.value === val)?.label}
+            size='lg'
+            step={5}
+            marks={marks}
+            classNames={{
+              bar: 'bg-blue-600',
+              markFilled: 'border-blue-600',
+              thumb: 'border-blue-600',
+              markLabel: 'font-bold text-gray-800',
+            }}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...form.getInputProps('usefulness')}
+          />
+        </InputWrapper>
+        <Select
+          required
+          label='Which assistance was the most helpful?'
+          size='lg'
+          classNames={{ input: 'focus:border-blue-600' }}
+          placeholder='Pick one'
+          data={interventions}
+          {...form.getInputProps('intervention')}
         />
-      </InputWrapper>
-      <Space h={24} />
-      <InputWrapper label='How useful was this tool?' required>
-        <Slider
-          label={(val) =>
-            usefulMarks?.find((mark) => mark.value === val)?.label
-          }
-          step={5}
-          marks={usefulMarks}
+        <TextInput
+          required
+          label='What worked well?'
+          size='lg'
+          classNames={{ input: 'focus:border-blue-600' }}
+          placeholder='I found this feature useful. I liked that it was easy to do this.'
           // eslint-disable-next-line react/jsx-props-no-spreading
-          {...form.getInputProps('usefulness')}
+          {...form.getInputProps('whatWorkedWell')}
         />
-      </InputWrapper>
-      <Space h={24} />
-      <TextInput
-        required
-        label='What worked well?'
-        placeholder='I found this feature useful. I liked that it was easy to do this.'
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...form.getInputProps('whatWorkedWell')}
-      />
-      <TextInput
-        required
-        label='What went wrong?'
-        placeholder='This page was completely broken. I found using this feature frustrating.'
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...form.getInputProps('whatWentWrong')}
-      />
-      <Space h={24} />
-      <Checkbox
-        label='I would use this tool again if it was optional'
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...form.getInputProps('useAgain')}
-      />
-      <Space h={24} />
-      <GenericButton type='submit' text='Submit' />
-    </form>
+        <TextInput
+          required
+          label='What went wrong?'
+          size='lg'
+          classNames={{ input: 'focus:border-blue-600' }}
+          placeholder='This page was completely broken. I found using this feature frustrating.'
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...form.getInputProps('whatWentWrong')}
+        />
+        <Checkbox
+          label='I would use this tool again if it was optional'
+          size='lg'
+          classNames={{ input: 'focus:border-blue-600' }}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...form.getInputProps('useAgain')}
+        />
+        <GenericButton size='lg' type='submit' text='Submit' />
+      </form>
+    </Stack>
   );
 };
 

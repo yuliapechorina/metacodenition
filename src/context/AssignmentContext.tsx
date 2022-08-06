@@ -1,8 +1,5 @@
-import { collection, doc, DocumentData, setDoc } from 'firebase/firestore';
-import {
-  useCollectionData,
-  useDocumentData,
-} from 'react-firebase-hooks/firestore';
+import { doc, DocumentData, setDoc } from 'firebase/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import {
   createContext,
   ReactNode,
@@ -14,6 +11,7 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../util/firebase';
 import useUpdate from '../hooks/useUpdate';
+import useAssignmentsData from '../hooks/useAssignmentsData';
 
 interface IAssignmentContext {
   assignmentName: string;
@@ -21,7 +19,6 @@ interface IAssignmentContext {
   questionId: string;
   setQuestionId: (s: string) => void;
   assignmentsData: DocumentData[] | undefined;
-  userDocData: DocumentData | undefined;
   questionNumber: number;
   questionsLength: number;
   setNextQuestion: () => void;
@@ -29,6 +26,7 @@ interface IAssignmentContext {
   assignmentSubmitted: boolean;
   updateUserAssignmentDoc: (data: { [x: string]: any }) => void;
   getAllCode: () => string[] | undefined;
+  userAssignmentCompletion: boolean[] | undefined;
 }
 
 const AssignmentContext = createContext<Partial<IAssignmentContext>>({});
@@ -44,18 +42,47 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
   const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
 
   const [user] = useAuthState(auth);
-  const userDoc = user ? doc(db, 'users', user?.uid) : undefined;
-  const [userDocData] = useDocumentData(userDoc);
-  const assignmentsCollection = user
-    ? collection(db, 'assignments')
-    : undefined;
-  const [assignmentsData, , , assignmentsSnapShot] = useCollectionData(
-    assignmentsCollection
-  );
 
-  const currentAssignment = assignmentsData?.find(
+  const {
+    assignmentsData,
+    assignmentIds,
+    userAssignmentsData,
+    userAssignmentIds,
+  } = useAssignmentsData();
+
+  const assignmentIndex = assignmentsData?.findIndex(
     (a) => a.name === assignmentName
   );
+  const assignmentId =
+    assignmentIds && assignmentIndex !== undefined
+      ? assignmentIds[assignmentIndex]
+      : 0;
+  const currentAssignment =
+    assignmentIndex !== undefined
+      ? assignmentsData?.[assignmentIndex]
+      : undefined;
+
+  const userAssignmentCompletion: boolean[] | undefined =
+    assignmentsData?.map<boolean>((a, i) => {
+      const aid = assignmentIds?.[i];
+      const indexInUserAssignmentsCollection = userAssignmentIds?.findIndex(
+        (v) => v === aid
+      );
+      if (indexInUserAssignmentsCollection !== undefined) {
+        const submitted: boolean =
+          userAssignmentsData?.[indexInUserAssignmentsCollection]?.submitted ||
+          userAssignmentsData?.[indexInUserAssignmentsCollection]?.complete;
+        return submitted !== undefined ? submitted : false;
+      }
+      return false;
+    });
+
+  const userAssignmentDoc =
+    user && assignmentId && currentAssignment
+      ? doc(db, 'users', user?.uid, 'assignments', assignmentId)
+      : undefined;
+  const [userAssignmentDocData] = useDocumentData(userAssignmentDoc);
+
   const currentQuestionIndex =
     questionId !== undefined
       ? currentAssignment?.questions?.findIndex(
@@ -66,19 +93,6 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
   const questionsLength = currentAssignment?.questions?.length;
   const finalQuestion = questionNumber === questionsLength;
 
-  const assignmentIds = assignmentsSnapShot?.docs.map((v) => v.id);
-  const assignmentIndex = assignmentsData?.findIndex(
-    (a) => a.name === assignmentName
-  );
-  const assignmentId =
-    assignmentIds && assignmentIndex !== undefined
-      ? assignmentIds[assignmentIndex]
-      : 0;
-  const userAssignmentDoc =
-    user && assignmentId && currentAssignment
-      ? doc(db, 'users', user?.uid, 'assignments', assignmentId)
-      : undefined;
-  const [userAssignmentDocData] = useDocumentData(userAssignmentDoc);
   const { updateDocumentRef } = useUpdate();
   const updateUserAssignmentDoc = (data: { [x: string]: any }) => {
     if (userAssignmentDoc) {
@@ -137,7 +151,6 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       questionId,
       setQuestionId,
       assignmentsData,
-      userDocData,
       questionNumber,
       questionsLength,
       setNextQuestion,
@@ -145,6 +158,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       assignmentSubmitted,
       updateUserAssignmentDoc,
       getAllCode,
+      userAssignmentCompletion,
     }),
     [
       assignmentName,
@@ -152,7 +166,6 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       questionId,
       setQuestionId,
       assignmentsData,
-      userDocData,
       questionNumber,
       questionsLength,
       setNextQuestion,
@@ -160,6 +173,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       assignmentSubmitted,
       updateUserAssignmentDoc,
       getAllCode,
+      userAssignmentCompletion,
     ]
   );
 

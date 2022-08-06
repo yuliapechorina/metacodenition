@@ -11,10 +11,14 @@ import useAssignment from '../../context/AssignmentContext';
 import ChangeAssignmentButton from '../../components/ChangeAssignmentButton';
 
 const ApplicationShell = () => {
-  const { assignmentComplete } = useAssignment();
+  const {
+    assignmentComplete,
+    assignmentName,
+    questionNumber,
+    questionsLength,
+  } = useAssignment();
   const location = useLocation();
   const [user] = useAuthState(auth);
-  const { assignmentName, questionNumber, questionsLength } = useAssignment();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,19 +30,23 @@ const ApplicationShell = () => {
       <AppNotifications />
       <AppShell
         header={
-          <Header height={40} className='p-3'>
-            <Group position='apart'>
+          <Header height={40} className='p-3 flex'>
+            <Group position='apart' className='self-center w-full'>
               <TitleIcon />
-              <Group>
-                {questionNumber && questionsLength && (
-                  <Text>
+              <Group className='space-x-12'>
+                {questionNumber && questionsLength && !assignmentComplete && (
+                  <Text size='lg'>
                     Question {questionNumber}/{questionsLength}
                   </Text>
                 )}
-                {assignmentName && <Text>{assignmentName}</Text>}
-                {user && assignmentName && <ChangeAssignmentButton />}
-                <Text>{user?.displayName}</Text>
-                {user && <LogOutButton />}
+                <Group>
+                  {assignmentName && <Text size='lg'>{assignmentName}</Text>}
+                  {user && assignmentName && <ChangeAssignmentButton />}
+                </Group>
+                <Group>
+                  <Text size='lg'>{user?.displayName}</Text>
+                  {user && <LogOutButton />}
+                </Group>
               </Group>
             </Group>
           </Header>

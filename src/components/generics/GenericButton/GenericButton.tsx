@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mantine/core';
+import { Button, MantineSize } from '@mantine/core';
 
 type GenericButtonProps = {
   text: string;
@@ -7,6 +7,7 @@ type GenericButtonProps = {
   className?: string;
   leftIcon?: React.ReactNode;
   type?: 'button' | 'submit' | 'reset' | undefined;
+  size?: MantineSize;
 };
 
 const GenericButton = ({
@@ -15,10 +16,11 @@ const GenericButton = ({
   leftIcon,
   className,
   type,
+  size,
 }: GenericButtonProps) => (
   <Button
     uppercase
-    size='md'
+    size={size}
     onClick={onClick}
     className={`w-fit bg-emerald-500 hover:bg-emerald-600 rounded-xl ${className}`}
     leftIcon={leftIcon}
@@ -33,6 +35,7 @@ GenericButton.defaultProps = {
   className: '',
   leftIcon: undefined,
   type: undefined,
+  size: 'md',
 };
 
 export default GenericButton;
