@@ -2,50 +2,75 @@ import {
   Button,
   Divider,
   Group,
-  Notification,
   ScrollArea,
   Stack,
   Text,
   Title,
   TypographyStylesProvider,
 } from '@mantine/core';
-import { arrayRemove } from 'firebase/firestore';
 import HTMLReactParser from 'html-react-parser';
-import React, { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React, { useState } from 'react';
 import GenericInput from '../../components/generics/GenericInput';
-import useProblem from '../../context/ProblemContext';
-import { auth } from '../../util/firebase';
-import useUpdate from '../../hooks/useUpdate';
-import { Highlight } from '../../util/highlighter';
+import { findHighlightInParent, Highlight } from '../../util/highlighter';
+import useQuestion from '../../hooks/useQuestion';
 
 const DesignPage = () => {
   const {
+    isLoading,
     highlights,
     getProblemStatement,
-    highlightChunk,
-    removeHighlightedChunk,
-  } = useProblem();
+    updateUserQuestionDocument,
+  } = useQuestion();
+
   const [highlightedChunk, setHighlightedChunk] = useState<
     Highlight | undefined
   >();
+
   const [inputValue, setInputValue] = useState<string>('');
-  const [user] = useAuthState(auth);
-  const { isLoading, isError, updateDocument } = useUpdate();
-  const [errorNotificationVisible, setErrorNotificationVisible] =
-    useState(false);
-  const [errorNotificationDismissed, setErrorNotifcationDismissed] =
-    useState(false);
 
-  useEffect(() => {
-    if (isError) {
-      setErrorNotificationVisible(true);
+  const highlightChunk = (chunk: Selection): Highlight | undefined => {
+    const indexPair = findHighlightInParent(chunk);
+
+    if (highlights) {
+      const selectedHighlight = highlights?.find(
+        (highlight: Highlight) =>
+          highlight.indexPair.start <= indexPair.start &&
+          highlight.indexPair.end >= indexPair.end,
+        indexPair
+      );
+
+      if (selectedHighlight || !chunk.toString) {
+        return selectedHighlight;
+      }
     }
 
-    if (errorNotificationDismissed) {
-      setErrorNotificationVisible(false);
+    const newHighlight: Highlight = {
+      id: Math.floor(Math.random() * 100),
+      indexPair,
+      highlightedText: chunk.toString(),
+      action: '',
+    };
+
+    if (newHighlight.highlightedText === '') return undefined;
+
+    const newHighlights = highlights
+      ? [...highlights, newHighlight]
+      : [newHighlight];
+    updateUserQuestionDocument({ highlights: newHighlights });
+
+    return newHighlight;
+  };
+
+  const removeHighlightedChunk = (highlight: Highlight) => {
+    if (!highlights) {
+      return;
     }
-  }, [isError, errorNotificationDismissed]);
+
+    const newHighlights = highlights.filter(
+      (thisHighlight: Highlight) => thisHighlight !== highlight
+    );
+    updateUserQuestionDocument({ highlights: newHighlights });
+  };
 
   const handleMouseUp = () => {
     const selection = window.getSelection();
@@ -63,7 +88,7 @@ const DesignPage = () => {
       return;
     }
 
-    if (user && highlights && highlightedChunk) {
+    if (highlights && highlightedChunk) {
       const newHighlightedChunk = {
         ...highlightedChunk,
         action: inputValue,
@@ -74,7 +99,7 @@ const DesignPage = () => {
           ? newHighlightedChunk
           : highlight
       );
-      updateDocument('users', user.uid, {
+      updateUserQuestionDocument({
         highlights: newHighlights,
       });
     }
@@ -85,12 +110,9 @@ const DesignPage = () => {
       removeHighlightedChunk!(highlightedChunk);
       setHighlightedChunk(undefined);
       setInputValue('');
-
-      if (user) {
-        updateDocument('users', user.uid, {
-          highlights: arrayRemove(highlightedChunk),
-        });
-      }
+      updateUserQuestionDocument({
+        highlights: highlights.filter((hl) => hl.id !== highlightedChunk.id),
+      });
     }
   };
 
@@ -153,15 +175,6 @@ const DesignPage = () => {
             Delete
           </Button>
         </Group>
-        {errorNotificationVisible && (
-          <Notification
-            title='Failed to submit action'
-            color='red'
-            onClose={() => setErrorNotifcationDismissed(true)}
-          >
-            Please try again.
-          </Notification>
-        )}
       </Stack>
     </ScrollArea>
   );

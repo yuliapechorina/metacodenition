@@ -19,7 +19,7 @@ const CodeInput = (props: CodeInputProps) => {
         input: 'font-mono rounded h-10 text-lg bg-gray-100 w-full',
       }}
       icon={CodeInputIcon()}
-      variant='headless'
+      variant='unstyled'
       placeholder={placeholder}
       onChange={onChange}
       value={value}

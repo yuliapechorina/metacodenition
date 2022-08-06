@@ -8,7 +8,7 @@ import getOutput from '../../util/comment-generator';
 import ProblemPopover from '../ProblemPopover';
 
 const CodeEditor = () => {
-  const { file, defaultFile, setFile } = useCode();
+  const { file, defaultCode, setFile } = useCode();
   const { getUsedParsonsFragments } = useParsons();
   const { addNotification } = useNotifications();
   const [isProblemOpened, setProblemOpened] = useState(false);
@@ -24,8 +24,8 @@ const CodeEditor = () => {
     }));
 
   const generateComments = () => {
-    const firstLineBreakIndex = defaultFile?.content.search('\n');
-    const firstLine = defaultFile?.content.slice(0, firstLineBreakIndex);
+    const firstLineBreakIndex = defaultCode?.search('\n');
+    const firstLine = defaultCode?.slice(0, firstLineBreakIndex);
     if (file?.content.includes(firstLine!)) {
       const generatorOutput = getOutput(getComments, file);
       setFile!({

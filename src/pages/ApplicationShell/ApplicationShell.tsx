@@ -1,28 +1,52 @@
-import React from 'react';
 import { AppShell, Group, Header, Text } from '@mantine/core';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ReactComponent as TitleIcon } from './title.svg';
 import { auth } from '../../util/firebase';
 import AppNotifications from '../../components/AppNotifications';
 import NavBar from '../../components/NavBar';
 import LogOutButton from '../../components/LogOutButton';
+import useAssignment from '../../context/AssignmentContext';
+import ChangeAssignmentButton from '../../components/ChangeAssignmentButton';
 
 const ApplicationShell = () => {
+  const {
+    assignmentComplete,
+    assignmentName,
+    questionNumber,
+    questionsLength,
+  } = useAssignment();
   const location = useLocation();
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (assignmentComplete && assignmentName) navigate('/submit');
+  }, [assignmentComplete, assignmentName]);
 
   return (
     <>
       <AppNotifications />
       <AppShell
         header={
-          <Header height={40} className='p-3'>
-            <Group position='apart'>
+          <Header height={40} className='p-3 flex'>
+            <Group position='apart' className='self-center w-full'>
               <TitleIcon />
-              <Group>
-                <Text>{user?.displayName}</Text>
-                {user && <LogOutButton />}
+              <Group className='space-x-12'>
+                {questionNumber && questionsLength && !assignmentComplete && (
+                  <Text size='lg'>
+                    Question {questionNumber}/{questionsLength}
+                  </Text>
+                )}
+                <Group>
+                  {assignmentName && <Text size='lg'>{assignmentName}</Text>}
+                  {user && assignmentName && <ChangeAssignmentButton />}
+                </Group>
+                <Group>
+                  <Text size='lg'>{user?.displayName}</Text>
+                  {user && <LogOutButton />}
+                </Group>
               </Group>
             </Group>
           </Header>

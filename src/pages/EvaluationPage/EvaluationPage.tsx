@@ -4,26 +4,20 @@ import {
   Group,
   Stack,
   Title,
-  Notification,
   ScrollArea,
   Center,
   Text,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
 
 const EvaluationPage = () => {
-  const [errorNotificationVisible, setErrorNotificationVisible] =
-    useState(false);
-  const [errorNotificationDismissed, setErrorNotifcationDismissed] =
-    useState(false);
   const [isProblemOpened, setProblemOpened] = useState(false);
 
   const {
     submitParsons,
-    isError,
     isLoading,
     getUnusedListItems,
     setUnusedListItems,
@@ -32,16 +26,6 @@ const EvaluationPage = () => {
     setUsedListItems,
     getUsedParsonsFragments,
   } = useParsons();
-
-  useEffect(() => {
-    if (isError) {
-      setErrorNotificationVisible(true);
-    }
-
-    if (errorNotificationDismissed) {
-      setErrorNotificationVisible(false);
-    }
-  }, [isError, errorNotificationDismissed]);
 
   return (
     <Stack className='h-full p-0 z-10 relative'>
@@ -62,7 +46,7 @@ const EvaluationPage = () => {
           />
         </Group>
         <Group className='items-start pb-32 bg-gray-100 shadow-inner mx-4 rounded-lg'>
-          <Stack spacing={0} className='h-full flex-1'>
+          <Stack spacing={0} className='grow min-h-[32rem]'>
             <Title order={4} className='text-center py-4 '>
               Drag from here
             </Title>
@@ -71,7 +55,7 @@ const EvaluationPage = () => {
               setList={setUnusedListItems}
               group='design-parsons'
               animation={100}
-              className='flex flex-col space-y-4 h-full pl-8 pr-2'
+              className='flex flex-col space-y-4 grow pl-8 pr-2'
             >
               {getUnusedParsonsFragments!().map((fragment) => (
                 <div key={fragment.listItem.id}>
@@ -89,7 +73,7 @@ const EvaluationPage = () => {
               ))}
             </ReactSortable>
           </Stack>
-          <Stack spacing={0} className='h-full flex-1 space-y-0'>
+          <Stack spacing={0} className='grow min-h-[32rem]'>
             <Title order={4} className='py-4 text-center'>
               Design your solution here
             </Title>
@@ -98,7 +82,7 @@ const EvaluationPage = () => {
               setList={setUsedListItems}
               group='design-parsons'
               animation={100}
-              className='flex flex-col space-y-4 h-full pl-2 pr-8'
+              className='flex flex-col space-y-4 grow pl-2 pr-8'
             >
               {getUsedParsonsFragments!().map((fragment) => (
                 <div key={fragment.listItem.id}>
@@ -128,15 +112,6 @@ const EvaluationPage = () => {
           Submit
         </Button>
       </Center>
-      {errorNotificationVisible && (
-        <Notification
-          title='Failed to submit'
-          color='red'
-          onClose={() => setErrorNotifcationDismissed(true)}
-        >
-          Please try again.
-        </Notification>
-      )}
     </Stack>
   );
 };

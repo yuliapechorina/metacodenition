@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
-import { arrayUnion, doc } from 'firebase/firestore';
-import { auth, db } from '../util/firebase';
 import { submitRun } from '../api/codeRunner.api';
 import useCode from '../context/CodeContext';
-import useUpdate from './useUpdate';
+import useQuestion from './useQuestion';
 
 export type ResultType = 'pass' | 'fail' | 'unrun';
 
@@ -22,17 +18,12 @@ const useTestCases = () => {
   const [testCases, setTestCases] = useState<ITestCase[]>([]);
   const { getRunFile } = useCode();
 
-  const [user] = useAuthState(auth);
-
-  const questionDoc = doc(db, 'questions', 'wIK4Zf2d0ZKLpnnzsfxp');
-  const [questionData] = useDocumentData(questionDoc);
-
-  const userDoc = user ? doc(db, 'users', user!.uid) : undefined;
-  const [userData] = useDocumentData(userDoc);
-
-  const questionTestCases = questionData?.testCases || undefined;
-  const solvedTestCases = userData?.solvedTestCases || undefined;
-  const userTestCases = userData?.userTestCases || undefined;
+  const {
+    defaultTestCases,
+    solvedTestCases,
+    userTestCases,
+    updateUserQuestionDocument,
+  } = useQuestion();
 
   const runCases = async (runTestCases: ITestCase[]) => {
     const runCode = async (testCase: ITestCase) => {
@@ -81,9 +72,9 @@ const useTestCases = () => {
 
   useEffect(() => {
     const newTestCases: ITestCase[] = [];
-    if (questionTestCases !== undefined) {
+    if (defaultTestCases !== undefined) {
       const availableQuestionTestCases = new Map<string, string>(
-        Object.entries(questionTestCases)
+        Object.entries(defaultTestCases)
       );
       const newQuestionTestCases: ITestCase[] = Array.from(
         availableQuestionTestCases
@@ -112,7 +103,7 @@ const useTestCases = () => {
       );
       setTestCases(newSolvedTestCases);
     } else setTestCases(newTestCases);
-  }, [questionTestCases, userTestCases, solvedTestCases]);
+  }, [defaultTestCases, userTestCases, solvedTestCases]);
 
   const getRandomUnsolvedTestCase = () => {
     const unsolvedTestCases = testCases.filter((tc) => !tc.solved);
@@ -124,15 +115,10 @@ const useTestCases = () => {
   const markAsSolved = (testCase: ITestCase) =>
     setTestCases([...testCases, { ...testCase, solved: true }]);
 
-  const { updateDocument } = useUpdate();
-
   const addUserTestCase = (testCase: ITestCase) => {
     if (!testCase.student_generated) return;
-    updateDocument('users', user!.uid, {
-      userTestCases:
-        userData?.userTestCases !== undefined
-          ? arrayUnion(testCase)
-          : [testCase],
+    updateUserQuestionDocument({
+      userTestCases: [...userTestCases, testCase],
     });
   };
 
@@ -141,7 +127,7 @@ const useTestCases = () => {
     const newUserTestCases = testCases.filter(
       (tc) => tc.student_generated && tc.input !== testCase.input
     );
-    updateDocument('users', user!.uid, {
+    updateUserQuestionDocument({
       userTestCases: newUserTestCases,
     });
   };
