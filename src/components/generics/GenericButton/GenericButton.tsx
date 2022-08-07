@@ -8,6 +8,7 @@ type GenericButtonProps = {
   leftIcon?: React.ReactNode;
   type?: 'button' | 'submit' | 'reset' | undefined;
   size?: MantineSize;
+  disabled?: boolean;
 };
 
 const GenericButton = ({
@@ -17,14 +18,16 @@ const GenericButton = ({
   className,
   type,
   size,
+  disabled,
 }: GenericButtonProps) => (
   <Button
     uppercase
     size={size}
     onClick={onClick}
-    className={`w-fit bg-emerald-500 hover:bg-emerald-600 rounded-xl ${className}`}
+    className={`w-fit bg-emerald-500 hover:bg-emerald-600 rounded-md ${className}`}
     leftIcon={leftIcon}
     type={type}
+    disabled={disabled}
   >
     {text}
   </Button>
@@ -36,6 +39,7 @@ GenericButton.defaultProps = {
   leftIcon: undefined,
   type: undefined,
   size: 'md',
+  disabled: false,
 };
 
 export default GenericButton;
