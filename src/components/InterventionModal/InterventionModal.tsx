@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import { Center, Checkbox, CheckboxGroup, Modal } from '@mantine/core';
 import GenericButton from '../generics/GenericButton';
@@ -29,8 +30,8 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
       }}
     >
       <CheckboxGroup value={value} onChange={setValue} orientation='vertical'>
-        {options.map((option) => (
-          <Checkbox value={option} label={option} />
+        {options.map((option, index) => (
+          <Checkbox key={index} value={option} label={option} />
         ))}
       </CheckboxGroup>
       <Center>
