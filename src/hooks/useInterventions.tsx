@@ -2,6 +2,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import useNotifications from '../context/NotificationContext';
 import { auth, db } from '../util/firebase';
 
 type IIntervention = {
@@ -33,7 +34,7 @@ const useInterventions = () => {
 
   const [user] = useAuthState(auth);
   const userDoc = user ? doc(db, 'users', user.uid) : undefined;
-  const [userDocumentData] = useDocumentData(userDoc);
+  const [userDocumentData, loading, error] = useDocumentData(userDoc);
 
   useEffect(() => {
     if (userDocumentData !== undefined) {
@@ -63,10 +64,22 @@ const useInterventions = () => {
     }
   };
 
+  const { addNotification } = useNotifications();
+  useEffect(() => {
+    if (error) {
+      addNotification!({
+        type: 'failure',
+        content: 'Error loading intervention data',
+      });
+    }
+  }, [error]);
+
   return {
     interventions,
     toggleInterventionEnabled,
     setUserInterventions,
+    loading,
+    error,
   };
 };
 

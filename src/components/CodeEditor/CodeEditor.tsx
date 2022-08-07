@@ -20,7 +20,7 @@ const CodeEditor = () => {
 
   useEffect(() => {
     const evaluatingASolutionEnabled = interventions.find(
-      ({ name }) => name === 'Evaluating implemented solution'
+      ({ name }) => name === 'Evaluating a solution'
     )?.enabled;
     setGenerateCommentsButtonVisible(evaluatingASolutionEnabled ?? false);
   }, [interventions]);
