@@ -22,6 +22,7 @@ import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
 import useAssignment from '../../context/AssignmentContext';
 import useQuestion from '../../hooks/useQuestion';
 import useCode from '../../context/CodeContext';
+import GenericButton from '../../components/generics/GenericButton';
 
 const TestCasePage = () => {
   const navigate = useNavigate();
@@ -287,24 +288,19 @@ const TestCasePage = () => {
         </Table>
       </Stack>
       <Group className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px] justify-center'>
-        <Button
-          size='md'
-          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+        <GenericButton
+          text='Run'
           onClick={handleRunButtonPress}
           disabled={running || isLoading}
           loading={running || isLoading}
-        >
-          Run
-        </Button>
-        <Button
-          size='md'
-          className='bg-blue-500 fill-blue-50 hover:bg-blue-600'
+        />
+        <GenericButton
+          text='Submit'
+          blue
           onClick={handleSubmitButtonPress}
           disabled={running || isLoading}
           loading={running || isLoading}
-        >
-          Submit
-        </Button>
+        />
       </Group>
     </ScrollArea>
   );

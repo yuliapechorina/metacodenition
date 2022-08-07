@@ -1,4 +1,4 @@
-import { Button, Code, Group, Stack, Text, Title } from '@mantine/core';
+import { Code, Group, Stack, Text, Title } from '@mantine/core';
 import Editor from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import useCode, { Comment } from '../../context/CodeContext';
