@@ -7,6 +7,7 @@ import {
   HiOutlineTerminal,
   HiOutlineClipboardCheck,
 } from 'react-icons/hi';
+import useInterventions from '../../hooks/useInterventions';
 import MainLink from './MainLink';
 
 const data = [
@@ -63,14 +64,25 @@ const data = [
 ];
 
 const MainLinks = () => {
-  const links = data.map((link) => (
-    <MainLink
-      key={link.label}
-      icon={link.icon}
-      label={link.label}
-      pathName={link.pathName}
-    />
-  ));
+  const { interventions } = useInterventions();
+
+  const links = data.map((link) => {
+    if (
+      link.label === 'Implementing a solution' ||
+      interventions.find((intervention) => intervention.name === link.label)
+        ?.enabled
+    ) {
+      return (
+        <MainLink
+          key={link.label}
+          icon={link.icon}
+          label={link.label}
+          pathName={link.pathName}
+        />
+      );
+    }
+    return undefined;
+  });
   return <Stack spacing={5}>{links}</Stack>;
 };
 
