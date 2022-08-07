@@ -13,22 +13,15 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProblemPopover from '../../components/ProblemPopover';
 import useNotifications, {
   INotification,
 } from '../../context/NotificationContext';
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
-import useAssignment from '../../context/AssignmentContext';
-import useQuestion from '../../hooks/useQuestion';
-import useCode from '../../context/CodeContext';
 import GenericButton from '../../components/generics/GenericButton';
 
 const TestCasePage = () => {
-  const navigate = useNavigate();
-  const { setNextQuestion } = useAssignment();
-  const { isLoading, updateUserQuestionDocument } = useQuestion();
-  const { file } = useCode();
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
   const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
@@ -76,12 +69,6 @@ const TestCasePage = () => {
 
     addNotification!(notification);
     setRunning(false);
-  };
-
-  const handleSubmitButtonPress = async () => {
-    updateUserQuestionDocument({ submitted: true, userCode: file });
-    setNextQuestion!();
-    navigate('/assignment');
   };
 
   const handleCheckboxChange = (testCase: ITestCase, selected: boolean) =>
@@ -291,15 +278,8 @@ const TestCasePage = () => {
         <GenericButton
           text='Run'
           onClick={handleRunButtonPress}
-          disabled={running || isLoading}
-          loading={running || isLoading}
-        />
-        <GenericButton
-          text='Submit'
-          blue
-          onClick={handleSubmitButtonPress}
-          disabled={running || isLoading}
-          loading={running || isLoading}
+          disabled={running}
+          loading={running}
         />
       </Group>
     </ScrollArea>
