@@ -4,22 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import GenericButton from '../../components/generics/GenericButton';
 import { ReactComponent as ErrorIcon } from '../../assets/error-icon.svg';
 
-const InvalidEmailPage = () => {
+const PageNotFound = () => {
   const navigate = useNavigate();
 
-  const navigateToHomePage = () => {
-    navigate('/');
+  const navigateBack = () => {
+    navigate(-1);
   };
 
   return (
     <Group className='items-center h-full justify-center'>
       <ErrorIcon className='w-[180px]' />
       <Stack className='p-4 w-fit'>
-        <Text className='font-bold -mb-4 text-lg'>Invalid Email</Text>
-        <Text>Please log in again with a University of Auckland email.</Text>
+        <Text className='font-bold -mb-4 text-lg'>Page Not Found</Text>
+        <Text>The page that you are trying to access may be disabled.</Text>
         <GenericButton
-          text='Return to home page'
-          onClick={navigateToHomePage}
+          text='Go back to previous page'
+          onClick={navigateBack}
           className='mt-4 w-auto'
         />
       </Stack>
@@ -27,4 +27,4 @@ const InvalidEmailPage = () => {
   );
 };
 
-export default InvalidEmailPage;
+export default PageNotFound;
