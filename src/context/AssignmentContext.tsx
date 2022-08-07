@@ -37,6 +37,7 @@ type AssignmentProviderProps = {
 
 export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
   const [assignmentName, setAssignmentName] = useState<string | undefined>();
+  const [questionIndex, setQuestionIndex] = useState<number | undefined>();
   const [questionId, setQuestionId] = useState<string | undefined>();
   const [assignmentComplete, setAssignmentComplete] = useState(false);
   const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
@@ -83,13 +84,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       : undefined;
   const [userAssignmentDocData] = useDocumentData(userAssignmentDoc);
 
-  const currentQuestionIndex =
-    questionId !== undefined
-      ? currentAssignment?.questions?.findIndex(
-          (uid: string) => uid === questionId
-        )
-      : 0;
-  const questionNumber = currentQuestionIndex + 1;
+  const questionNumber = questionIndex !== undefined ? questionIndex + 1 : 0;
   const questionsLength = currentAssignment?.questions?.length;
   const finalQuestion = questionNumber === questionsLength;
 
@@ -102,7 +97,9 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
 
   const setNextQuestion = () => {
     if (!finalQuestion) {
-      setQuestionId(currentAssignment?.questions?.[questionNumber]);
+      updateUserAssignmentDoc({
+        questionIndex: questionIndex !== undefined ? questionIndex + 1 : 0,
+      });
     } else {
       if (userAssignmentDoc) {
         updateUserAssignmentDoc({ complete: true });
@@ -134,6 +131,15 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       }
       if (userAssignmentDocData.submitted !== undefined) {
         setAssignmentSubmitted(userAssignmentDocData.submitted);
+      }
+      if (userAssignmentDocData.questionIndex !== undefined) {
+        setQuestionIndex(userAssignmentDocData.questionIndex);
+        setQuestionId(
+          currentAssignment?.questions?.[userAssignmentDocData.questionIndex]
+        );
+      } else {
+        setQuestionIndex(0);
+        setQuestionId(currentAssignment?.questions?.[0]);
       }
     }
   }, [userAssignmentDocData]);

@@ -18,9 +18,10 @@ const AssignmentPage = () => {
   const {
     assignmentName,
     setAssignmentName,
-    setQuestionId,
     assignmentsData,
     userAssignmentCompletion,
+    assignmentComplete,
+    assignmentSubmitted,
   } = useAssignment();
   const navigate = useNavigate();
 
@@ -34,11 +35,11 @@ const AssignmentPage = () => {
 
   useEffect(() => {
     if (assignmentName) {
-      const assignmentData = assignmentsData?.find(
-        (a) => a.name === assignmentName
-      );
-      setQuestionId!(assignmentData?.questions?.[0]);
-      navigate('/assignment');
+      if (assignmentComplete || assignmentSubmitted) {
+        navigate('/submit');
+      } else {
+        navigate('/assignment');
+      }
     }
   }, [assignmentName]);
 
