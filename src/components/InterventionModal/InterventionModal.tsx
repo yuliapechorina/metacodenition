@@ -46,7 +46,7 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
       title='Which problem-solving assistance would you like enabled?'
       classNames={{
         title: 'font-bold',
-        body: 'space-y-8',
+        body: 'space-y-4',
       }}
     >
       {interventions.map((intervention, index) => (
