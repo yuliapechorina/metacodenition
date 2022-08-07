@@ -1,16 +1,15 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
-import { Center, Checkbox, Modal } from '@mantine/core';
-import GenericButton from '../generics/GenericButton';
+import { Checkbox, Drawer, Text } from '@mantine/core';
 import useInterventions from '../../hooks/useInterventions';
 
-type InterventionModalProps = {
+type SettingsDrawerProps = {
   opened: boolean;
   setOpened: (value: React.SetStateAction<boolean>) => void;
 };
 
-const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
-  const { interventions, setUserInterventions } = useInterventions();
+const SettingsDrawer = ({ opened, setOpened }: SettingsDrawerProps) => {
+  const { interventions, toggleInterventionEnabled } = useInterventions();
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>(
     new Array(interventions.length).fill(false)
@@ -25,30 +24,22 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
       index === position ? !checkedState : checkedState
     );
     setCheckedStates(newCheckedStates);
-  };
-
-  const handleClick = () => {
-    setUserInterventions(
-      interventions.map((intervention, index) => ({
-        ...intervention,
-        enabled: checkedStates[index],
-      }))
-    );
-    setOpened(false);
+    toggleInterventionEnabled(name);
   };
 
   return (
-    <Modal
-      centered
+    <Drawer
       opened={opened}
-      withCloseButton={false}
       onClose={() => setOpened(false)}
-      title='Which problem-solving assistance would you like enabled?'
+      title='Settings'
+      position='right'
+      className='p-4'
       classNames={{
         title: 'font-bold',
-        body: 'space-y-8',
+        drawer: 'space-y-4',
       }}
     >
+      <Text className='font-bold text-sm'>Problem-solving assistance</Text>
       {interventions.map((intervention, index) => (
         <Checkbox
           key={intervention.name}
@@ -57,11 +48,8 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
           onChange={() => handleOnChange(intervention.name, index)}
         />
       ))}
-      <Center>
-        <GenericButton text='Continue' onClick={handleClick} />
-      </Center>
-    </Modal>
+    </Drawer>
   );
 };
 
-export default InterventionModal;
+export default SettingsDrawer;
