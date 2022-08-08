@@ -10,7 +10,7 @@ type InterventionModalProps = {
 };
 
 const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
-  const { interventions, setUserInterventions, loading } = useInterventions();
+  const { interventions, setUserInterventions, isLoading } = useInterventions();
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>(
     new Array(interventions.length).fill(false)
@@ -61,7 +61,7 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
         <GenericButton
           text='Continue'
           onClick={handleClick}
-          loading={loading}
+          loading={isLoading}
         />
       </Center>
     </Modal>

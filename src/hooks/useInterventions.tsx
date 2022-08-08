@@ -1,9 +1,6 @@
-import { doc, updateDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import useAssignment from '../context/AssignmentContext';
 import useNotifications from '../context/NotificationContext';
-import { auth, db } from '../util/firebase';
 
 type IIntervention = {
   name: string;
@@ -30,56 +27,50 @@ const defaultInterventions = [
 ];
 
 const useInterventions = () => {
+  const { userAssignmentDocData, updateUserAssignmentDoc, isLoading, isError } =
+    useAssignment();
   const [interventions, setInterventions] = useState<IIntervention[]>([]);
 
-  const [user] = useAuthState(auth);
-  const userDoc = user ? doc(db, 'users', user.uid) : undefined;
-  const [userDocumentData, loading, error] = useDocumentData(userDoc);
-
   useEffect(() => {
-    if (userDocumentData !== undefined) {
-      if (userDocumentData.interventions !== undefined) {
-        setInterventions(userDocumentData.interventions);
-      } else if (userDoc) {
-        updateDoc(userDoc, { interventions: defaultInterventions });
+    if (userAssignmentDocData !== undefined) {
+      if (userAssignmentDocData.interventions !== undefined) {
+        setInterventions(userAssignmentDocData.interventions);
+      } else {
+        updateUserAssignmentDoc!({ interventions: defaultInterventions });
       }
     }
-  }, [userDocumentData]);
+  }, [userAssignmentDocData]);
 
   const toggleInterventionEnabled = (name: string) => {
-    if (userDoc) {
-      const newInterventions = interventions.map((intervention) => {
-        if (intervention.name === name) {
-          return { ...intervention, enabled: !intervention.enabled };
-        }
-        return intervention;
-      });
-      updateDoc(userDoc, { interventions: newInterventions });
-    }
+    const newInterventions = interventions.map((intervention) => {
+      if (intervention.name === name) {
+        return { ...intervention, enabled: !intervention.enabled };
+      }
+      return intervention;
+    });
+    updateUserAssignmentDoc!({ interventions: newInterventions });
   };
 
   const setUserInterventions = (userInterventions: IIntervention[]) => {
-    if (userDoc) {
-      updateDoc(userDoc, { interventions: userInterventions });
-    }
+    updateUserAssignmentDoc!({ interventions: userInterventions });
   };
 
   const { addNotification } = useNotifications();
   useEffect(() => {
-    if (error) {
+    if (isError) {
       addNotification!({
         type: 'failure',
         content: 'Error loading intervention data',
       });
     }
-  }, [error]);
+  }, [isError]);
 
   return {
     interventions,
     toggleInterventionEnabled,
     setUserInterventions,
-    loading,
-    error,
+    isLoading,
+    isError,
   };
 };
 
