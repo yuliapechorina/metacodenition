@@ -9,7 +9,7 @@ import { applyHighlightToText } from '../util/highlighter';
 import useUpdate from './useUpdate';
 
 const useQuestion = () => {
-  const { questionId, setNextQuestion } = useAssignment();
+  const { questionId } = useAssignment();
   const [user] = useAuthState(auth);
   const questionDoc =
     user && questionId !== undefined
@@ -62,12 +62,6 @@ const useQuestion = () => {
     if (userQuestionData?.userTestCases !== undefined)
       setUserTestCases(userQuestionData?.userTestCases);
   }, [userQuestionData]);
-
-  useEffect(() => {
-    if (submitted === true) {
-      setNextQuestion!();
-    }
-  }, [submitted]);
 
   useEffect(() => {
     if (userQuestionDoc) {
