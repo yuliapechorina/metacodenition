@@ -38,7 +38,7 @@ const AppNotifications = () => {
       type='hover'
       className={
         (notifications || []).length > 0
-          ? '!fixed right-0 top-0 mt-4 mb-4 pb-8 ml-8 mr-4 pr-4 max-w-md h-full'
+          ? '!fixed right-0 top-0 mt-4 mb-4 pb-8 ml-8 mr-4 pr-4 max-w-md h-full pointer-events-none'
           : 'hidden'
       }
       style={{ zIndex: 110 }}
@@ -49,7 +49,7 @@ const AppNotifications = () => {
             icon={getNotificationIcon(notification)}
             title={getNotificationTitle(notification)}
             color={getNotificationColour(notification)}
-            className='bg-white/30 backdrop-blur-md'
+            className='bg-white/30 backdrop-blur-md pointer-events-auto'
             classNames={{ title: 'text-lg' }}
             onClose={() => removeNotification!(notification)}
             // eslint-disable-next-line react/no-array-index-key
