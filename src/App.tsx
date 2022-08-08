@@ -80,9 +80,13 @@ const App = () => {
             {testCaseRouteEnabled && (
               <Route path='test-cases' element={<TestCasePage />} />
             )}
-            <Route path='*' element={<PageNotFound />} />
+            <Route
+              path='*'
+              element={<Navigate to={assignmentRedirectRoute} />}
+            />
           </Route>
           <Route path='/invalid-email' element={<InvalidEmailPage />} />
+          <Route path='*' element={<PageNotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
