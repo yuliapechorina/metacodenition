@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   Group,
   Stack,
@@ -10,6 +9,7 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
+import GenericButton from '../../components/generics/GenericButton';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
 
@@ -103,14 +103,12 @@ const EvaluationPage = () => {
         </Group>
       </ScrollArea>
       <Center className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
-        <Button
-          size='md'
-          className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600 drop-shadow-md'
+        <GenericButton
+          text='Submit'
+          className='drop-shadow-md'
           onClick={() => submitParsons!()}
           disabled={isLoading}
-        >
-          Submit
-        </Button>
+        />
       </Center>
     </Stack>
   );

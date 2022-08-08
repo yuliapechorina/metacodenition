@@ -9,6 +9,7 @@ import NavBar from '../../components/NavBar';
 import LogOutButton from '../../components/LogOutButton';
 import useAssignment from '../../context/AssignmentContext';
 import ChangeAssignmentButton from '../../components/ChangeAssignmentButton';
+import SettingsButton from '../../components/SettingsButton';
 
 const ApplicationShell = () => {
   const {
@@ -33,7 +34,7 @@ const ApplicationShell = () => {
           <Header height={40} className='p-3 flex'>
             <Group position='apart' className='self-center w-full'>
               <TitleIcon />
-              <Group className='space-x-12'>
+              <Group className='space-x-8'>
                 {questionNumber && questionsLength && !assignmentComplete && (
                   <Text size='lg'>
                     Question {questionNumber}/{questionsLength}
@@ -46,6 +47,9 @@ const ApplicationShell = () => {
                 <Group>
                   <Text size='lg'>{user?.displayName}</Text>
                   {user && <LogOutButton />}
+                  {questionNumber === 3 && !assignmentComplete && (
+                    <SettingsButton />
+                  )}
                 </Group>
               </Group>
             </Group>

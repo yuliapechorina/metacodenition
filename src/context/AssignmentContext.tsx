@@ -15,18 +15,21 @@ import useAssignmentsData from '../hooks/useAssignmentsData';
 
 interface IAssignmentContext {
   assignmentName: string;
-  setAssignmentName: (s: string | undefined) => void;
+  setAssignmentName: (s?: string) => void;
   questionId: string;
   setQuestionId: (s: string) => void;
-  assignmentsData: DocumentData[] | undefined;
+  assignmentsData?: DocumentData[];
   questionNumber: number;
   questionsLength: number;
   setNextQuestion: () => void;
   assignmentComplete: boolean;
   assignmentSubmitted: boolean;
+  userAssignmentDocData?: DocumentData;
   updateUserAssignmentDoc: (data: { [x: string]: any }) => void;
   getAllCode: () => string[] | undefined;
-  userAssignmentCompletion: boolean[] | undefined;
+  userAssignmentCompletion?: boolean[];
+  isLoading: boolean;
+  isError: boolean;
 }
 
 const AssignmentContext = createContext<Partial<IAssignmentContext>>({});
@@ -88,7 +91,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
   const questionsLength = currentAssignment?.questions?.length;
   const finalQuestion = questionNumber === questionsLength;
 
-  const { updateDocumentRef } = useUpdate();
+  const { updateDocumentRef, isLoading, isError } = useUpdate();
   const updateUserAssignmentDoc = (data: { [x: string]: any }) => {
     if (userAssignmentDoc) {
       updateDocumentRef(userAssignmentDoc, data);
@@ -162,9 +165,12 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       setNextQuestion,
       assignmentComplete,
       assignmentSubmitted,
+      userAssignmentDocData,
       updateUserAssignmentDoc,
       getAllCode,
       userAssignmentCompletion,
+      isLoading,
+      isError,
     }),
     [
       assignmentName,
@@ -177,9 +183,12 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       setNextQuestion,
       assignmentComplete,
       assignmentSubmitted,
+      userAssignmentDocData,
       updateUserAssignmentDoc,
       getAllCode,
       userAssignmentCompletion,
+      isLoading,
+      isError,
     ]
   );
 

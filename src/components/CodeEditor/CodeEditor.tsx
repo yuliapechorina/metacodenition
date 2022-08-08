@@ -1,10 +1,12 @@
-import { Button, Code, Group, Stack, Text, Title } from '@mantine/core';
+import { Code, Group, Stack, Text, Title } from '@mantine/core';
 import Editor from '@monaco-editor/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useCode, { Comment } from '../../context/CodeContext';
 import useNotifications from '../../context/NotificationContext';
+import useInterventions from '../../hooks/useInterventions';
 import useParsons from '../../hooks/useParsons';
 import getOutput from '../../util/comment-generator';
+import GenericButton from '../generics/GenericButton';
 import ProblemPopover from '../ProblemPopover';
 
 const CodeEditor = () => {
@@ -12,6 +14,16 @@ const CodeEditor = () => {
   const { getUsedParsonsFragments } = useParsons();
   const { addNotification } = useNotifications();
   const [isProblemOpened, setProblemOpened] = useState(false);
+  const { interventions } = useInterventions();
+  const [generateCommentsButtonVisible, setGenerateCommentsButtonVisible] =
+    useState(true);
+
+  useEffect(() => {
+    const evaluatingASolutionEnabled = interventions.find(
+      ({ name }) => name === 'Evaluating a solution'
+    )?.enabled;
+    setGenerateCommentsButtonVisible(evaluatingASolutionEnabled ?? false);
+  }, [interventions]);
 
   const handleFileEdit = (content?: string) => {
     if (content) setFile!({ ...file!, content });
@@ -64,13 +76,13 @@ const CodeEditor = () => {
       <Group className='justify-between p-4'>
         <Title order={4}>Your Solution:</Title>
         <Group>
-          <Button
-            size='xs'
-            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
-            onClick={() => generateComments()}
-          >
-            Auto-Generate Comments
-          </Button>
+          {generateCommentsButtonVisible && (
+            <GenericButton
+              text='Auto-generate comments'
+              size='xs'
+              onClick={() => generateComments()}
+            />
+          )}
           <ProblemPopover
             opened={isProblemOpened}
             setOpened={setProblemOpened}

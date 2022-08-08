@@ -1,5 +1,4 @@
 import {
-  Button,
   Divider,
   Group,
   ScrollArea,
@@ -13,6 +12,7 @@ import React, { useState } from 'react';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
+import GenericButton from '../../components/generics/GenericButton';
 
 const DesignPage = () => {
   const {
@@ -158,22 +158,17 @@ const DesignPage = () => {
             value={inputValue}
             onChange={handleInputChange}
           />
-          <Button
-            size='md'
-            className='bg-emerald-500 fill-emerald-50 hover:bg-emerald-600'
+          <GenericButton
+            text='Submit'
             onClick={handleSubmitAction}
             disabled={isLoading}
-          >
-            Submit
-          </Button>
-          <Button
-            size='md'
-            className='bg-red-500 fill-red-50 hover:bg-red-600'
+          />
+          <GenericButton
+            text='Delete'
+            red
             onClick={handleDeleteAction}
             disabled={isLoading}
-          >
-            Delete
-          </Button>
+          />
         </Group>
       </Stack>
     </ScrollArea>
