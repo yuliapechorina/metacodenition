@@ -67,8 +67,8 @@ const AssignmentFeedbackForm = () => {
 
   return (
     <Stack className='gap-y-8'>
-      <Title order={2}>Please rate your experience</Title>
-      <Text size='xl'>
+      <Title order={4}>Please rate your experience</Title>
+      <Text>
         Please complete this <b>optional</b>, short questionaire. Your answers
         are below the questionaire.
         <br />
@@ -82,7 +82,7 @@ const AssignmentFeedbackForm = () => {
         <InputWrapper
           className='mb-4'
           label='How easy was it to use this tool?'
-          classNames={{ label: 'text-lg' }}
+          classNames={{ label: 'text-base font-bold' }}
           required
         >
           <Group className='justify-between'>
@@ -106,7 +106,7 @@ const AssignmentFeedbackForm = () => {
         <InputWrapper
           className='mb-4'
           label='How helpful was the problem-solving assistance?'
-          classNames={{ label: 'text-lg' }}
+          classNames={{ label: 'text-base font-bold' }}
           required
         >
           <Group className=' justify-between'>
@@ -130,8 +130,8 @@ const AssignmentFeedbackForm = () => {
         <Select
           required
           label='Which assistance was the most helpful?'
-          size='lg'
-          classNames={{ input: 'focus:border-blue-600' }}
+          size='md'
+          classNames={{ input: 'focus:border-blue-600', label: 'font-bold' }}
           placeholder='Pick one'
           data={interventions}
           {...form.getInputProps('intervention')}
@@ -139,26 +139,26 @@ const AssignmentFeedbackForm = () => {
         <TextInput
           required
           label='What worked well?'
-          size='lg'
-          classNames={{ input: 'focus:border-blue-600' }}
+          size='md'
+          classNames={{ input: 'focus:border-blue-600', label: 'font-bold' }}
           placeholder='I found this feature useful. I liked that it was easy to do this.'
           {...form.getInputProps('whatWorkedWell')}
         />
         <TextInput
           required
           label='What went wrong?'
-          size='lg'
-          classNames={{ input: 'focus:border-blue-600' }}
+          size='md'
+          classNames={{ input: 'focus:border-blue-600', label: 'font-bold' }}
           placeholder='This page was completely broken. I found using this feature frustrating.'
           {...form.getInputProps('whatWentWrong')}
         />
         <Checkbox
           label='I would use this tool again if it was optional'
-          size='lg'
-          classNames={{ input: 'focus:border-blue-600' }}
+          size='md'
+          classNames={{ input: 'focus:border-blue-600', label: 'font-bold' }}
           {...form.getInputProps('useAgain')}
         />
-        <GenericButton size='lg' type='submit' text='Submit' />
+        <GenericButton type='submit' text='Submit' />
       </form>
     </Stack>
   );

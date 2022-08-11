@@ -12,7 +12,7 @@ const CodeCopyBox = ({ code }: { code: string }) => {
   };
 
   return (
-    <Code block className='text-lg relative'>
+    <Code block className='text-base relative'>
       <Container className='absolute right-0 top-0' px={8} py={8}>
         <Tooltip
           withArrow
