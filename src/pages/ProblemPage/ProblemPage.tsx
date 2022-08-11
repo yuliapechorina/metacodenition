@@ -28,7 +28,7 @@ const ProblemPage = () => {
         setCookie('question3Visited', 'true');
       }
     }
-  }, []);
+  }, [questionNumber]);
 
   return (
     <>
