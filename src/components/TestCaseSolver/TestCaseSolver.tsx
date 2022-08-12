@@ -18,7 +18,7 @@ const TestCaseSolver = () => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
 
   useEffect(() => {
-    if (testCases.length !== 0 && currentTestCase === undefined) {
+    if (testCases.length !== 0) {
       setCurrentTestCase(getRandomUnsolvedTestCase());
     }
   }, [testCases]);
