@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
+import { HiCheck } from 'react-icons/hi';
 import GenericButton from '../../components/generics/GenericButton';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
@@ -26,6 +27,14 @@ const EvaluationPage = () => {
     setUsedListItems,
     getUsedParsonsFragments,
   } = useParsons();
+
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleClickSubmit = () => {
+    submitParsons();
+    setSubmitted(true);
+    window.setTimeout(() => setSubmitted(false), 3000);
+  };
 
   return (
     <Stack className='h-full p-0 z-10 relative'>
@@ -106,8 +115,9 @@ const EvaluationPage = () => {
         <GenericButton
           text='Submit'
           className='drop-shadow-md'
-          onClick={() => submitParsons!()}
-          disabled={isLoading}
+          onClick={handleClickSubmit}
+          loading={isLoading}
+          leftIcon={submitted && !isLoading && <HiCheck size={20} />}
         />
       </Center>
     </Stack>
