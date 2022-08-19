@@ -35,8 +35,8 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   }, [isError, errorNotificationDismissed]);
 
   const run = () => {
-    setLoading(true);
     const runCode = async () => {
+      setLoading(true);
       try {
         const result = await submitRun({
           run_spec: {
@@ -52,9 +52,9 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
         setIsError(true);
         setErrorNotifcationDismissed(false);
       }
+      setLoading(false);
     };
     runCode();
-    setLoading(false);
   };
   return (
     <Stack className={className}>
