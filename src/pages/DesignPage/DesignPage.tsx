@@ -29,7 +29,7 @@ const DesignPage = () => {
 
   const [inputValue, setInputValue] = useState<string>('');
 
-  const [submitted, setSubmitted] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
   const highlightChunk = (chunk: Selection): Highlight | undefined => {
@@ -87,7 +87,7 @@ const DesignPage = () => {
     setInputValue(e!.currentTarget.value);
   };
 
-  const handleSubmitAction = () => {
+  const handleSaveAction = () => {
     if (!inputValue) {
       return;
     }
@@ -106,8 +106,8 @@ const DesignPage = () => {
       updateUserQuestionDocument({
         highlights: newHighlights,
       });
-      setSubmitted(true);
-      window.setTimeout(() => setSubmitted(false), 3000);
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 3000);
     }
   };
 
@@ -167,10 +167,10 @@ const DesignPage = () => {
             onChange={handleInputChange}
           />
           <GenericButton
-            text='Submit'
-            onClick={handleSubmitAction}
-            loading={submitted && isLoading}
-            leftIcon={submitted && !isLoading && <HiCheck size={20} />}
+            text='Save'
+            onClick={handleSaveAction}
+            loading={saved && isLoading}
+            leftIcon={saved && !isLoading && <HiCheck size={20} />}
           />
           <GenericButton
             text='Delete'

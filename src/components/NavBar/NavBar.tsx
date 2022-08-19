@@ -20,7 +20,7 @@ const NavBar = () => {
           <MainLinks />
         </Navbar.Section>
         <Navbar.Section className='justify-self-end mt-auto pb-4 mx-auto'>
-          <Tooltip label='Submit current question'>
+          <Tooltip label='Submit current question and proceed'>
             <GenericButton
               text='Submit'
               onClick={openSubmissionModal}

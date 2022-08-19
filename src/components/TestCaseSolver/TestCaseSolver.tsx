@@ -23,7 +23,7 @@ const TestCaseSolver = () => {
     }
   }, [testCases]);
 
-  const handleSubmitInput = () => {
+  const handleCheckInput = () => {
     if (!inputValue || !currentTestCase) {
       return;
     }
@@ -76,7 +76,7 @@ const TestCaseSolver = () => {
               }
             </Text>
           </Text>
-          <Tooltip label='Restart tests'>
+          <Tooltip label='Restart test cases'>
             <UnstyledButton onClick={handleReset} disabled={noneSolved}>
               <HiOutlineRefresh
                 size='24px'
@@ -88,7 +88,7 @@ const TestCaseSolver = () => {
               />
             </UnstyledButton>
           </Tooltip>
-          <Tooltip label='Shuffle test'>
+          <Tooltip label='Shuffle test cases'>
             <UnstyledButton onClick={handleNext} disabled={allSolved}>
               <IoShuffle
                 size='24px'
@@ -137,8 +137,8 @@ const TestCaseSolver = () => {
               />
             ) : (
               <GenericButton
-                text='Submit'
-                onClick={handleSubmitInput}
+                text='Check'
+                onClick={handleCheckInput}
                 disabled={isLoading}
               />
             )}

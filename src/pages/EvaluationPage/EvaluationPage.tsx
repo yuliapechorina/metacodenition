@@ -28,12 +28,12 @@ const EvaluationPage = () => {
     getUsedParsonsFragments,
   } = useParsons();
 
-  const [submitted, setSubmitted] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  const handleClickSubmit = () => {
+  const handleClickSave = () => {
     submitParsons();
-    setSubmitted(true);
-    window.setTimeout(() => setSubmitted(false), 3000);
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 3000);
   };
 
   return (
@@ -113,11 +113,11 @@ const EvaluationPage = () => {
       </ScrollArea>
       <Center className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
         <GenericButton
-          text='Submit'
+          text='Save'
           className='drop-shadow-md'
-          onClick={handleClickSubmit}
+          onClick={handleClickSave}
           loading={isLoading}
-          leftIcon={submitted && !isLoading && <HiCheck size={20} />}
+          leftIcon={saved && !isLoading && <HiCheck size={20} />}
         />
       </Center>
     </Stack>
