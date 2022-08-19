@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Group, Text, Title, UnstyledButton } from '@mantine/core';
+import { Group, Text, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
 import useQuestion from '../../hooks/useQuestion';
@@ -76,26 +76,30 @@ const TestCaseSolver = () => {
               }
             </Text>
           </Text>
-          <UnstyledButton onClick={handleReset} disabled={noneSolved}>
-            <HiOutlineRefresh
-              size='24px'
-              className={
-                noneSolved
-                  ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
-                  : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
-              }
-            />
-          </UnstyledButton>
-          <UnstyledButton onClick={handleNext} disabled={allSolved}>
-            <IoShuffle
-              size='24px'
-              className={
-                allSolved
-                  ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
-                  : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
-              }
-            />
-          </UnstyledButton>
+          <Tooltip label='Restart tests'>
+            <UnstyledButton onClick={handleReset} disabled={noneSolved}>
+              <HiOutlineRefresh
+                size='24px'
+                className={
+                  noneSolved
+                    ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
+                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                }
+              />
+            </UnstyledButton>
+          </Tooltip>
+          <Tooltip label='Shuffle test'>
+            <UnstyledButton onClick={handleNext} disabled={allSolved}>
+              <IoShuffle
+                size='24px'
+                className={
+                  allSolved
+                    ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
+                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                }
+              />
+            </UnstyledButton>
+          </Tooltip>
         </Group>
       </Group>
       {allSolved ? (
