@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import HTMLReactParser from 'html-react-parser';
 import React, { useState } from 'react';
+import { HiCheck } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
@@ -27,6 +28,9 @@ const DesignPage = () => {
   >();
 
   const [inputValue, setInputValue] = useState<string>('');
+
+  const [saved, setSaved] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
   const highlightChunk = (chunk: Selection): Highlight | undefined => {
     const indexPair = findHighlightInParent(chunk);
@@ -83,7 +87,7 @@ const DesignPage = () => {
     setInputValue(e!.currentTarget.value);
   };
 
-  const handleSubmitAction = () => {
+  const handleSaveAction = () => {
     if (!inputValue) {
       return;
     }
@@ -102,6 +106,8 @@ const DesignPage = () => {
       updateUserQuestionDocument({
         highlights: newHighlights,
       });
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 3000);
     }
   };
 
@@ -113,6 +119,8 @@ const DesignPage = () => {
       updateUserQuestionDocument({
         highlights: highlights.filter((hl) => hl.id !== highlightedChunk.id),
       });
+      setDeleted(true);
+      window.setTimeout(() => setDeleted(false), 3000);
     }
   };
 
@@ -159,15 +167,17 @@ const DesignPage = () => {
             onChange={handleInputChange}
           />
           <GenericButton
-            text='Submit'
-            onClick={handleSubmitAction}
-            disabled={isLoading}
+            text='Save'
+            onClick={handleSaveAction}
+            loading={saved && isLoading}
+            leftIcon={saved && !isLoading && <HiCheck size={20} />}
           />
           <GenericButton
             text='Delete'
             red
             onClick={handleDeleteAction}
-            disabled={isLoading}
+            loading={deleted && isLoading}
+            leftIcon={deleted && !isLoading && <HiCheck size={20} />}
           />
         </Group>
       </Stack>

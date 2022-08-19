@@ -44,6 +44,15 @@ const TestCasePage = () => {
   };
 
   const handleRunButtonPress = async () => {
+    const noTestCasesNotification: INotification = {
+      type: 'failure',
+      content: <Text>No test cases selected</Text>,
+    };
+    if (selectedTestCases.length === 0) {
+      addNotification!(noTestCasesNotification);
+      return;
+    }
+
     setRunning(true);
     const testCaseResults = await runCases(selectedTestCases);
     setSelectedTestCases(testCaseResults);

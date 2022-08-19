@@ -1,4 +1,4 @@
-import { Navbar } from '@mantine/core';
+import { Navbar, Tooltip } from '@mantine/core';
 import { useState } from 'react';
 import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../generics/GenericButton';
@@ -20,12 +20,14 @@ const NavBar = () => {
           <MainLinks />
         </Navbar.Section>
         <Navbar.Section className='justify-self-end mt-auto pb-4 mx-auto'>
-          <GenericButton
-            text='Submit'
-            onClick={openSubmissionModal}
-            disabled={isLoading}
-            loading={isLoading}
-          />
+          <Tooltip label='Submit current question and proceed'>
+            <GenericButton
+              text='Submit'
+              onClick={openSubmissionModal}
+              disabled={isLoading}
+              loading={isLoading}
+            />
+          </Tooltip>
         </Navbar.Section>
       </Navbar>
       <SubmissionModal

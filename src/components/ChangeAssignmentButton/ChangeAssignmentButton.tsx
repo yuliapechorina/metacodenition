@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@mantine/core';
+import { Tooltip, UnstyledButton } from '@mantine/core';
 import { HiOutlinePencilAlt } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import useAssignment from '../../context/AssignmentContext';
@@ -11,12 +11,17 @@ const ChangeAssignmentButton = () => {
     navigate('choose-assignment');
   };
   return (
-    <UnstyledButton className='flex items-center' onClick={() => handleClick()}>
-      <HiOutlinePencilAlt
-        size='24px'
-        className='stroke-black hover:scale-110'
-      />
-    </UnstyledButton>
+    <Tooltip label='Change assignment' position='bottom'>
+      <UnstyledButton
+        className='flex items-center'
+        onClick={() => handleClick()}
+      >
+        <HiOutlinePencilAlt
+          size='24px'
+          className='stroke-black hover:scale-110'
+        />
+      </UnstyledButton>
+    </Tooltip>
   );
 };
 

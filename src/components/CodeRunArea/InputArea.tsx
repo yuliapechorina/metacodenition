@@ -1,4 +1,4 @@
-import { Group, Stack, Text, UnstyledButton } from '@mantine/core';
+import { Group, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import React from 'react';
 import { HiDotsHorizontal, HiPlay } from 'react-icons/hi';
 import CodeInput from '../CodeInput';
@@ -30,10 +30,12 @@ const InputArea = (props: InputAreaProps) => {
               className=' bg-white fill-emerald-500 rounded-full'
             />
           ) : (
-            <HiPlay
-              size='36px'
-              className=' bg-white fill-emerald-500 rounded-full'
-            />
+            <Tooltip label='Run'>
+              <HiPlay
+                size='36px'
+                className=' bg-white fill-emerald-500 rounded-full'
+              />
+            </Tooltip>
           )}
         </UnstyledButton>
       </Group>

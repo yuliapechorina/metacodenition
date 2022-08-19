@@ -9,6 +9,7 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
+import { HiCheck } from 'react-icons/hi';
 import GenericButton from '../../components/generics/GenericButton';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
@@ -26,6 +27,14 @@ const EvaluationPage = () => {
     setUsedListItems,
     getUsedParsonsFragments,
   } = useParsons();
+
+  const [saved, setSaved] = useState(false);
+
+  const handleClickSave = () => {
+    submitParsons();
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 3000);
+  };
 
   return (
     <Stack className='h-full p-0 z-10 relative'>
@@ -104,10 +113,11 @@ const EvaluationPage = () => {
       </ScrollArea>
       <Center className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
         <GenericButton
-          text='Submit'
+          text='Save'
           className='drop-shadow-md'
-          onClick={() => submitParsons!()}
-          disabled={isLoading}
+          onClick={handleClickSave}
+          loading={isLoading}
+          leftIcon={saved && !isLoading && <HiCheck size={20} />}
         />
       </Center>
     </Stack>

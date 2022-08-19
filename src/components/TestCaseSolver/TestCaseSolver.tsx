@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Group, Text, Title, UnstyledButton } from '@mantine/core';
+import { Group, Text, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
 import useQuestion from '../../hooks/useQuestion';
@@ -18,12 +18,12 @@ const TestCaseSolver = () => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
 
   useEffect(() => {
-    if (testCases.length !== 0) {
+    if (testCases.length !== 0 && currentTestCase?.solved !== true) {
       setCurrentTestCase(getRandomUnsolvedTestCase());
     }
   }, [testCases]);
 
-  const handleSubmitInput = () => {
+  const handleCheckInput = () => {
     if (!inputValue || !currentTestCase) {
       return;
     }
@@ -76,26 +76,30 @@ const TestCaseSolver = () => {
               }
             </Text>
           </Text>
-          <UnstyledButton onClick={handleReset} disabled={noneSolved}>
-            <HiOutlineRefresh
-              size='24px'
-              className={
-                noneSolved
-                  ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
-                  : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
-              }
-            />
-          </UnstyledButton>
-          <UnstyledButton onClick={handleNext} disabled={allSolved}>
-            <IoShuffle
-              size='24px'
-              className={
-                allSolved
-                  ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
-                  : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
-              }
-            />
-          </UnstyledButton>
+          <Tooltip label='Restart test cases'>
+            <UnstyledButton onClick={handleReset} disabled={noneSolved}>
+              <HiOutlineRefresh
+                size='24px'
+                className={
+                  noneSolved
+                    ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
+                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                }
+              />
+            </UnstyledButton>
+          </Tooltip>
+          <Tooltip label='Shuffle test cases'>
+            <UnstyledButton onClick={handleNext} disabled={allSolved}>
+              <IoShuffle
+                size='24px'
+                className={
+                  allSolved
+                    ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
+                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                }
+              />
+            </UnstyledButton>
+          </Tooltip>
         </Group>
       </Group>
       {allSolved ? (
@@ -133,8 +137,8 @@ const TestCaseSolver = () => {
               />
             ) : (
               <GenericButton
-                text='Submit'
-                onClick={handleSubmitInput}
+                text='Check'
+                onClick={handleCheckInput}
                 disabled={isLoading}
               />
             )}
