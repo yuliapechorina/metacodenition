@@ -8,14 +8,17 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core';
 import HTMLReactParser from 'html-react-parser';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../../components/generics/GenericButton';
+import useAssignment from '../../context/AssignmentContext';
 
 const DesignPage = () => {
+  const { unsavedChanges, setUnsavedChanges } = useAssignment();
+
   const {
     isLoading,
     highlights,
@@ -31,6 +34,19 @@ const DesignPage = () => {
 
   const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
+
+  useEffect(() => {
+    const highlight: Highlight | undefined = highlights.find(
+      (h) => h.id === highlightedChunk?.id
+    );
+    if (highlight === undefined) {
+      setUnsavedChanges!(true);
+    } else if (highlight.action === inputValue) {
+      setUnsavedChanges!(false);
+    } else {
+      setUnsavedChanges!(true);
+    }
+  }, [highlightedChunk, inputValue, highlights]);
 
   const highlightChunk = (chunk: Selection): Highlight | undefined => {
     const indexPair = findHighlightInParent(chunk);
@@ -58,7 +74,7 @@ const DesignPage = () => {
     if (newHighlight.highlightedText === '') return undefined;
 
     const newHighlights = highlights
-      ? [...highlights, newHighlight]
+      ? [...highlights.filter((hl) => hl.action), newHighlight]
       : [newHighlight];
     updateUserQuestionDocument({ highlights: newHighlights });
 
@@ -168,6 +184,7 @@ const DesignPage = () => {
           />
           <GenericButton
             text='Save'
+            disabled={!inputValue || !unsavedChanges}
             onClick={handleSaveAction}
             loading={saved && isLoading}
             leftIcon={saved && !isLoading && <HiCheck size={20} />}
@@ -175,6 +192,7 @@ const DesignPage = () => {
           <GenericButton
             text='Delete'
             red
+            disabled={highlightedChunk === undefined}
             onClick={handleDeleteAction}
             loading={deleted && isLoading}
             leftIcon={deleted && !isLoading && <HiCheck size={20} />}

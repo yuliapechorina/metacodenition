@@ -26,10 +26,12 @@ const generateDefaultFragments = (defaultListItems: ItemInterface[]) =>
   }));
 
 const generateUserFragments = (highlights: Highlight[]) =>
-  highlights.map<ParsonsFragment>((highlight: Highlight) => ({
-    listItem: { id: `user-${highlight.id}`, action: highlight.action },
-    userGenerated: true,
-  }));
+  highlights
+    .filter((hl) => hl.action)
+    .map<ParsonsFragment>((highlight: Highlight) => ({
+      listItem: { id: `user-${highlight.id}`, action: highlight.action },
+      userGenerated: true,
+    }));
 
 const useParsons = () => {
   const {
