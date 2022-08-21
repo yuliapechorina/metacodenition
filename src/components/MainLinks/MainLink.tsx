@@ -1,8 +1,8 @@
-import { Group, Modal, Stack, Text, UnstyledButton } from '@mantine/core';
+import { Group, Stack, Text, UnstyledButton } from '@mantine/core';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAssignment from '../../context/AssignmentContext';
-import GenericButton from '../generics/GenericButton';
+import NavigationModal from '../NavigationModal';
 
 interface LinkProps {
   icon: React.ReactNode;
@@ -12,7 +12,7 @@ interface LinkProps {
 
 const MainLink = ({ icon, label, pathName }: LinkProps) => {
   const [showModal, setShowModal] = React.useState(false);
-  const { unsavedChanges, setUnsavedChanges } = useAssignment();
+  const { unsavedChanges } = useAssignment();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,14 +23,6 @@ const MainLink = ({ icon, label, pathName }: LinkProps) => {
       navigate(`/assignment/${pathName}`);
     }
   };
-
-  const handleConfirmNavigation = () => {
-    setShowModal(false);
-    setUnsavedChanges!(false);
-    navigate(`/assignment/${pathName}`);
-  };
-
-  const handleDeclineNavigation = () => setShowModal(false);
 
   return (
     <Stack>
@@ -47,28 +39,11 @@ const MainLink = ({ icon, label, pathName }: LinkProps) => {
           <Text size='sm'>{label}</Text>
         </Group>
       </UnstyledButton>
-      <Modal
-        centered
+      <NavigationModal
         opened={showModal}
-        onClose={() => setShowModal(false)}
-        size='sm'
-        title='Unsaved Changes'
-        classNames={{
-          title: 'font-bold',
-          body: 'space-y-8',
-        }}
-      >
-        <Text className='text-sm'>
-          If you leave now, you will lose anything that hasn&apos;t been saved.
-          <br />
-          <br />
-          Are you sure you want to leave?
-        </Text>
-        <Group className='space-x-1 justify-center'>
-          <GenericButton text='Yes' red onClick={handleConfirmNavigation} />
-          <GenericButton text='No' onClick={handleDeclineNavigation} />
-        </Group>
-      </Modal>
+        setOpened={setShowModal}
+        path={`/assignment/${pathName}`}
+      />
     </Stack>
   );
 };

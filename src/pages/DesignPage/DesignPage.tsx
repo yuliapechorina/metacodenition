@@ -32,16 +32,13 @@ const DesignPage = () => {
 
   const [inputValue, setInputValue] = useState<string>('');
 
-  const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     const highlight: Highlight | undefined = highlights.find(
       (h) => h.id === highlightedChunk?.id
     );
-    if (highlight === undefined) {
-      setUnsavedChanges!(true);
-    } else if (highlight.action === inputValue) {
+    if (!inputValue || highlight?.action === inputValue) {
       setUnsavedChanges!(false);
     } else {
       setUnsavedChanges!(true);
@@ -122,8 +119,6 @@ const DesignPage = () => {
       updateUserQuestionDocument({
         highlights: newHighlights,
       });
-      setSaved(true);
-      window.setTimeout(() => setSaved(false), 3000);
     }
   };
 
@@ -183,11 +178,14 @@ const DesignPage = () => {
             onChange={handleInputChange}
           />
           <GenericButton
-            text='Save'
-            disabled={!inputValue || !unsavedChanges}
+            text={`Save${unsavedChanges || !highlightedChunk ? '' : 'd'}`}
             onClick={handleSaveAction}
-            loading={saved && isLoading}
-            leftIcon={saved && !isLoading && <HiCheck size={20} />}
+            loading={isLoading}
+            disabled={isLoading || !unsavedChanges}
+            leftIcon={
+              !(unsavedChanges || !highlightedChunk) &&
+              !isLoading && <HiCheck size={20} />
+            }
           />
           <GenericButton
             text='Delete'
