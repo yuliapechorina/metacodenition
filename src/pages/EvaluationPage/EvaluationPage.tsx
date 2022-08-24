@@ -13,8 +13,11 @@ import { HiCheck } from 'react-icons/hi';
 import GenericButton from '../../components/generics/GenericButton';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
+import useAssignment from '../../context/AssignmentContext';
 
 const EvaluationPage = () => {
+  const { unsavedChanges } = useAssignment();
+
   const [isProblemOpened, setProblemOpened] = useState(false);
 
   const {
@@ -28,12 +31,8 @@ const EvaluationPage = () => {
     getUsedParsonsFragments,
   } = useParsons();
 
-  const [saved, setSaved] = useState(false);
-
   const handleClickSave = () => {
     submitParsons();
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 3000);
   };
 
   return (
@@ -113,11 +112,12 @@ const EvaluationPage = () => {
       </ScrollArea>
       <Center className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px]'>
         <GenericButton
-          text='Save'
+          text={`Save${unsavedChanges ? '' : 'd'}`}
           className='drop-shadow-md'
           onClick={handleClickSave}
           loading={isLoading}
-          leftIcon={saved && !isLoading && <HiCheck size={20} />}
+          disabled={isLoading || !unsavedChanges}
+          leftIcon={!unsavedChanges && !isLoading && <HiCheck size={20} />}
         />
       </Center>
     </Stack>

@@ -30,6 +30,8 @@ interface IAssignmentContext {
   userAssignmentCompletion?: boolean[];
   isLoading: boolean;
   isError: boolean;
+  unsavedChanges: boolean;
+  setUnsavedChanges: (b: boolean) => void;
 }
 
 const AssignmentContext = createContext<Partial<IAssignmentContext>>({});
@@ -44,6 +46,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
   const [questionId, setQuestionId] = useState<string | undefined>();
   const [assignmentComplete, setAssignmentComplete] = useState(false);
   const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   const [user] = useAuthState(auth);
 
@@ -171,6 +174,8 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       userAssignmentCompletion,
       isLoading,
       isError,
+      unsavedChanges,
+      setUnsavedChanges,
     }),
     [
       assignmentName,
@@ -189,6 +194,8 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       userAssignmentCompletion,
       isLoading,
       isError,
+      unsavedChanges,
+      setUnsavedChanges,
     ]
   );
 

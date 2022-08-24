@@ -1,17 +1,22 @@
 import { Navbar, Tooltip } from '@mantine/core';
 import { useState } from 'react';
+import useAssignment from '../../context/AssignmentContext';
 import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../generics/GenericButton';
 import MainLinks from '../MainLinks';
+import NavigationModal from '../NavigationModal';
 import SubmissionModal from '../SubmissionModal';
 
 const NavBar = () => {
+  const { unsavedChanges } = useAssignment();
   const { isLoading } = useQuestion();
   const [submissionModalOpened, setSubmissionModalOpened] = useState(false);
+  const [navigationModalOpened, setNavigationModalOpened] = useState(false);
 
-  const openSubmissionModal = () => {
-    setSubmissionModalOpened(true);
-  };
+  const handleQuestionSubmission = () =>
+    unsavedChanges
+      ? setNavigationModalOpened(true)
+      : setSubmissionModalOpened(true);
 
   return (
     <>
@@ -23,7 +28,7 @@ const NavBar = () => {
           <Tooltip label='Submit current question and proceed'>
             <GenericButton
               text='Submit'
-              onClick={openSubmissionModal}
+              onClick={handleQuestionSubmission}
               disabled={isLoading}
               loading={isLoading}
             />
@@ -33,6 +38,11 @@ const NavBar = () => {
       <SubmissionModal
         opened={submissionModalOpened}
         setOpened={setSubmissionModalOpened}
+      />
+      <NavigationModal
+        opened={navigationModalOpened}
+        setOpened={setNavigationModalOpened}
+        path=''
       />
     </>
   );

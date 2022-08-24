@@ -8,14 +8,17 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core';
 import HTMLReactParser from 'html-react-parser';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../../components/generics/GenericButton';
+import useAssignment from '../../context/AssignmentContext';
 
 const DesignPage = () => {
+  const { unsavedChanges, setUnsavedChanges } = useAssignment();
+
   const {
     isLoading,
     highlights,
@@ -29,8 +32,18 @@ const DesignPage = () => {
 
   const [inputValue, setInputValue] = useState<string>('');
 
-  const [saved, setSaved] = useState(false);
   const [deleted, setDeleted] = useState(false);
+
+  useEffect(() => {
+    const highlight: Highlight | undefined = highlights.find(
+      (h) => h.id === highlightedChunk?.id
+    );
+    if (!inputValue || highlight?.action === inputValue) {
+      setUnsavedChanges!(false);
+    } else {
+      setUnsavedChanges!(true);
+    }
+  }, [highlightedChunk, inputValue, highlights]);
 
   const highlightChunk = (chunk: Selection): Highlight | undefined => {
     const indexPair = findHighlightInParent(chunk);
@@ -58,7 +71,7 @@ const DesignPage = () => {
     if (newHighlight.highlightedText === '') return undefined;
 
     const newHighlights = highlights
-      ? [...highlights, newHighlight]
+      ? [...highlights.filter((hl) => hl.action), newHighlight]
       : [newHighlight];
     updateUserQuestionDocument({ highlights: newHighlights });
 
@@ -106,8 +119,6 @@ const DesignPage = () => {
       updateUserQuestionDocument({
         highlights: newHighlights,
       });
-      setSaved(true);
-      window.setTimeout(() => setSaved(false), 3000);
     }
   };
 
@@ -167,14 +178,19 @@ const DesignPage = () => {
             onChange={handleInputChange}
           />
           <GenericButton
-            text='Save'
+            text={`Save${unsavedChanges || !highlightedChunk ? '' : 'd'}`}
             onClick={handleSaveAction}
-            loading={saved && isLoading}
-            leftIcon={saved && !isLoading && <HiCheck size={20} />}
+            loading={isLoading}
+            disabled={isLoading || !unsavedChanges}
+            leftIcon={
+              !(unsavedChanges || !highlightedChunk) &&
+              !isLoading && <HiCheck size={20} />
+            }
           />
           <GenericButton
             text='Delete'
             red
+            disabled={highlightedChunk === undefined}
             onClick={handleDeleteAction}
             loading={deleted && isLoading}
             leftIcon={deleted && !isLoading && <HiCheck size={20} />}

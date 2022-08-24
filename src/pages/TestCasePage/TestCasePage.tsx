@@ -11,7 +11,7 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import ProblemPopover from '../../components/ProblemPopover';
@@ -20,8 +20,10 @@ import useNotifications, {
 } from '../../context/NotificationContext';
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
 import GenericButton from '../../components/generics/GenericButton';
+import useAssignment from '../../context/AssignmentContext';
 
 const TestCasePage = () => {
+  const { setUnsavedChanges } = useAssignment();
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
   const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
@@ -107,6 +109,8 @@ const TestCasePage = () => {
     setInput(defaultUserTestCase);
   };
 
+  useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
+
   const saveTestCase = () => {
     if (
       testCases.filter(
@@ -124,6 +128,11 @@ const TestCasePage = () => {
     addUserTestCase(inputTestCase);
     setDisplayInputRow(false);
     setInput(defaultUserTestCase);
+  };
+
+  const handleDeleteTestCase = (testCase: ITestCase) => {
+    deleteUserTestCase(testCase);
+    setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
   };
 
   const inputRow = (
@@ -209,7 +218,7 @@ const TestCasePage = () => {
               </Text>
               {testCase.student_generated && (
                 <UnstyledButton
-                  onClick={() => deleteUserTestCase(testCase)}
+                  onClick={() => handleDeleteTestCase(testCase)}
                   className='hover:bg-gray-100 p-2 rounded-md'
                 >
                   <HiTrash />

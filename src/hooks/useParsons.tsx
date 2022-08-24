@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ItemInterface } from 'react-sortablejs';
+import useAssignment from '../context/AssignmentContext';
 import { Highlight } from '../util/highlighter';
 import useQuestion from './useQuestion';
 
@@ -26,12 +27,15 @@ const generateDefaultFragments = (defaultListItems: ItemInterface[]) =>
   }));
 
 const generateUserFragments = (highlights: Highlight[]) =>
-  highlights.map<ParsonsFragment>((highlight: Highlight) => ({
-    listItem: { id: `user-${highlight.id}`, action: highlight.action },
-    userGenerated: true,
-  }));
+  highlights
+    .filter((hl) => hl.action)
+    .map<ParsonsFragment>((highlight: Highlight) => ({
+      listItem: { id: `user-${highlight.id}`, action: highlight.action },
+      userGenerated: true,
+    }));
 
 const useParsons = () => {
+  const { setUnsavedChanges } = useAssignment();
   const {
     defaultListItems,
     highlights,
@@ -67,6 +71,14 @@ const useParsons = () => {
     setUnusedIds(newUnusedIds);
   }, [defaultListItems, highlights]);
 
+  useEffect(() => {
+    const sameLength = usedParsonsIds.length === usedIds.length;
+    const allInParsonsListInOrder = usedParsonsIds.every(
+      (id, index) => usedIds[index] === id
+    );
+    setUnsavedChanges!(!sameLength || !allInParsonsListInOrder);
+  }, [usedIds, usedParsonsIds]);
+
   const getItemsFromIds = (ids: (string | number)[]) =>
     ids
       ? (ids
@@ -95,11 +107,13 @@ const useParsons = () => {
   const getUsedParsonsFragments = (): ParsonsFragment[] =>
     getFragmentsFromItems(getUsedListItems());
 
-  const setUnusedListItems = (newState: ItemInterface[]) =>
+  const setUnusedListItems = (newState: ItemInterface[]) => {
     setUnusedIds(getIdsFromItems(newState));
+  };
 
-  const setUsedListItems = (newState: ItemInterface[]) =>
+  const setUsedListItems = (newState: ItemInterface[]) => {
     setUsedIds(getIdsFromItems(newState));
+  };
 
   const submitParsons = () => {
     if (!getIdsFromItems(getUsedListItems())) {
