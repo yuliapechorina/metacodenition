@@ -6,10 +6,8 @@ import useQuestion from '../../hooks/useQuestion';
 import useTestCases, { ITestCase } from '../../hooks/useTestCases';
 import GenericInput from '../generics/GenericInput';
 import GenericButton from '../generics/GenericButton';
-import useAssignment from '../../context/AssignmentContext';
 
 const TestCaseSolver = () => {
-  const { unsavedChanges, setUnsavedChanges } = useAssignment();
   const { isLoading, updateUserQuestionDocument } = useQuestion();
   const { testCases, getRandomUnsolvedTestCase, markAsSolved } = useTestCases();
 
@@ -20,22 +18,12 @@ const TestCaseSolver = () => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
 
   useEffect(() => {
-    if (currentTestCase && !currentTestCase.solved && inputValue) {
-      setUnsavedChanges!(true);
-    } else {
-      setUnsavedChanges!(false);
-    }
-  }, [currentTestCase, inputValue]);
-
-  useEffect(() => {
     if (testCases.length !== 0 && currentTestCase?.solved !== true) {
       setCurrentTestCase(getRandomUnsolvedTestCase());
     }
   }, [testCases]);
 
   const handleCheckInput = () => {
-    setUnsavedChanges!(false);
-
     if (!inputValue || !currentTestCase) {
       return;
     }
@@ -151,7 +139,7 @@ const TestCaseSolver = () => {
               <GenericButton
                 text='Check'
                 onClick={handleCheckInput}
-                disabled={isLoading || !unsavedChanges}
+                disabled={isLoading}
               />
             )}
           </Group>
