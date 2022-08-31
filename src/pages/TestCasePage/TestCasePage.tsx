@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import ProblemPopover from '../../components/ProblemPopover';
 import useNotifications, {
   INotification,
@@ -38,6 +39,8 @@ const TestCasePage = () => {
 
   const { addNotification } = useNotifications();
 
+  const analytics = getAnalytics();
+
   const handleParentCheckboxChange = (value: boolean) => {
     setSelectedTestCases(
       testCases.filter((testCase) => testCase.solved && value)
@@ -54,6 +57,10 @@ const TestCasePage = () => {
       addNotification!(noTestCasesNotification);
       return;
     }
+
+    logEvent(analytics, 'run_test_cases', {
+      num_test_cases: selectedTestCases.length,
+    });
 
     setRunning(true);
     const testCaseResults = await runCases(selectedTestCases);
@@ -112,6 +119,8 @@ const TestCasePage = () => {
   useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
 
   const saveTestCase = () => {
+    logEvent(analytics, 'add_test_case');
+
     if (
       testCases.filter(
         (tc) => tc.student_generated && tc.input === inputTestCase.input
