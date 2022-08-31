@@ -142,6 +142,8 @@ const TestCasePage = () => {
   const handleDeleteTestCase = (testCase: ITestCase) => {
     deleteUserTestCase(testCase);
     setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
+
+    logEvent(analytics, 'delete_test_case');
   };
 
   const inputRow = (
