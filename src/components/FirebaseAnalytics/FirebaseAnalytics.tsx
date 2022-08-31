@@ -4,7 +4,7 @@ import { getAnalytics, logEvent } from 'firebase/analytics';
 
 const pageNames = new Map([
   ['/', 'Home page'],
-  ['/choose-assignment', 'Choose assignment page'],
+  ['/entry', 'Entry page'],
   ['/assignment/problem', 'Understanding the problem'],
   ['/assignment/design', 'Designing a solution'],
   ['/assignment/evaluation', 'Evaluating a solution'],
