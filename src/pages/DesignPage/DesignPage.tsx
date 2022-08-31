@@ -10,6 +10,7 @@ import {
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
@@ -33,6 +34,8 @@ const DesignPage = () => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const [deleted, setDeleted] = useState(false);
+
+  const analytics = getAnalytics();
 
   useEffect(() => {
     const highlight: Highlight | undefined = highlights.find(
@@ -120,6 +123,7 @@ const DesignPage = () => {
         highlights: newHighlights,
       });
     }
+    logEvent(analytics, 'save_action');
   };
 
   const handleDeleteAction = () => {
@@ -133,6 +137,8 @@ const DesignPage = () => {
       setDeleted(true);
       window.setTimeout(() => setDeleted(false), 3000);
     }
+
+    logEvent(analytics, 'delete_action');
   };
 
   return (

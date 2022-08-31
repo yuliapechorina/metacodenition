@@ -1,6 +1,7 @@
 import React from 'react';
 import { Group, Modal, Text } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import useAssignment from '../../context/AssignmentContext';
 import GenericButton from '../generics/GenericButton';
 import useQuestion from '../../hooks/useQuestion';
@@ -16,11 +17,14 @@ const SubmissionModal = ({ opened, setOpened }: SubmissionModalProps) => {
   const { file } = useCode();
   const navigate = useNavigate();
 
+  const analytics = getAnalytics();
+
   const handleClickYes = () => {
     updateUserQuestionDocument({ submitted: true, userCode: file });
     setNextQuestion!();
     navigate('/assignment');
     setOpened(false);
+    logEvent(analytics, 'confirm_submit_question');
   };
 
   const handleClickNo = () => {

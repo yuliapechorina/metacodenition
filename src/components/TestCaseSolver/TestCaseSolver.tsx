@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Group, Text, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import useQuestion from '../../hooks/useQuestion';
 import useTestCases, { ITestCase } from '../../hooks/useTestCases';
 import GenericInput from '../generics/GenericInput';
@@ -16,6 +17,8 @@ const TestCaseSolver = () => {
   );
   const [inputValue, setInputValue] = useState<string | undefined>(undefined);
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
+
+  const analytics = getAnalytics();
 
   useEffect(() => {
     if (testCases.length !== 0 && currentTestCase?.solved !== true) {
@@ -45,11 +48,25 @@ const TestCaseSolver = () => {
         setIncorrectAnswer(true);
       }
     }
+    logEvent(analytics, 'check_test_case', {
+      current_test_case: currentTestCase?.input,
+    });
+  };
+
+  const handleShuffle = () => {
+    setInputValue('');
+    setCurrentTestCase(getRandomUnsolvedTestCase());
+    logEvent(analytics, 'shuffle_test_cases', {
+      current_test_case: currentTestCase?.input,
+    });
   };
 
   const handleNext = () => {
     setInputValue('');
     setCurrentTestCase(getRandomUnsolvedTestCase());
+    logEvent(analytics, 'next_test_case', {
+      current_test_case: currentTestCase?.input,
+    });
   };
 
   const handleReset = () => {
@@ -57,6 +74,7 @@ const TestCaseSolver = () => {
       solvedTestCases: '',
     });
     setCurrentTestCase(getRandomUnsolvedTestCase());
+    logEvent(analytics, 'reset_test_cases');
   };
 
   const noneSolved = testCases.filter((tc) => tc.solved).length === 0;
@@ -89,7 +107,7 @@ const TestCaseSolver = () => {
             </UnstyledButton>
           </Tooltip>
           <Tooltip label='Shuffle test cases'>
-            <UnstyledButton onClick={handleNext} disabled={allSolved}>
+            <UnstyledButton onClick={handleShuffle} disabled={allSolved}>
               <IoShuffle
                 size='24px'
                 className={

@@ -1,5 +1,6 @@
 import { Code, Group, Stack, Text, Title } from '@mantine/core';
 import Editor from '@monaco-editor/react';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import { useEffect, useState } from 'react';
 import useCode, { Comment } from '../../context/CodeContext';
 import useNotifications from '../../context/NotificationContext';
@@ -17,6 +18,8 @@ const CodeEditor = () => {
   const { interventions } = useInterventions();
   const [generateCommentsButtonVisible, setGenerateCommentsButtonVisible] =
     useState(true);
+
+  const analytics = getAnalytics();
 
   useEffect(() => {
     const evaluatingASolutionEnabled = interventions.find(
@@ -69,6 +72,8 @@ const CodeEditor = () => {
           </Text>
         ),
       });
+
+    logEvent(analytics, 'auto_generate_comments');
   };
 
   return (
