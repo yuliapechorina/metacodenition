@@ -3,12 +3,15 @@ import { useLocation } from 'react-router-dom';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 
 const pageNames = new Map([
-  ['/assignment/step-1', 'Understanding the problem'],
-  ['/assignment/step-2', 'Searching for similar problems'],
-  ['/assignment/step-3', 'Designing a solution'],
-  ['/assignment/step-4', 'Evaluating a solution'],
-  ['/assignment/step-5', 'Implementing a solution'],
-  ['/assignment/step-6', 'Evaluating a potential solution'],
+  ['/', 'Home page'],
+  ['/choose-assignment', 'Choose assignment page'],
+  ['/assignment/problem', 'Understanding the problem'],
+  ['/assignment/design', 'Designing a solution'],
+  ['/assignment/evaluation', 'Evaluating a solution'],
+  ['/assignment/implementation', 'Implementing a solution'],
+  ['/assignment/test-cases', 'Evaluating a potential solution'],
+  ['/submit', 'Submission page'],
+  ['/invalid-email', 'Invalid email page'],
 ]);
 
 const FirebaseAnalytics = () => {
