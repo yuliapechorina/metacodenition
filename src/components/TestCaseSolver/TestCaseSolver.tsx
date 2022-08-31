@@ -44,13 +44,20 @@ const TestCaseSolver = () => {
         markAsSolved(currentTestCase);
         setCurrentTestCase({ ...currentTestCase, solved: true });
         setIncorrectAnswer(false);
+
+        logEvent(analytics, 'check_test_case', {
+          current_test_case: currentTestCase?.input,
+          correct: true,
+        });
       } else {
         setIncorrectAnswer(true);
+
+        logEvent(analytics, 'check_test_case', {
+          current_test_case: currentTestCase?.input,
+          correct: false,
+        });
       }
     }
-    logEvent(analytics, 'check_test_case', {
-      current_test_case: currentTestCase?.input,
-    });
   };
 
   const handleShuffle = () => {
