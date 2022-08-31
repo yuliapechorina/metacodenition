@@ -58,10 +58,6 @@ const TestCasePage = () => {
       return;
     }
 
-    logEvent(analytics, 'run_test_cases', {
-      num_test_cases: selectedTestCases.length,
-    });
-
     setRunning(true);
     const testCaseResults = await runCases(selectedTestCases);
     setSelectedTestCases(testCaseResults);
@@ -69,6 +65,11 @@ const TestCasePage = () => {
       (a, c) => (c.result === 'pass' ? a + 1 : a),
       0
     );
+
+    logEvent(analytics, 'run_test_cases', {
+      num_test_cases: selectedTestCases.length,
+      num_passed: passCount,
+    });
 
     const notification: INotification =
       passCount === selectedTestCases.length
