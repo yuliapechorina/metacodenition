@@ -50,8 +50,8 @@ const EntryPage = () => {
 
   return (
     <ScrollArea className='h-full'>
-      <Stack className='p-16 justify-center'>
-        <Title order={2} className='font-black w-fit'>
+      <Stack className='p-16'>
+        <Title order={2} className='font-black'>
           Kia Ora, {user?.displayName}!
         </Title>
         <Space h={8} />
