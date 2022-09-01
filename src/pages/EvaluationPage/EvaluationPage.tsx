@@ -39,6 +39,10 @@ const EvaluationPage = () => {
     logEvent(analytics, 'save_parsons');
   };
 
+  const handleRearrange = () => {
+    logEvent(analytics, 'rearrange_parsons');
+  };
+
   return (
     <Stack className='h-full p-0 z-10 relative'>
       <ScrollArea>
@@ -95,6 +99,8 @@ const EvaluationPage = () => {
               group='design-parsons'
               animation={100}
               className='flex flex-col space-y-4 grow pl-2 pr-8'
+              onAdd={handleRearrange}
+              onEnd={handleRearrange}
             >
               {getUsedParsonsFragments!().map((fragment) => (
                 <div key={fragment.listItem.id}>

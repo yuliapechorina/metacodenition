@@ -73,6 +73,8 @@ const DesignPage = () => {
 
     if (newHighlight.highlightedText === '') return undefined;
 
+    logEvent(analytics, 'highlight');
+
     const newHighlights = highlights
       ? [...highlights.filter((hl) => hl.action), newHighlight]
       : [newHighlight];
