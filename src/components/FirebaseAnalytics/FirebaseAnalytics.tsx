@@ -1,6 +1,7 @@
+import { logEvent } from 'firebase/analytics';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { analytics } from '../../util/firebase';
 
 const pageNames = new Map([
   ['/', 'Home page'],
@@ -16,7 +17,6 @@ const pageNames = new Map([
 
 const FirebaseAnalytics = () => {
   const location = useLocation();
-  const analytics = getAnalytics();
 
   useEffect(() => {
     if (

@@ -4,11 +4,12 @@ import {
   TypographyStylesProvider,
   UnstyledButton,
 } from '@mantine/core';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import HTMLReactParser from 'html-react-parser';
 import React from 'react';
 import { HiQuestionMarkCircle } from 'react-icons/hi';
 import useQuestion from '../../hooks/useQuestion';
+import { analytics } from '../../util/firebase';
 
 type ProblemPopoverProps = {
   opened: boolean;
@@ -22,8 +23,6 @@ const ProblemPopover = ({
   className,
 }: ProblemPopoverProps) => {
   const { getProblemStatement } = useQuestion();
-
-  const analytics = getAnalytics();
 
   const handleClickOpenProblem = () => {
     if (!opened) logEvent(analytics, 'open_problem_popover');

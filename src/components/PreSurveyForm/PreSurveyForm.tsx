@@ -9,9 +9,10 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { getAnalytics, setUserProperties } from 'firebase/analytics';
+import { setUserProperties } from 'firebase/analytics';
 import GenericButton from '../generics/GenericButton';
 import useUser from '../../hooks/useUser';
+import { analytics } from '../../util/firebase';
 
 enum Genders {
   'Female' = 'female',
@@ -64,8 +65,6 @@ const marks = [
 
 const PreSurveyForm = () => {
   const form = useForm({ initialValues });
-
-  const analytics = getAnalytics();
 
   const { updateUserDocument, isUserUpdateLoading } = useUser();
 

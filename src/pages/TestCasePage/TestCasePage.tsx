@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import ProblemPopover from '../../components/ProblemPopover';
 import useNotifications, {
   INotification,
@@ -22,6 +22,7 @@ import useNotifications, {
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
 import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
+import { analytics } from '../../util/firebase';
 
 const TestCasePage = () => {
   const { setUnsavedChanges } = useAssignment();
@@ -38,8 +39,6 @@ const TestCasePage = () => {
     useState<boolean>(false);
 
   const { addNotification } = useNotifications();
-
-  const analytics = getAnalytics();
 
   const handleParentCheckboxChange = (value: boolean) => {
     setSelectedTestCases(

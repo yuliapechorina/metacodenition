@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { initializeAnalytics } from 'firebase/analytics';
+import { getAnalytics, initializeAnalytics } from 'firebase/analytics';
 import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
@@ -19,6 +19,7 @@ initializeAnalytics(app, {
     send_page_view: false,
   },
 });
+const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
@@ -35,5 +36,5 @@ const logOut = () => {
   signOutAndNavigateHome(auth);
 };
 
-export { db, auth, logIn, logOut };
+export { db, auth, logIn, logOut, analytics };
 export default app;

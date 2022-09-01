@@ -10,18 +10,17 @@ import {
 import { useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import { HiCheck } from 'react-icons/hi';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import GenericButton from '../../components/generics/GenericButton';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
 import useAssignment from '../../context/AssignmentContext';
+import { analytics } from '../../util/firebase';
 
 const EvaluationPage = () => {
   const { unsavedChanges } = useAssignment();
 
   const [isProblemOpened, setProblemOpened] = useState(false);
-
-  const analytics = getAnalytics();
 
   const {
     submitParsons,

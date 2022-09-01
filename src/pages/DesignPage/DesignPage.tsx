@@ -10,12 +10,13 @@ import {
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
+import { analytics } from '../../util/firebase';
 
 const DesignPage = () => {
   const { unsavedChanges, setUnsavedChanges } = useAssignment();
@@ -34,8 +35,6 @@ const DesignPage = () => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const [deleted, setDeleted] = useState(false);
-
-  const analytics = getAnalytics();
 
   useEffect(() => {
     const highlight: Highlight | undefined = highlights.find(

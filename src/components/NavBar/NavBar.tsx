@@ -1,8 +1,9 @@
 import { Navbar, Tooltip } from '@mantine/core';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import useAssignment from '../../context/AssignmentContext';
 import useQuestion from '../../hooks/useQuestion';
+import { analytics } from '../../util/firebase';
 import GenericButton from '../generics/GenericButton';
 import MainLinks from '../MainLinks';
 import NavigationModal from '../NavigationModal';
@@ -13,8 +14,6 @@ const NavBar = () => {
   const { isLoading } = useQuestion();
   const [submissionModalOpened, setSubmissionModalOpened] = useState(false);
   const [navigationModalOpened, setNavigationModalOpened] = useState(false);
-
-  const analytics = getAnalytics();
 
   const handleQuestionSubmission = () => {
     if (unsavedChanges) {

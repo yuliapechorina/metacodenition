@@ -1,12 +1,13 @@
 import { Code, Group, Stack, Text, Title } from '@mantine/core';
 import Editor from '@monaco-editor/react';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import { useEffect, useState } from 'react';
 import useCode, { Comment } from '../../context/CodeContext';
 import useNotifications from '../../context/NotificationContext';
 import useInterventions from '../../hooks/useInterventions';
 import useParsons from '../../hooks/useParsons';
 import getOutput from '../../util/comment-generator';
+import { analytics } from '../../util/firebase';
 import GenericButton from '../generics/GenericButton';
 import ProblemPopover from '../ProblemPopover';
 
@@ -18,8 +19,6 @@ const CodeEditor = () => {
   const { interventions } = useInterventions();
   const [generateCommentsButtonVisible, setGenerateCommentsButtonVisible] =
     useState(true);
-
-  const analytics = getAnalytics();
 
   useEffect(() => {
     const evaluatingASolutionEnabled = interventions.find(

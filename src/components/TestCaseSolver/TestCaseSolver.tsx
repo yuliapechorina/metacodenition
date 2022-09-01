@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Group, Text, Title, Tooltip, UnstyledButton } from '@mantine/core';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
-import { getAnalytics, logEvent } from 'firebase/analytics';
+import { logEvent } from 'firebase/analytics';
 import useQuestion from '../../hooks/useQuestion';
 import useTestCases, { ITestCase } from '../../hooks/useTestCases';
 import GenericInput from '../generics/GenericInput';
 import GenericButton from '../generics/GenericButton';
+import { analytics } from '../../util/firebase';
 
 const TestCaseSolver = () => {
   const { isLoading, updateUserQuestionDocument } = useQuestion();
@@ -17,8 +18,6 @@ const TestCaseSolver = () => {
   );
   const [inputValue, setInputValue] = useState<string | undefined>(undefined);
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
-
-  const analytics = getAnalytics();
 
   useEffect(() => {
     if (testCases.length !== 0 && currentTestCase?.solved !== true) {
