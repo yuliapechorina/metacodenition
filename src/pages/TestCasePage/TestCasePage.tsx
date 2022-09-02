@@ -14,6 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
+import { logEvent } from 'firebase/analytics';
 import ProblemPopover from '../../components/ProblemPopover';
 import useNotifications, {
   INotification,
@@ -21,6 +22,7 @@ import useNotifications, {
 import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
 import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
+import { analytics } from '../../util/firebase';
 
 const TestCasePage = () => {
   const { setUnsavedChanges } = useAssignment();
@@ -62,6 +64,11 @@ const TestCasePage = () => {
       (a, c) => (c.result === 'pass' ? a + 1 : a),
       0
     );
+
+    logEvent(analytics, 'run_test_cases', {
+      num_test_cases: selectedTestCases.length,
+      num_passed: passCount,
+    });
 
     const notification: INotification =
       passCount === selectedTestCases.length
@@ -112,6 +119,8 @@ const TestCasePage = () => {
   useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
 
   const saveTestCase = () => {
+    logEvent(analytics, 'add_test_case');
+
     if (
       testCases.filter(
         (tc) => tc.student_generated && tc.input === inputTestCase.input
@@ -133,6 +142,8 @@ const TestCasePage = () => {
   const handleDeleteTestCase = (testCase: ITestCase) => {
     deleteUserTestCase(testCase);
     setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
+
+    logEvent(analytics, 'delete_test_case');
   };
 
   const inputRow = (

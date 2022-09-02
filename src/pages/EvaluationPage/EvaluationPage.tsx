@@ -10,10 +10,12 @@ import {
 import { useState } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import { HiCheck } from 'react-icons/hi';
+import { logEvent } from 'firebase/analytics';
 import GenericButton from '../../components/generics/GenericButton';
 import ProblemPopover from '../../components/ProblemPopover';
 import useParsons from '../../hooks/useParsons';
 import useAssignment from '../../context/AssignmentContext';
+import { analytics } from '../../util/firebase';
 
 const EvaluationPage = () => {
   const { unsavedChanges } = useAssignment();
@@ -33,6 +35,11 @@ const EvaluationPage = () => {
 
   const handleClickSave = () => {
     submitParsons();
+    logEvent(analytics, 'save_parsons');
+  };
+
+  const handleRearrange = () => {
+    logEvent(analytics, 'rearrange_parsons');
   };
 
   return (
@@ -91,6 +98,8 @@ const EvaluationPage = () => {
               group='design-parsons'
               animation={100}
               className='flex flex-col space-y-4 grow pl-2 pr-8'
+              onAdd={handleRearrange}
+              onEnd={handleRearrange}
             >
               {getUsedParsonsFragments!().map((fragment) => (
                 <div key={fragment.listItem.id}>

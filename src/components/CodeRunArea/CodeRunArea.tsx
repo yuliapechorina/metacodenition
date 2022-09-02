@@ -1,7 +1,9 @@
 import { Notification, Stack } from '@mantine/core';
+import { logEvent } from 'firebase/analytics';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { submitRun } from '../../api/codeRunner.api';
 import useCode from '../../context/CodeContext';
+import { analytics } from '../../util/firebase';
 import InputArea from './InputArea';
 import OutputArea from './OutputArea';
 
@@ -35,6 +37,8 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   }, [isError, errorNotificationDismissed]);
 
   const run = () => {
+    logEvent(analytics, 'run_code');
+
     const runCode = async () => {
       setLoading(true);
       try {

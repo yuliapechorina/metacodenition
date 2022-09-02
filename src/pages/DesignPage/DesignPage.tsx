@@ -10,11 +10,13 @@ import {
 import HTMLReactParser from 'html-react-parser';
 import React, { useEffect, useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
+import { logEvent } from 'firebase/analytics';
 import GenericInput from '../../components/generics/GenericInput';
 import { findHighlightInParent, Highlight } from '../../util/highlighter';
 import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
+import { analytics } from '../../util/firebase';
 
 const DesignPage = () => {
   const { unsavedChanges, setUnsavedChanges } = useAssignment();
@@ -70,6 +72,8 @@ const DesignPage = () => {
 
     if (newHighlight.highlightedText === '') return undefined;
 
+    logEvent(analytics, 'highlight');
+
     const newHighlights = highlights
       ? [...highlights.filter((hl) => hl.action), newHighlight]
       : [newHighlight];
@@ -120,6 +124,7 @@ const DesignPage = () => {
         highlights: newHighlights,
       });
     }
+    logEvent(analytics, 'save_action');
   };
 
   const handleDeleteAction = () => {
@@ -133,6 +138,8 @@ const DesignPage = () => {
       setDeleted(true);
       window.setTimeout(() => setDeleted(false), 3000);
     }
+
+    logEvent(analytics, 'delete_action');
   };
 
   return (

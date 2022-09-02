@@ -1,10 +1,12 @@
 import React from 'react';
 import { Group, Modal, Text } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
+import { logEvent } from 'firebase/analytics';
 import useAssignment from '../../context/AssignmentContext';
 import GenericButton from '../generics/GenericButton';
 import useQuestion from '../../hooks/useQuestion';
 import useCode from '../../context/CodeContext';
+import { analytics } from '../../util/firebase';
 
 type SubmissionModalProps = {
   opened: boolean;
@@ -21,6 +23,7 @@ const SubmissionModal = ({ opened, setOpened }: SubmissionModalProps) => {
     setNextQuestion!();
     navigate('/assignment');
     setOpened(false);
+    logEvent(analytics, 'confirm_submit_question');
   };
 
   const handleClickNo = () => {

@@ -25,7 +25,7 @@ const AssignmentSubmit = () => {
 
   useEffect(() => {
     if (!assignmentName) {
-      navigate('/choose-assignment');
+      navigate('/entry');
     }
   }, [assignmentName]);
 

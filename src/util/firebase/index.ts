@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getAnalytics, initializeAnalytics } from 'firebase/analytics';
 import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
@@ -9,10 +10,16 @@ const firebaseConfig = {
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  appId: process.env.REACT_APP_FIREBASE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
+initializeAnalytics(app, {
+  config: {
+    send_page_view: false,
+  },
+});
+const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
@@ -29,5 +36,5 @@ const logOut = () => {
   signOutAndNavigateHome(auth);
 };
 
-export { db, auth, logIn, logOut };
+export { db, auth, logIn, logOut, analytics };
 export default app;
