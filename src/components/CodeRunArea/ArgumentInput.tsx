@@ -14,7 +14,7 @@ const ArgumentInput = ({
     onChange={onChange}
     placeholder={argument.name}
     classNames={{
-      input: 'font-mono rounded h-10 text-lg w-full',
+      input: 'font-mono rounded text-md w-full',
     }}
   />
 );

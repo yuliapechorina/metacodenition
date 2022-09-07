@@ -6,6 +6,7 @@ export interface IArgument {
   name?: string;
   value?: string;
   size?: number;
+  isArray?: boolean;
 }
 
 export interface ITestCase {
