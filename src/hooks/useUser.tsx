@@ -1,10 +1,9 @@
-import { setUserProperties } from 'firebase/analytics';
 import { doc } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import useNotifications from '../context/NotificationContext';
-import { analytics, auth, db } from '../util/firebase';
+import { auth, db } from '../util/firebase';
 import useUpdate from './useUpdate';
 
 const useUser = () => {
@@ -41,14 +40,6 @@ const useUser = () => {
       });
     }
   }, [isError]);
-
-  useEffect(() => {
-    if (user) {
-      setUserProperties(analytics, {
-        upi: user?.email?.split('@')?.[0] ?? '',
-      });
-    }
-  }, [user]);
 
   return {
     userData,
