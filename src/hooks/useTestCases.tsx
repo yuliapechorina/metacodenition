@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { submitRun } from '../api/codeRunner.api';
 import useCode from '../context/CodeContext';
-import { ITestCase, ResultType } from '../util/testcase';
+import { IArgument, ITestCase, ResultType } from '../util/testcase';
 import useQuestion from './useQuestion';
 
 const useTestCases = () => {
@@ -9,11 +9,25 @@ const useTestCases = () => {
   const { getRunFile } = useCode();
 
   const {
+    questionFunction,
     defaultTestCases,
     solvedTestCaseIds,
     userTestCases,
     updateUserQuestionDocument,
   } = useQuestion();
+
+  const constructArgs = (partial: IArgument[]): IArgument[] | undefined =>
+    questionFunction?.arguments?.map((arg, idx) => ({
+      ...arg,
+      ...(partial[idx] ?? {}),
+    }));
+
+  const checkResult = (stdout: string, expected: string) => {
+    if (questionFunction.returnType === 'void') {
+      return stdout === expected ? 'pass' : 'fail';
+    }
+    return stdout === `return_value: ${expected}` ? 'pass' : 'fail';
+  };
 
   const runCases = async (runTestCases: ITestCase[]) => {
     const runCode = async (testCase: ITestCase) => {
@@ -23,15 +37,14 @@ const useTestCases = () => {
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
-            sourcecode: getRunFile!(input),
+            sourcecode: getRunFile!(constructArgs(input) ?? []),
             input: '',
           },
         });
         if (runResult.stderr || runResult.cmpinfo)
           throw new Error(runResult.stderr || runResult.cmpinfo);
 
-        const result: ResultType =
-          runResult.stdout === expected ? 'pass' : 'fail';
+        const result: ResultType = checkResult(runResult.stdout, expected);
         const newTestCase = { ...testCase, output: runResult.stdout, result };
         setTestCases(
           testCases.map((tc) =>

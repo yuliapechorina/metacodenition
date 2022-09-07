@@ -65,17 +65,11 @@ export const CodeProvider = ({ children }: CodeProviderProps) => {
         '/** STUDENT CODE BEGINS **/\n\n/** STUDENT CODE ENDS **/',
         `/** STUDENT CODE BEGINS **/\n${file?.content}\n/** STUDENT CODE ENDS **/`
       );
-      return args.reduce((newFile, arg) => {
-        if (!arg?.inline) {
-          return newFile
-            .replace(
-              `<INIT_ARGUMENT_${arg.name}>`,
-              `${arg.type} ${arg.name} = ${arg.value};`
-            )
-            .replace(`<CALL_ARGUMENT_${arg.name}>`, `${arg.name}`);
-        }
-        return newFile.replace(`<INLINE_ARGUMENT_${arg.name}>`, `${arg.value}`);
-      }, templateWithStudentCode);
+      return args.reduce(
+        (newFile, arg) =>
+          newFile.replace(`<ARGUMENT_${arg.name}>`, `${arg.value}`),
+        templateWithStudentCode
+      );
     },
     [template, file]
   );

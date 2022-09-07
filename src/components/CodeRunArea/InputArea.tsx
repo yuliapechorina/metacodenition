@@ -15,12 +15,18 @@ const InputArea = (props: InputAreaProps) => {
   const { questionFunction } = useQuestion();
 
   const [args, setArgs] = React.useState<IArgument[]>([
-    ...(questionFunction?.arguments ?? []),
+    ...(questionFunction?.arguments?.map((arg) => ({ ...arg, value: '' })) ??
+      []),
   ]);
 
   useEffect(() => {
     if (questionFunction) {
-      setArgs([...(questionFunction.arguments ?? [])]);
+      setArgs([
+        ...(questionFunction?.arguments?.map((arg) => ({
+          ...arg,
+          value: '',
+        })) ?? []),
+      ]);
     }
   }, [questionFunction]);
 

@@ -104,7 +104,8 @@ const TestCasePage = () => {
   const defaultResult: ResultType = 'unrun';
   const getDefaultUserTestCase = (): ITestCase => ({
     id: uuidv4(),
-    input: [],
+    input:
+      questionFunction?.arguments?.map((arg) => ({ ...arg, value: '' })) ?? [],
     expected: '',
     output: '',
     solved: true,
@@ -112,25 +113,18 @@ const TestCasePage = () => {
     student_generated: true,
   });
 
-  const [inputTestCase, setInput] = useState<ITestCase>({
-    ...getDefaultUserTestCase(),
-    input: questionFunction?.arguments || [],
-  });
+  const [inputTestCase, setInput] = useState<ITestCase>(
+    getDefaultUserTestCase()
+  );
 
   const addTestCase = () => {
     setDisplayInputRow(true);
-    setInput({
-      ...getDefaultUserTestCase(),
-      input: questionFunction?.arguments || [],
-    });
+    setInput(getDefaultUserTestCase());
   };
 
   const removeTestCase = () => {
     setDisplayInputRow(false);
-    setInput({
-      ...getDefaultUserTestCase(),
-      input: questionFunction?.arguments || [],
-    });
+    setInput(getDefaultUserTestCase());
   };
 
   useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
@@ -173,20 +167,9 @@ const TestCasePage = () => {
         </td>
         <td>
           <TestCaseInput
-            className='max-w-md'
             value={inputTestCase.input}
             onChange={(value) => setInput({ ...inputTestCase, input: value })}
           />
-          {/* <TextInput
-            value={inputTestCase.input?.[0]?.value ?? ''}
-            onChange={(e) =>
-              setInput({
-                ...inputTestCase,
-                input: [{ value: e.currentTarget.value }],
-              })
-            }
-            className='max-w-md'
-          /> */}
         </td>
         <td className='whitespace-pre'>
           {inputTestCase.output || 'not run yet'}
@@ -197,7 +180,6 @@ const TestCasePage = () => {
             onChange={(e) =>
               setInput({ ...inputTestCase, expected: e.currentTarget.value })
             }
-            className='max-w-md'
           />
         </td>
       </tr>

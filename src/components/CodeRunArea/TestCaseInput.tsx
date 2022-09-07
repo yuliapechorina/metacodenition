@@ -25,7 +25,7 @@ const TestCaseInput = ({
     <Stack className={className}>
       <Code block className='text-md font-bold bg-gray-100'>
         {value?.map((arg: IArgument, idx) => (
-          <Group className=' space-x-0 px-0 mx-0'>
+          <Group key={arg.name ?? idx} className='space-x-0 px-0 mx-0'>
             {arg.type} {arg.name}
             {arg.isArray ? '[]' : ''} =
             <ArgumentInput
