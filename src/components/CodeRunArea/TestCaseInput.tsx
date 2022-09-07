@@ -41,7 +41,9 @@ const TestCaseInput = ({
             }(${questionFunction.arguments
               ?.map((arg) => arg.name)
               .join(', ')});`
-          : ''}
+          : `${questionFunction.name}(${questionFunction.arguments
+              ?.map((arg) => arg.name)
+              .join(', ')});`}
       </Code>
     </Stack>
   );
