@@ -73,7 +73,9 @@ const useTestCases = () => {
           ? { ...testCase, solved: true }
           : testCase
       );
-      setTestCases(newSolvedTestCases);
+      setTestCases(
+        newSolvedTestCases.map((tc) => ({ ...tc, result: 'unrun' }))
+      );
     } else setTestCases(newTestCases);
   }, [defaultTestCases, userTestCases, solvedTestCaseIds]);
 

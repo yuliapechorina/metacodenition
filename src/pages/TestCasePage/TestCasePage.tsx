@@ -2,6 +2,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Code,
   Group,
   ScrollArea,
   Stack,
@@ -25,9 +26,13 @@ import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
 import { analytics } from '../../util/firebase';
 import { ITestCase, ResultType } from '../../util/testcase';
+import useQuestion from '../../hooks/useQuestion';
+import { buildTestCaseString } from '../../util/testcase-helpers';
+import TestCaseInput from '../../components/CodeRunArea/TestCaseInput';
 
 const TestCasePage = () => {
   const { setUnsavedChanges } = useAssignment();
+  const { questionFunction } = useQuestion();
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
   const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
@@ -107,18 +112,25 @@ const TestCasePage = () => {
     student_generated: true,
   });
 
-  const [inputTestCase, setInput] = useState<ITestCase>(
-    getDefaultUserTestCase()
-  );
+  const [inputTestCase, setInput] = useState<ITestCase>({
+    ...getDefaultUserTestCase(),
+    input: questionFunction?.arguments || [],
+  });
 
   const addTestCase = () => {
     setDisplayInputRow(true);
-    setInput(getDefaultUserTestCase());
+    setInput({
+      ...getDefaultUserTestCase(),
+      input: questionFunction?.arguments || [],
+    });
   };
 
   const removeTestCase = () => {
     setDisplayInputRow(false);
-    setInput(getDefaultUserTestCase());
+    setInput({
+      ...getDefaultUserTestCase(),
+      input: questionFunction?.arguments || [],
+    });
   };
 
   useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
@@ -160,7 +172,12 @@ const TestCasePage = () => {
           </Center>
         </td>
         <td>
-          <TextInput
+          <TestCaseInput
+            className='max-w-md'
+            value={inputTestCase.input}
+            onChange={(value) => setInput({ ...inputTestCase, input: value })}
+          />
+          {/* <TextInput
             value={inputTestCase.input?.[0]?.value ?? ''}
             onChange={(e) =>
               setInput({
@@ -169,7 +186,7 @@ const TestCasePage = () => {
               })
             }
             className='max-w-md'
-          />
+          /> */}
         </td>
         <td className='whitespace-pre'>
           {inputTestCase.output || 'not run yet'}
@@ -213,6 +230,7 @@ const TestCasePage = () => {
           // eslint-disable-next-line react/no-array-index-key
           key={i}
           className={`${
+            testCase.result &&
             testCase.result !== 'unrun' &&
             (testCase.result === 'pass' ? 'bg-green-100' : 'bg-red-100')
           } ${testCase.student_generated ? 'font-bold' : ''}`}
@@ -228,13 +246,29 @@ const TestCasePage = () => {
               />
             </Center>
           </td>
-          <td>{testCase.input[0]?.value ?? ''}</td>
-          <td className='whitespace-pre'>{testCase.output || 'not run yet'}</td>
+          <td>
+            <Code block className='text-md'>
+              {testCase && buildTestCaseString(questionFunction, testCase)}
+            </Code>
+          </td>
+          <td>
+            {testCase.output ? (
+              <Code block className='text-md font-bold'>
+                {testCase.output}
+              </Code>
+            ) : (
+              'Not run yet!'
+            )}
+          </td>
           <td>
             <Group className='inline-flex items-center '>
-              <Text size='sm'>
-                {testCase.solved ? testCase.expected : 'Solve manually first!'}
-              </Text>
+              {testCase.solved ? (
+                <Code block className='text-md'>
+                  return_value: {testCase.expected}
+                </Code>
+              ) : (
+                'Solve manually first!'
+              )}
               {testCase.student_generated && (
                 <UnstyledButton
                   onClick={() => handleDeleteTestCase(testCase)}

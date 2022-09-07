@@ -87,7 +87,7 @@ const TestCaseSolver = () => {
 
   const handleReset = () => {
     updateUserQuestionDocument({
-      solvedTestCases: '',
+      solvedTestCaseIds: [],
     });
     setCurrentTestCase(getRandomUnsolvedTestCase());
     logEvent(analytics, 'reset_test_cases');
