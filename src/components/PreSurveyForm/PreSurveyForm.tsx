@@ -12,7 +12,7 @@ import { useForm } from '@mantine/form';
 import { setUserProperties } from 'firebase/analytics';
 import GenericButton from '../generics/GenericButton';
 import useUser from '../../hooks/useUser';
-import { analytics } from '../../util/firebase';
+import { analytics, auth } from '../../util/firebase';
 
 enum Genders {
   'Female' = 'female',
@@ -81,10 +81,13 @@ const PreSurveyForm = () => {
       },
     });
 
+    const upi = auth.currentUser?.email?.split('@')?.[0];
+
     setUserProperties(analytics, {
       user_gender: values.gender,
       ethnicity: values.ethnicity,
       prev_experience: programmingExperienceLabel,
+      upi,
     });
   };
 

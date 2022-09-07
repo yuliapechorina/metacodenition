@@ -13,7 +13,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/entry');
+      navigate('/assignment');
     }
   }, [user, navigate]);
 

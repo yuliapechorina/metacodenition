@@ -5,7 +5,6 @@ import { analytics } from '../../util/firebase';
 
 const pageNames = new Map([
   ['/', 'Home page'],
-  ['/entry', 'Entry page'],
   ['/assignment/problem', 'Understanding the problem'],
   ['/assignment/design', 'Designing a solution'],
   ['/assignment/evaluation', 'Evaluating a solution'],
