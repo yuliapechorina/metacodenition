@@ -20,7 +20,12 @@ const getOutput = (getComments: () => Comment[], file: File) => {
   const commentBlock = newComments
     ?.filter((nC) => !usedCommentIds.includes(nC.id))
     .reduce((s, c) => `${s + c.text}\n`, '');
-  if (commentBlock) newContentArray.splice(1, 0, commentBlock);
+  if (commentBlock)
+    newContentArray.splice(
+      newContentArray.findIndex((s) => s.includes('{')) + 1,
+      0,
+      commentBlock
+    );
   const newContent = newContentArray.join('\n');
 
   const generatorOutput = {
