@@ -155,7 +155,7 @@ const TestCaseSolver = () => {
             />
             {currentTestCase?.solved ? (
               <GenericButton
-                text='Next Question'
+                text='Next Test Case'
                 onClick={handleNext}
                 disabled={isLoading}
               />
