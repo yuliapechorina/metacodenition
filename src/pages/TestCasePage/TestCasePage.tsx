@@ -235,7 +235,7 @@ const TestCasePage = () => {
           </td>
           <td>
             {testCase.output ? (
-              <Code block className='text-md font-bold'>
+              <Code block className='text-md'>
                 {testCase.output}
               </Code>
             ) : (
@@ -246,7 +246,10 @@ const TestCasePage = () => {
             <Group className='inline-flex items-center '>
               {testCase.solved ? (
                 <Code block className='text-md'>
-                  return_value: {testCase.expected}
+                  {questionFunction?.returnType !== 'void'
+                    ? 'return_value: '
+                    : ''}
+                  {testCase.expected}
                 </Code>
               ) : (
                 'Solve manually first!'
