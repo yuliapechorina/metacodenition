@@ -1,9 +1,10 @@
 import { Notification, Stack } from '@mantine/core';
 import { logEvent } from 'firebase/analytics';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { submitRun } from '../../api/codeRunner.api';
 import useCode from '../../context/CodeContext';
 import { analytics } from '../../util/firebase';
+import { IArgument } from '../../util/testcase';
 import InputArea from './InputArea';
 import OutputArea from './OutputArea';
 
@@ -21,11 +22,6 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   const [errorNotificationDismissed, setErrorNotifcationDismissed] =
     useState(false);
   const [output, setOutput] = useState('');
-  const [input, setInput] = useState('');
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(event.target.value);
-  };
 
   useEffect(() => {
     if (isError) {
@@ -36,7 +32,7 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
     }
   }, [isError, errorNotificationDismissed]);
 
-  const run = () => {
+  const run = (args: IArgument[]) => {
     logEvent(analytics, 'run_code');
 
     const runCode = async () => {
@@ -46,8 +42,8 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
-            sourcecode: getRunFile!([]),
-            input,
+            sourcecode: getRunFile!(args),
+            input: '',
           },
         });
         setOutput(result.stdout || result.stderr || result.cmpinfo);
@@ -62,12 +58,7 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   };
   return (
     <Stack className={className}>
-      <InputArea
-        loading={loading}
-        value={input}
-        onChange={handleInputChange}
-        runCallback={run}
-      />
+      <InputArea loading={loading} runCallback={run} />
       <OutputArea loading={loading} text={output} />
       {errorNotificationVisible && (
         <Notification
