@@ -15,14 +15,16 @@ import { useEffect, useState } from 'react';
 import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { logEvent } from 'firebase/analytics';
+import { v4 as uuidv4 } from 'uuid';
 import ProblemPopover from '../../components/ProblemPopover';
 import useNotifications, {
   INotification,
 } from '../../context/NotificationContext';
-import useTestCases, { ITestCase, ResultType } from '../../hooks/useTestCases';
+import useTestCases from '../../hooks/useTestCases';
 import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
 import { analytics } from '../../util/firebase';
+import { ITestCase, ResultType } from '../../util/testcase';
 
 const TestCasePage = () => {
   const { setUnsavedChanges } = useAssignment();
@@ -95,25 +97,28 @@ const TestCasePage = () => {
       : setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
 
   const defaultResult: ResultType = 'unrun';
-  const defaultUserTestCase = {
-    input: '',
+  const getDefaultUserTestCase = (): ITestCase => ({
+    id: uuidv4(),
+    input: [],
     expected: '',
     output: '',
     solved: true,
     result: defaultResult,
     student_generated: true,
-  };
+  });
 
-  const [inputTestCase, setInput] = useState<ITestCase>(defaultUserTestCase);
+  const [inputTestCase, setInput] = useState<ITestCase>(
+    getDefaultUserTestCase()
+  );
 
   const addTestCase = () => {
     setDisplayInputRow(true);
-    setInput(defaultUserTestCase);
+    setInput(getDefaultUserTestCase());
   };
 
   const removeTestCase = () => {
     setDisplayInputRow(false);
-    setInput(defaultUserTestCase);
+    setInput(getDefaultUserTestCase());
   };
 
   useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
@@ -136,7 +141,7 @@ const TestCasePage = () => {
     }
     addUserTestCase(inputTestCase);
     setDisplayInputRow(false);
-    setInput(defaultUserTestCase);
+    setInput(getDefaultUserTestCase);
   };
 
   const handleDeleteTestCase = (testCase: ITestCase) => {
@@ -156,9 +161,12 @@ const TestCasePage = () => {
         </td>
         <td>
           <TextInput
-            value={inputTestCase.input}
+            value={inputTestCase.input?.[0]?.value ?? ''}
             onChange={(e) =>
-              setInput({ ...inputTestCase, input: e.currentTarget.value })
+              setInput({
+                ...inputTestCase,
+                input: [{ value: e.currentTarget.value }],
+              })
             }
             className='max-w-md'
           />
@@ -220,7 +228,7 @@ const TestCasePage = () => {
               />
             </Center>
           </td>
-          <td>{testCase.input}</td>
+          <td>{testCase.input[0]?.value ?? ''}</td>
           <td className='whitespace-pre'>{testCase.output || 'not run yet'}</td>
           <td>
             <Group className='inline-flex items-center '>

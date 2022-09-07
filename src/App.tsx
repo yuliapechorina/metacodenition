@@ -9,6 +9,7 @@ import EvaluationPage from './pages/EvaluationPage';
 import TestCasePage from './pages/TestCasePage';
 import HomePage from './pages/HomePage';
 import InvalidEmailPage from './pages/InvalidEmailPage';
+import EntryPage from './pages/EntryPage';
 import AssignmentSubmit from './pages/AssignmentSubmit';
 import useInterventions from './hooks/useInterventions';
 import PageNotFound from './pages/PageNotFound';
@@ -63,6 +64,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<ApplicationShell />}>
           <Route index element={<HomePage />} />
+          <Route path='entry' element={<EntryPage />} />
           <Route path='submit' element={<AssignmentSubmit />} />
           <Route path='/assignment' element={<AuthRoute />}>
             <Route index element={<Navigate to={assignmentRedirectRoute} />} />

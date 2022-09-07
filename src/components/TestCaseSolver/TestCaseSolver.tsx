@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Group, Text, Title, Tooltip, UnstyledButton } from '@mantine/core';
+import {
+  Code,
+  Group,
+  Text,
+  Title,
+  Tooltip,
+  UnstyledButton,
+} from '@mantine/core';
 import { HiCheck, HiOutlineRefresh, HiX } from 'react-icons/hi';
 import { IoShuffle } from 'react-icons/io5';
 import { logEvent } from 'firebase/analytics';
 import useQuestion from '../../hooks/useQuestion';
-import useTestCases, { ITestCase } from '../../hooks/useTestCases';
+import useTestCases from '../../hooks/useTestCases';
 import GenericInput from '../generics/GenericInput';
 import GenericButton from '../generics/GenericButton';
 import { analytics } from '../../util/firebase';
+import { ITestCase } from '../../util/testcase';
+import { buildTestCaseString } from '../../util/testcase-helpers';
 
 const TestCaseSolver = () => {
-  const { isLoading, updateUserQuestionDocument } = useQuestion();
+  const { questionFunction, isLoading, updateUserQuestionDocument } =
+    useQuestion();
   const { testCases, getRandomUnsolvedTestCase, markAsSolved } = useTestCases();
 
   const [currentTestCase, setCurrentTestCase] = useState<ITestCase | undefined>(
@@ -33,12 +43,12 @@ const TestCaseSolver = () => {
     const { expected } = currentTestCase;
     if (expected) {
       if (inputValue === expected && currentTestCase !== undefined) {
-        const solvedTestCases = [
-          ...testCases.filter((tc) => tc.solved).map((tc) => tc.input),
-          currentTestCase.input,
+        const solvedTestCaseIds = [
+          ...testCases.filter((tc) => tc.solved).map((tc) => tc.id),
+          currentTestCase.id,
         ];
         updateUserQuestionDocument({
-          solvedTestCases,
+          solvedTestCaseIds,
         });
         markAsSolved(currentTestCase);
         setCurrentTestCase({ ...currentTestCase, solved: true });
@@ -131,12 +141,20 @@ const TestCaseSolver = () => {
       ) : (
         <>
           <Text>
-            Given input:{' '}
-            <Text inherit component='span' className=' font-bold'>
-              {currentTestCase?.input}
-            </Text>
+            Given the following function call:
+            <br />
+            <Code block className='text-md font-bold'>
+              {currentTestCase &&
+                buildTestCaseString(questionFunction, currentTestCase)}
+            </Code>
           </Text>
-          <Text>What is the output? </Text>
+          <Text>
+            What is{' '}
+            {questionFunction?.returnType !== 'void'
+              ? 'the value of return_value'
+              : 'the output'}
+            ?
+          </Text>
           <Group className='w-full h-fit'>
             <GenericInput
               placeholder='Enter your expected output'

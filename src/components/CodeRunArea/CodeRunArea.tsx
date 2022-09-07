@@ -46,7 +46,7 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
-            sourcecode: getRunFile!(),
+            sourcecode: getRunFile!([]),
             input,
           },
         });

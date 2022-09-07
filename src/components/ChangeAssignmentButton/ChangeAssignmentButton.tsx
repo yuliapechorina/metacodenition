@@ -8,7 +8,7 @@ const ChangeAssignmentButton = () => {
   const { setAssignmentName } = useAssignment();
   const handleClick = () => {
     setAssignmentName!(undefined);
-    navigate('assignment');
+    navigate('entry');
   };
   return (
     <Tooltip label='Change assignment' position='bottom'>

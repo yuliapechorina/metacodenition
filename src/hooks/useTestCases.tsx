@@ -1,18 +1,8 @@
 import { useEffect, useState } from 'react';
 import { submitRun } from '../api/codeRunner.api';
 import useCode from '../context/CodeContext';
+import { ITestCase, ResultType } from '../util/testcase';
 import useQuestion from './useQuestion';
-
-export type ResultType = 'pass' | 'fail' | 'unrun';
-
-export interface ITestCase {
-  input: string;
-  expected: string;
-  output: string;
-  solved: boolean;
-  result: ResultType;
-  student_generated?: boolean;
-}
 
 const useTestCases = () => {
   const [testCases, setTestCases] = useState<ITestCase[]>([]);
@@ -20,7 +10,7 @@ const useTestCases = () => {
 
   const {
     defaultTestCases,
-    solvedTestCases,
+    solvedTestCaseIds,
     userTestCases,
     updateUserQuestionDocument,
   } = useQuestion();
@@ -33,8 +23,8 @@ const useTestCases = () => {
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
-            sourcecode: getRunFile!(),
-            input,
+            sourcecode: getRunFile!(input),
+            input: '',
           },
         });
         if (runResult.stderr || runResult.cmpinfo)
@@ -73,37 +63,19 @@ const useTestCases = () => {
   useEffect(() => {
     const newTestCases: ITestCase[] = [];
     if (defaultTestCases !== undefined) {
-      const availableQuestionTestCases = new Map<string, string>(
-        Object.entries(defaultTestCases)
-      );
-      const newQuestionTestCases: ITestCase[] = Array.from(
-        availableQuestionTestCases
-      ).map(([input, expected]) => ({
-        input,
-        expected,
-        output: '',
-        solved: false,
-        selected: false,
-        result: 'unrun',
-      }));
+      const newQuestionTestCases: ITestCase[] = defaultTestCases;
       newTestCases.push(...newQuestionTestCases);
     }
     if (userTestCases !== undefined) newTestCases.push(...userTestCases);
-    if (solvedTestCases !== undefined) {
-      const availableSolvedTestCases = new Map<string, string>(
-        Object.entries(solvedTestCases)
-      );
-      const solvedInputs = Array.from(availableSolvedTestCases).map(
-        ([, v]) => v
-      );
+    if (solvedTestCaseIds !== undefined) {
       const newSolvedTestCases = newTestCases.map((testCase) =>
-        solvedInputs.includes(testCase.input)
+        solvedTestCaseIds.includes(testCase.id)
           ? { ...testCase, solved: true }
           : testCase
       );
       setTestCases(newSolvedTestCases);
     } else setTestCases(newTestCases);
-  }, [defaultTestCases, userTestCases, solvedTestCases]);
+  }, [defaultTestCases, userTestCases, solvedTestCaseIds]);
 
   const getRandomUnsolvedTestCase = () => {
     const unsolvedTestCases = testCases.filter((tc) => !tc.solved);
