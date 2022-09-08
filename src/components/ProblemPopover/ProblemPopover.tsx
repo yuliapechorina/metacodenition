@@ -1,15 +1,9 @@
-import {
-  Popover,
-  Text,
-  TypographyStylesProvider,
-  UnstyledButton,
-} from '@mantine/core';
+import { Popover, UnstyledButton } from '@mantine/core';
 import { logEvent } from 'firebase/analytics';
-import HTMLReactParser from 'html-react-parser';
 import React from 'react';
 import { HiQuestionMarkCircle } from 'react-icons/hi';
-import useQuestion from '../../hooks/useQuestion';
 import { analytics } from '../../util/firebase';
+import ProblemText from '../ProblemText';
 
 type ProblemPopoverProps = {
   opened: boolean;
@@ -22,8 +16,6 @@ const ProblemPopover = ({
   setOpened,
   className,
 }: ProblemPopoverProps) => {
-  const { getProblemStatement } = useQuestion();
-
   const handleClickOpenProblem = () => {
     if (!opened) logEvent(analytics, 'open_problem_popover');
     setOpened(!opened);
@@ -31,6 +23,7 @@ const ProblemPopover = ({
 
   return (
     <Popover
+      id='problem-popover'
       opened={opened}
       onClose={() => setOpened(false)}
       target={
@@ -51,18 +44,18 @@ const ProblemPopover = ({
       withArrow
       title='Problem:'
       classNames={{
-        root: className,
+        root: `${className}`,
         body: 'border-gray-300 border-sm',
         header: 'border-gray-300 border-sm',
         popover: 'bg-white/30 backdrop-blur-md',
         arrow: 'bg-white/30 backdrop-blur-md border-gray-300 border-sm mr-1',
       }}
     >
-      <Text className='text-justify'>
-        <TypographyStylesProvider className='text-sm'>
-          {HTMLReactParser(getProblemStatement!())}
-        </TypographyStylesProvider>
-      </Text>
+      <ProblemText
+        classNames={{ provider: 'text-sm' }}
+        relativeParentId='problem-popover-body'
+        tooltipOffset={10}
+      />
     </Popover>
   );
 };

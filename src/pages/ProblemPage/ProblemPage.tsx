@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Divider,
-  ScrollArea,
-  Stack,
-  Text,
-  Title,
-  TypographyStylesProvider,
-} from '@mantine/core';
-import HTMLReactParser from 'html-react-parser';
-import useQuestion from '../../hooks/useQuestion';
+import { useEffect, useState } from 'react';
+import { Divider, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import InterventionModal from '../../components/InterventionModal';
 import TestCaseSolver from '../../components/TestCaseSolver';
 import useAssignment from '../../context/AssignmentContext';
 import { getCookie, setCookie } from '../../util/cookie';
+import ProblemText from '../../components/ProblemText';
 
 const ProblemPage = () => {
-  const { getProblemStatement } = useQuestion();
   const { questionNumber } = useAssignment();
 
   const [interventionModalOpened, setInterventionModalOpened] = useState(false);
@@ -36,9 +27,7 @@ const ProblemPage = () => {
         <Stack className='p-4'>
           <Title order={4}>Problem:</Title>
           <Text className='text-justify'>
-            <TypographyStylesProvider>
-              {HTMLReactParser(getProblemStatement!())}
-            </TypographyStylesProvider>
+            <ProblemText />
           </Text>
           <Divider />
           <TestCaseSolver />
