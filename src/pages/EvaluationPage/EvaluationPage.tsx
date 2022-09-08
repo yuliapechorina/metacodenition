@@ -60,7 +60,7 @@ const EvaluationPage = () => {
             setOpened={setProblemOpened}
           />
         </Group>
-        <Group className='items-start pb-32 bg-gray-100 shadow-inner mx-4 rounded-lg'>
+        <Group className='items-start pb-32 flex-nowrap bg-gray-100 shadow-inner mx-4 rounded-lg'>
           <Stack spacing={0} className='grow min-h-[32rem]'>
             <Title order={4} className='text-center py-4 '>
               Drag from here
@@ -78,7 +78,7 @@ const EvaluationPage = () => {
                     shadow='sm'
                     radius='md'
                     p='md'
-                    className={`bg-white cursor-grab h-fit ${
+                    className={`bg-white cursor-grab h-fit min-w-0 ${
                       fragment.userGenerated && ' font-bold'
                     }`}
                   >
