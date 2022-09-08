@@ -1,29 +1,48 @@
 import { Group, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HiDotsHorizontal, HiPlay } from 'react-icons/hi';
-import CodeInput from '../CodeInput';
+import useQuestion from '../../hooks/useQuestion';
+import { IArgument } from '../../util/testcase';
+import TestCaseInput from './TestCaseInput';
 
 type InputAreaProps = {
   loading: boolean;
-  runCallback: () => void;
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement> | undefined;
+  runCallback: (args: IArgument[]) => void;
 };
 
 const InputArea = (props: InputAreaProps) => {
-  const { loading, runCallback, value, onChange } = props;
+  const { loading, runCallback } = props;
+  const { questionFunction } = useQuestion();
+
+  const [args, setArgs] = React.useState<IArgument[]>([
+    ...(questionFunction?.arguments?.map((arg) => ({ ...arg, value: '' })) ??
+      []),
+  ]);
+
+  useEffect(() => {
+    if (questionFunction) {
+      setArgs([
+        ...(questionFunction?.arguments?.map((arg) => ({
+          ...arg,
+          value: '',
+        })) ?? []),
+      ]);
+    }
+  }, [questionFunction]);
 
   return (
     <Stack>
       <Text className='grow text-lg'>Input</Text>
       <Group>
-        <CodeInput
+        <TestCaseInput
           className='grow rounded'
-          placeholder='Input'
-          value={value}
-          onChange={onChange}
+          value={args}
+          onChange={setArgs}
         />
-        <UnstyledButton className='hover:scale-110' onClick={runCallback}>
+        <UnstyledButton
+          className='hover:scale-110'
+          onClick={() => runCallback(args)}
+        >
           {loading ? (
             <HiDotsHorizontal
               size='36px'

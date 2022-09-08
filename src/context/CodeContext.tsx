@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useQuestion from '../hooks/useQuestion';
+import { IArgument } from '../util/testcase';
 import useAssignment from './AssignmentContext';
 
 export type Comment = {
@@ -16,7 +17,7 @@ interface ICodeContext {
   file: File;
   defaultCode: string;
   setFile: (files: File | undefined) => void;
-  getRunFile: () => string;
+  getRunFile: (args: IArgument[]) => string;
 }
 
 const CodeContext = React.createContext<Partial<ICodeContext>>({});
@@ -59,11 +60,17 @@ export const CodeProvider = ({ children }: CodeProviderProps) => {
   }, [initialCode, file]);
 
   const getRunFile = useCallback(
-    () =>
-      template.replace(
+    (args: IArgument[]) => {
+      const templateWithStudentCode = template.replace(
         '/** STUDENT CODE BEGINS **/\n\n/** STUDENT CODE ENDS **/',
         `/** STUDENT CODE BEGINS **/\n${file?.content}\n/** STUDENT CODE ENDS **/`
-      ),
+      );
+      return args.reduce(
+        (newFile, arg) =>
+          newFile.replace(`<ARGUMENT_${arg.name}>`, `${arg.value}`),
+        templateWithStudentCode
+      );
+    },
     [template, file]
   );
 

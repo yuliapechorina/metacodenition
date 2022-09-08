@@ -8,7 +8,7 @@ const useAssignmentsData = () => {
 
   const assignmentsCollection =
     user && db ? collection(db, 'assignments') : undefined;
-  const [assignmentsData, , , assignmentsSnapShot] = useCollectionData(
+  const [rawAssignmentsData, , , assignmentsSnapShot] = useCollectionData(
     assignmentsCollection
   );
 
@@ -18,7 +18,16 @@ const useAssignmentsData = () => {
     userAssignmentsCollection
   );
 
-  const assignmentIds = assignmentsSnapShot?.docs.map((v) => v.id);
+  const assignmentsData = rawAssignmentsData?.filter(
+    (assignment) => !assignment?.disabled
+  );
+
+  const assignmentIds = assignmentsSnapShot?.docs.reduce((a, v, i) => {
+    if (rawAssignmentsData?.[i]?.disabled) {
+      return a;
+    }
+    return [...a, v.id];
+  }, [] as string[]);
 
   const userAssignmentIds = userAssignmentsSnapShot?.docs.map((v) => v.id);
 

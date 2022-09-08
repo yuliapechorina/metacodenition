@@ -1,29 +1,33 @@
 import { useEffect, useState } from 'react';
 import { submitRun } from '../api/codeRunner.api';
 import useCode from '../context/CodeContext';
+import { IArgument, ITestCase, ResultType } from '../util/testcase';
 import useQuestion from './useQuestion';
-
-export type ResultType = 'pass' | 'fail' | 'unrun';
-
-export interface ITestCase {
-  input: string;
-  expected: string;
-  output: string;
-  solved: boolean;
-  result: ResultType;
-  student_generated?: boolean;
-}
 
 const useTestCases = () => {
   const [testCases, setTestCases] = useState<ITestCase[]>([]);
   const { getRunFile } = useCode();
 
   const {
+    questionFunction,
     defaultTestCases,
-    solvedTestCases,
+    solvedTestCaseIds,
     userTestCases,
     updateUserQuestionDocument,
   } = useQuestion();
+
+  const constructArgs = (partial: IArgument[]): IArgument[] | undefined =>
+    questionFunction?.arguments?.map((arg, idx) => ({
+      ...arg,
+      ...(partial[idx] ?? {}),
+    }));
+
+  const checkResult = (stdout: string, expected: string) => {
+    if (questionFunction.returnType === 'void') {
+      return stdout === expected ? 'pass' : 'fail';
+    }
+    return stdout === `return_value: ${expected}` ? 'pass' : 'fail';
+  };
 
   const runCases = async (runTestCases: ITestCase[]) => {
     const runCode = async (testCase: ITestCase) => {
@@ -33,15 +37,14 @@ const useTestCases = () => {
           run_spec: {
             language_id: 'c',
             sourcefilename: 'test.c',
-            sourcecode: getRunFile!(),
-            input,
+            sourcecode: getRunFile!(constructArgs(input) ?? []),
+            input: '',
           },
         });
         if (runResult.stderr || runResult.cmpinfo)
           throw new Error(runResult.stderr || runResult.cmpinfo);
 
-        const result: ResultType =
-          runResult.stdout === expected ? 'pass' : 'fail';
+        const result: ResultType = checkResult(runResult.stdout, expected);
         const newTestCase = { ...testCase, output: runResult.stdout, result };
         setTestCases(
           testCases.map((tc) =>
@@ -73,37 +76,21 @@ const useTestCases = () => {
   useEffect(() => {
     const newTestCases: ITestCase[] = [];
     if (defaultTestCases !== undefined) {
-      const availableQuestionTestCases = new Map<string, string>(
-        Object.entries(defaultTestCases)
-      );
-      const newQuestionTestCases: ITestCase[] = Array.from(
-        availableQuestionTestCases
-      ).map(([input, expected]) => ({
-        input,
-        expected,
-        output: '',
-        solved: false,
-        selected: false,
-        result: 'unrun',
-      }));
+      const newQuestionTestCases: ITestCase[] = defaultTestCases;
       newTestCases.push(...newQuestionTestCases);
     }
     if (userTestCases !== undefined) newTestCases.push(...userTestCases);
-    if (solvedTestCases !== undefined) {
-      const availableSolvedTestCases = new Map<string, string>(
-        Object.entries(solvedTestCases)
-      );
-      const solvedInputs = Array.from(availableSolvedTestCases).map(
-        ([, v]) => v
-      );
+    if (solvedTestCaseIds !== undefined) {
       const newSolvedTestCases = newTestCases.map((testCase) =>
-        solvedInputs.includes(testCase.input)
+        solvedTestCaseIds.includes(testCase.id)
           ? { ...testCase, solved: true }
           : testCase
       );
-      setTestCases(newSolvedTestCases);
+      setTestCases(
+        newSolvedTestCases.map((tc) => ({ ...tc, result: 'unrun' }))
+      );
     } else setTestCases(newTestCases);
-  }, [defaultTestCases, userTestCases, solvedTestCases]);
+  }, [defaultTestCases, userTestCases, solvedTestCaseIds]);
 
   const getRandomUnsolvedTestCase = () => {
     const unsolvedTestCases = testCases.filter((tc) => !tc.solved);

@@ -1,7 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getAnalytics, initializeAnalytics } from 'firebase/analytics';
+import {
+  getAnalytics,
+  initializeAnalytics,
+  setUserProperties,
+} from 'firebase/analytics';
 import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
@@ -30,6 +34,10 @@ const auth = getAuth(app);
 
 const logIn = () => {
   signIn(auth, googleProvider, db);
+  const upi = auth.currentUser?.email?.split('@')?.[0];
+  setUserProperties(analytics, {
+    upi,
+  });
 };
 
 const logOut = () => {

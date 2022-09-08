@@ -6,6 +6,7 @@ import useAssignment from '../context/AssignmentContext';
 import useNotifications from '../context/NotificationContext';
 import { auth, db } from '../util/firebase';
 import { applyHighlightToText } from '../util/highlighter';
+import { IFunction, ITestCase } from '../util/testcase';
 import useUpdate from './useUpdate';
 
 const useQuestion = () => {
@@ -22,6 +23,7 @@ const useQuestion = () => {
       : undefined;
   const [userQuestionData] = useDocumentData(userQuestionDoc);
 
+  const [questionFunction, setQuestionFunction] = useState<IFunction>({});
   const [problemStatement, setProblemStatement] = useState<string>('');
   const [defaultTestCases, setDefaultTestCases] = useState<any[]>([]);
   const [defaultListItems, setDefaultListItems] = useState<any[]>([]);
@@ -29,6 +31,8 @@ const useQuestion = () => {
   const [codeTemplate, setCodeTemplate] = useState<string>('');
 
   useEffect(() => {
+    if (questionData?.function !== undefined)
+      setQuestionFunction(questionData.function);
     if (questionData?.text !== undefined)
       setProblemStatement(questionData.text);
     if (questionData?.testCases !== undefined)
@@ -42,17 +46,17 @@ const useQuestion = () => {
   }, [questionData]);
 
   const [highlights, setHighlights] = useState<any[]>([]);
-  const [solvedTestCases, setSolvedTestCases] = useState<any[]>([]);
+  const [solvedTestCaseIds, setSolvedTestCaseIds] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [usedParsonsIds, setUsedParsonsIds] = useState<any[]>([]);
   const [userCode, setUserCode] = useState<string>('');
-  const [userTestCases, setUserTestCases] = useState<any[]>([]);
+  const [userTestCases, setUserTestCases] = useState<ITestCase[]>([]);
 
   useEffect(() => {
     if (userQuestionData?.highlights !== undefined)
       setHighlights(userQuestionData?.highlights);
-    if (userQuestionData?.solvedTestCases !== undefined)
-      setSolvedTestCases(userQuestionData?.solvedTestCases);
+    if (userQuestionData?.solvedTestCaseIds !== undefined)
+      setSolvedTestCaseIds(userQuestionData?.solvedTestCaseIds);
     if (userQuestionData?.submitted !== undefined)
       setSubmitted(userQuestionData?.submitted);
     if (userQuestionData?.usedParsonsIds !== undefined)
@@ -69,7 +73,7 @@ const useQuestion = () => {
         if (!d.exists()) {
           setDoc(userQuestionDoc, {
             highlights: [],
-            solvedTestCases: [],
+            solvedTestCaseIds: [],
             submitted: false,
             usedParsonsIds: [],
             userCode: '',
@@ -103,12 +107,13 @@ const useQuestion = () => {
 
   return {
     questionId,
+    questionFunction,
     defaultTestCases,
     defaultListItems,
     initialCode,
     codeTemplate,
     highlights,
-    solvedTestCases,
+    solvedTestCaseIds,
     submitted,
     usedParsonsIds,
     userCode,
