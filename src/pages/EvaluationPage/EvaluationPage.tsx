@@ -61,7 +61,7 @@ const EvaluationPage = () => {
           />
         </Group>
         <Group className='items-start pb-32 flex-nowrap bg-gray-100 shadow-inner mx-4 rounded-lg'>
-          <Stack spacing={0} className='grow min-h-[32rem]'>
+          <Stack spacing={0} className='grow min-h-[32rem] max-w-[50%]'>
             <Title order={4} className='text-center py-4 '>
               Drag from here
             </Title>
@@ -88,7 +88,7 @@ const EvaluationPage = () => {
               ))}
             </ReactSortable>
           </Stack>
-          <Stack spacing={0} className='grow min-h-[32rem]'>
+          <Stack spacing={0} className='grow min-h-[32rem] max-w-[50%]'>
             <Title order={4} className='py-4 text-center'>
               Design your solution here
             </Title>
