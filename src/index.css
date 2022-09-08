@@ -17,23 +17,19 @@
 }
 
 .tooltip {
-  position: relative;
+  cursor: pointer;
 }
 
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: auto;
-  min-width: 100px;
+  display: none;
+  width: max-content;
   background-color: black;
   color: #fff;
   text-align: center;
   border-radius: 6px;
-  padding: 5px 5px;
-  position: absolute;
+  padding: 5px 10px;
+  position: fixed;
   z-index: 1;
-  bottom: 150%;
-  left: 50%;
-  margin-left: -60px;
 }
 
 .tooltip .tooltiptext::after {
@@ -52,5 +48,5 @@
 }
 
 .tooltip:hover .tooltiptext {
-  visibility: visible;
+  display: block;
 }

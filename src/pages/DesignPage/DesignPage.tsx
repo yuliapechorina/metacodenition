@@ -1,13 +1,4 @@
-import {
-  Divider,
-  Group,
-  ScrollArea,
-  Stack,
-  Text,
-  Title,
-  TypographyStylesProvider,
-} from '@mantine/core';
-import HTMLReactParser from 'html-react-parser';
+import { Divider, Group, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
 import { logEvent } from 'firebase/analytics';
@@ -17,16 +8,12 @@ import useQuestion from '../../hooks/useQuestion';
 import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
 import { analytics } from '../../util/firebase';
+import ProblemText from '../../components/ProblemText';
 
 const DesignPage = () => {
   const { unsavedChanges, setUnsavedChanges } = useAssignment();
 
-  const {
-    isLoading,
-    highlights,
-    getProblemStatement,
-    updateUserQuestionDocument,
-  } = useQuestion();
+  const { isLoading, highlights, updateUserQuestionDocument } = useQuestion();
 
   const [highlightedChunk, setHighlightedChunk] = useState<
     Highlight | undefined
@@ -158,14 +145,10 @@ const DesignPage = () => {
           </Text>
         </Text>
         <Title order={4}>Highlight a Key Phrase:</Title>
-        <Text className='text-justify'>
-          <TypographyStylesProvider
-            onMouseUp={handleMouseUp}
-            className='selection:bg-yellow-200'
-          >
-            {HTMLReactParser(getProblemStatement!())}
-          </TypographyStylesProvider>
-        </Text>
+        <ProblemText
+          onMouseUp={handleMouseUp}
+          className='selection:bg-yellow-200'
+        />
         <Divider />
         <Title order={4}>Describe an action:</Title>
         {highlightedChunk === undefined ? (

@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import useAssignment from '../context/AssignmentContext';
@@ -91,11 +91,14 @@ const useQuestion = () => {
   const updateUserQuestionDocument = async (data: { [x: string]: any }) =>
     userQuestionDoc && updateDocumentRef(userQuestionDoc, data);
 
-  const getProblemStatement = () =>
-    `<p class='whitespace-pre-line'>${applyHighlightToText(
-      problemStatement.replaceAll('\\t', '\t').replaceAll('\\n', '\n'),
-      highlights
-    )}</p>`;
+  const getProblemStatement = useCallback(
+    () =>
+      `<p class='whitespace-pre-line'>${applyHighlightToText(
+        problemStatement.replaceAll('\\t', '\t').replaceAll('\\n', '\n'),
+        highlights
+      )}</p>`,
+    [problemStatement, highlights]
+  );
 
   useEffect(() => {
     if (isError)
