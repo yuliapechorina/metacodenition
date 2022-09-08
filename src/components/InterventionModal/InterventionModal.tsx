@@ -1,8 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import { Center, Checkbox, Modal } from '@mantine/core';
+import { logEvent } from 'firebase/analytics';
 import GenericButton from '../generics/GenericButton';
 import useInterventions from '../../hooks/useInterventions';
+import { analytics } from '../../util/firebase';
 
 type InterventionModalProps = {
   opened: boolean;
@@ -34,6 +36,13 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
         enabled: checkedStates[index],
       }))
     );
+
+    logEvent(analytics, 'select_interventions', {
+      understanding_the_problem: checkedStates[0],
+      designing_a_solution: checkedStates[1],
+      evaluating_a_solution: checkedStates[2],
+      evaluating_implemented_solution: checkedStates[3],
+    });
     setOpened(false);
   };
 

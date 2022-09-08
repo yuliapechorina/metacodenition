@@ -1,7 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import { Checkbox, Drawer, Text } from '@mantine/core';
+import { logEvent } from 'firebase/analytics';
 import useInterventions from '../../hooks/useInterventions';
+import { analytics } from '../../util/firebase';
 
 type SettingsDrawerProps = {
   opened: boolean;
@@ -25,6 +27,13 @@ const SettingsDrawer = ({ opened, setOpened }: SettingsDrawerProps) => {
     );
     setCheckedStates(newCheckedStates);
     toggleInterventionEnabled(name);
+
+    logEvent(analytics, 'select_interventions', {
+      understanding_the_problem: newCheckedStates[0],
+      designing_a_solution: newCheckedStates[1],
+      evaluating_a_solution: newCheckedStates[2],
+      evaluating_implemented_solution: newCheckedStates[3],
+    });
   };
 
   return (

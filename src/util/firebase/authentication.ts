@@ -15,7 +15,10 @@ const signIn = async (
     const { user } = signInResult;
     const id: string = user.uid;
 
-    if (user.email?.endsWith('aucklanduni.ac.nz' || 'auckland.ac.nz')) {
+    if (
+      user.email?.endsWith('aucklanduni.ac.nz' || 'auckland.ac.nz') ||
+      user.email === 'metacodenition@gmail.com'
+    ) {
       await setDoc(
         doc(database, 'users/', id),
         {
