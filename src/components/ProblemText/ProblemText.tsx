@@ -36,7 +36,6 @@ const ProblemText = ({
     const parentLeft = boundingRect?.left ?? 0;
     tooltip.forEach((t) => {
       // Calculate the left offset based on whether the tooltip is inside a relative parent
-      // console.log();
       const maxWidth =
         e.clientX - parentLeft + t.offsetWidth / 2 - (boundingRect?.width ?? 0);
       const minWidth = e.clientX - parentLeft - t.offsetWidth / 2;
