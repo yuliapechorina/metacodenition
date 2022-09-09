@@ -13,7 +13,14 @@ import {
 } from '@mantine/core';
 import { useState } from 'react';
 import { ItemInterface, ReactSortable } from 'react-sortablejs';
-import { HiCheck, HiPencil, HiPlus, HiTrash, HiX } from 'react-icons/hi';
+import {
+  HiCheck,
+  HiLink,
+  HiPencil,
+  HiPlus,
+  HiTrash,
+  HiX,
+} from 'react-icons/hi';
 import { logEvent } from 'firebase/analytics';
 import { v4 as uuidv4 } from 'uuid';
 import GenericButton from '../../components/generics/GenericButton';
@@ -153,11 +160,10 @@ const EvaluationPage = () => {
         >
           <Group position='apart'>
             {fragment.userGenerated ? (
-              <Tooltip
-                label='This action is linked to a highlight'
-                className='bg-yellow-200/50'
-              >
-                {fragment.listItem.action}
+              <Tooltip label='This action is linked to a highlight'>
+                <Group className=' space-x-0 gap-2'>
+                  <HiLink /> {fragment.listItem.action}
+                </Group>
               </Tooltip>
             ) : (
               fragment.listItem.action
@@ -179,7 +185,7 @@ const EvaluationPage = () => {
     <>
       <Stack className='h-full p-0 z-10 relative'>
         <ScrollArea>
-          <Group className='justify-between p-2 align-top flex-nowrap'>
+          <Group className='justify-between p-2 flex-nowrap items-start'>
             <Text className='p-2'>
               <Text inherit component='span' className='font-bold'>
                 Task:{' '}
@@ -193,7 +199,7 @@ const EvaluationPage = () => {
             <HelpButton onClick={handleClickOpenProblem} className='m-2' />
           </Group>
           <Group className='items-start pb-32 flex-nowrap bg-gray-100 shadow-inner mx-4 rounded-lg'>
-            <Stack spacing={0} className='grow min-h-[32rem]'>
+            <Stack spacing={0} className='grow min-h-[32rem] w-1/2'>
               <Title order={4} className='text-center py-4 '>
                 My Actions
               </Title>
@@ -256,7 +262,7 @@ const EvaluationPage = () => {
                 )}
               </ReactSortable>
             </Stack>
-            <Stack spacing={0} className='grow min-h-[32rem]'>
+            <Stack spacing={0} className='grow min-h-[32rem] w-1/2'>
               <Title order={4} className='py-4 text-center'>
                 My Action Plan
               </Title>
