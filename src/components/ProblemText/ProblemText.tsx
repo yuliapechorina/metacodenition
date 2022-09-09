@@ -27,7 +27,7 @@ const ProblemText = ({
 
   const stickyTooltip = (e: React.MouseEvent) => {
     const relativeParent = relativeParentId
-      ? document.getElementById(relativeParentId)
+      ? document.getElementById(relativeParentId)?.parentElement
       : undefined;
     const boundingRect = relativeParent
       ? relativeParent?.getBoundingClientRect()

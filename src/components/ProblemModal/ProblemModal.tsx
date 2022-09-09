@@ -24,7 +24,7 @@ const ProblemModal = ({ opened, setOpened }: ProblemModalProps) => (
     <ProblemText
       classNames={{ provider: 'text-sm' }}
       relativeParentId='problem-popover-body'
-      tooltipOffset={10}
+      tooltipOffset={40}
     />
     <Text className='font-bold'>Example usage:</Text>
     <HelpGif />
