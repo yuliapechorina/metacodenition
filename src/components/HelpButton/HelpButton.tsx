@@ -11,7 +11,7 @@ const HelpButton = ({ onClick, className }: HelpButtonProps) => (
   <UnstyledButton className='flex items-center' onClick={onClick}>
     <HiQuestionMarkCircle
       size='36px'
-      className={`${className} fill-emerald-500 rounded-full hover:fill-emerald-600 mr-2`}
+      className={`${className} fill-emerald-500 rounded-full hover:fill-emerald-600`}
     />
   </UnstyledButton>
 );

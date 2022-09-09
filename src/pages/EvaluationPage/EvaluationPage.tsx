@@ -52,7 +52,7 @@ const EvaluationPage = () => {
     <>
       <Stack className='h-full p-0 z-10 relative'>
         <ScrollArea>
-          <Group className='justify-between p-2 flex-nowrap'>
+          <Group className='justify-between p-2 flex-nowrap items-start'>
             <Text className='p-2'>
               <Text inherit component='span' className='font-bold'>
                 Task:{' '}
@@ -61,7 +61,7 @@ const EvaluationPage = () => {
               area on the right. <br />
               You can add your own blocks on the previous page.
             </Text>
-            <HelpButton onClick={handleClickOpenProblem} className='mr-5' />
+            <HelpButton onClick={handleClickOpenProblem} className='m-2' />
           </Group>
           <Group className='items-start pb-32 flex-nowrap bg-gray-100 shadow-inner mx-4 rounded-lg'>
             <Stack spacing={0} className='grow min-h-[32rem] w-[50%]'>
