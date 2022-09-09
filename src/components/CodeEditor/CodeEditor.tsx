@@ -9,7 +9,8 @@ import useParsons from '../../hooks/useParsons';
 import getOutput from '../../util/comment-generator';
 import { analytics } from '../../util/firebase';
 import GenericButton from '../generics/GenericButton';
-import ProblemPopover from '../ProblemPopover';
+import HelpButton from '../HelpButton';
+import ProblemModal from '../ProblemModal';
 
 const CodeEditor = () => {
   const { file, defaultCode, setFile } = useCode();
@@ -75,32 +76,37 @@ const CodeEditor = () => {
     logEvent(analytics, 'auto_generate_comments');
   };
 
+  const handleClickOpenProblem = () => {
+    logEvent(analytics, 'open_problem_modal');
+    setProblemOpened(!isProblemOpened);
+  };
+
   return (
-    <Stack className='overflow-hidden'>
-      <Group className='justify-between p-4'>
-        <Title order={4}>Your Solution:</Title>
-        <Group>
-          {generateCommentsButtonVisible && (
-            <GenericButton
-              text='Auto-generate comments'
-              size='xs'
-              onClick={() => generateComments()}
-            />
-          )}
-          <ProblemPopover
-            opened={isProblemOpened}
-            setOpened={setProblemOpened}
-          />
+    <>
+      <Stack className='overflow-hidden'>
+        <Group className='justify-between p-4'>
+          <Title order={4}>Your Solution:</Title>
+          <Group>
+            {generateCommentsButtonVisible && (
+              <GenericButton
+                text='Auto-generate comments'
+                size='xs'
+                onClick={() => generateComments()}
+              />
+            )}
+            <HelpButton onClick={handleClickOpenProblem} />
+          </Group>
         </Group>
-      </Group>
-      <Editor
-        theme='vs'
-        language='c'
-        value={file?.content}
-        className='shrink'
-        onChange={handleFileEdit}
-      />
-    </Stack>
+        <Editor
+          theme='vs'
+          language='c'
+          value={file?.content}
+          className='shrink'
+          onChange={handleFileEdit}
+        />
+      </Stack>
+      <ProblemModal opened={isProblemOpened} setOpened={setProblemOpened} />
+    </>
   );
 };
 

@@ -17,7 +17,7 @@ import { HiCheck, HiPlus, HiTrash, HiX } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { logEvent } from 'firebase/analytics';
 import { v4 as uuidv4 } from 'uuid';
-import ProblemPopover from '../../components/ProblemPopover';
+import ProblemModal from '../../components/ProblemModal';
 import useNotifications, {
   INotification,
 } from '../../context/NotificationContext';
@@ -29,6 +29,7 @@ import { ITestCase, ResultType } from '../../util/testcase';
 import useQuestion from '../../hooks/useQuestion';
 import { buildTestCaseString } from '../../util/testcase-helpers';
 import TestCaseInput from '../../components/CodeRunArea/TestCaseInput';
+import HelpButton from '../../components/HelpButton';
 
 const TestCasePage = () => {
   const { setUnsavedChanges } = useAssignment();
@@ -39,6 +40,11 @@ const TestCasePage = () => {
   const [running, setRunning] = useState(false);
 
   const [isProblemOpened, setProblemOpened] = useState(false);
+
+  const handleClickOpenProblem = () => {
+    logEvent(analytics, 'open_problem_modal');
+    setProblemOpened(!isProblemOpened);
+  };
 
   const [displayInputRow, setDisplayInputRow] = useState(false);
 
@@ -287,58 +293,58 @@ const TestCasePage = () => {
   );
 
   return (
-    <ScrollArea className='h-full'>
-      <Stack className='p-4 pb-24 h-full'>
-        <Group className='justify-between'>
-          <Title order={4}>Run test cases</Title>
-          <ProblemPopover
-            opened={isProblemOpened}
-            setOpened={setProblemOpened}
+    <>
+      <ScrollArea className='h-full'>
+        <Stack className='p-4 pb-24 h-full'>
+          <Group className='justify-between'>
+            <Title order={4}>Run test cases</Title>
+            <HelpButton onClick={handleClickOpenProblem} />
+          </Group>
+          <Text>
+            You&apos;ll only be able to run test cases you&apos;ve previously
+            solved in the
+            <Text<typeof Link>
+              component={Link}
+              to='../problem'
+              className='text-blue-600'
+            >
+              {' '}
+              understanding the problem{' '}
+            </Text>
+            stage
+          </Text>
+          <Table>
+            <thead>
+              <tr>
+                <th className='min-w-fit w-12'>
+                  <Center>
+                    <Checkbox
+                      checked={parentCheckboxState}
+                      onChange={(e) =>
+                        handleParentCheckboxChange(e.currentTarget.checked)
+                      }
+                    />
+                  </Center>
+                </th>
+                <th>Input</th>
+                <th>Output</th>
+                <th>Expected</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </Table>
+        </Stack>
+        <Group className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px] justify-center'>
+          <GenericButton
+            text='Run'
+            onClick={handleRunButtonPress}
+            disabled={running}
+            loading={running}
           />
         </Group>
-        <Text>
-          You&apos;ll only be able to run test cases you&apos;ve previously
-          solved in the
-          <Text<typeof Link>
-            component={Link}
-            to='../problem'
-            className='text-blue-600'
-          >
-            {' '}
-            understanding the problem{' '}
-          </Text>
-          stage
-        </Text>
-        <Table>
-          <thead>
-            <tr>
-              <th className='min-w-fit w-12'>
-                <Center>
-                  <Checkbox
-                    checked={parentCheckboxState}
-                    onChange={(e) =>
-                      handleParentCheckboxChange(e.currentTarget.checked)
-                    }
-                  />
-                </Center>
-              </th>
-              <th>Input</th>
-              <th>Output</th>
-              <th>Expected</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
-        </Table>
-      </Stack>
-      <Group className='absolute bottom-0 w-full p-4 backdrop-blur-sm bg-white/60 border-t-gray-200 border-t-[1px] justify-center'>
-        <GenericButton
-          text='Run'
-          onClick={handleRunButtonPress}
-          disabled={running}
-          loading={running}
-        />
-      </Group>
-    </ScrollArea>
+      </ScrollArea>
+      <ProblemModal opened={isProblemOpened} setOpened={setProblemOpened} />
+    </>
   );
 };
 

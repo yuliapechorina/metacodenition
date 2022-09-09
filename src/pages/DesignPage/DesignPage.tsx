@@ -9,6 +9,8 @@ import GenericButton from '../../components/generics/GenericButton';
 import useAssignment from '../../context/AssignmentContext';
 import { analytics } from '../../util/firebase';
 import ProblemText from '../../components/ProblemText';
+import HelpButton from '../../components/HelpButton';
+import HelpModal from '../../components/HelpModal';
 
 const DesignPage = () => {
   const { unsavedChanges, setUnsavedChanges } = useAssignment();
@@ -22,6 +24,13 @@ const DesignPage = () => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const [deleted, setDeleted] = useState(false);
+
+  const [isHelpModalOpened, setHelpModalOpened] = useState(false);
+
+  const handleClickOpenHelpModal = () => {
+    logEvent(analytics, 'open_help_modal');
+    setHelpModalOpened(true);
+  };
 
   useEffect(() => {
     const highlight: Highlight | undefined = highlights.find(
@@ -130,64 +139,71 @@ const DesignPage = () => {
   };
 
   return (
-    <ScrollArea className='h-full'>
-      <Stack className='p-4 h-full'>
-        <Text>
-          <Text inherit component='span' className='font-bold'>
-            Task:{' '}
-          </Text>
-          Identify and highlight key phrases of the problem statement and assign
-          an action to achieve it.
-          <br />
-          <Text inherit component='span' className='italic'>
-            Hint: Highlight the parts of the problem statement that require code
-            to achieve, for example &quot;multiply the result by 3&quot;.
-          </Text>
-        </Text>
-        <Title order={4}>Highlight a Key Phrase:</Title>
-        <ProblemText
-          onMouseUp={handleMouseUp}
-          className='selection:bg-yellow-200'
-        />
-        <Divider />
-        <Title order={4}>Describe an action:</Title>
-        {highlightedChunk === undefined ? (
-          <Text>Nothing highlighted yet!</Text>
-        ) : (
-          <Text>
-            Highlighted text:{` `}
-            <Text inherit component='span' className=' font-bold'>
-              {highlightedChunk.highlightedText}
+    <>
+      <ScrollArea className='h-full'>
+        <Stack className='p-4 h-full'>
+          <Group className='justify-between flex-nowrap items-start'>
+            <Text>
+              <Text inherit component='span' className='font-bold'>
+                Task:{' '}
+              </Text>
+              Identify and highlight key phrases of the problem statement and
+              assign an action to achieve it.
+              <br />
+              <Text inherit component='span' className='italic'>
+                Hint: Highlight the parts of the problem statement that require
+                code to achieve, for example &quot;multiply the result by
+                3&quot;.
+              </Text>
             </Text>
-          </Text>
-        )}
-        <Group className='w-full h-fit'>
-          <GenericInput
-            placeholder='Describe an action here...'
-            value={inputValue}
-            onChange={handleInputChange}
+            <HelpButton onClick={handleClickOpenHelpModal} />
+          </Group>
+          <Title order={4}>Highlight a Key Phrase:</Title>
+          <ProblemText
+            onMouseUp={handleMouseUp}
+            className='selection:bg-yellow-200'
           />
-          <GenericButton
-            text={`Save${unsavedChanges || !highlightedChunk ? '' : 'd'}`}
-            onClick={handleSaveAction}
-            loading={isLoading}
-            disabled={isLoading || !unsavedChanges}
-            leftIcon={
-              !(unsavedChanges || !highlightedChunk) &&
-              !isLoading && <HiCheck size={20} />
-            }
-          />
-          <GenericButton
-            text='Delete'
-            red
-            disabled={highlightedChunk === undefined}
-            onClick={handleDeleteAction}
-            loading={deleted && isLoading}
-            leftIcon={deleted && !isLoading && <HiCheck size={20} />}
-          />
-        </Group>
-      </Stack>
-    </ScrollArea>
+          <Divider />
+          <Title order={4}>Describe an action:</Title>
+          {highlightedChunk === undefined ? (
+            <Text>Nothing highlighted yet!</Text>
+          ) : (
+            <Text>
+              Highlighted text:{` `}
+              <Text inherit component='span' className=' font-bold'>
+                {highlightedChunk.highlightedText}
+              </Text>
+            </Text>
+          )}
+          <Group className='w-full h-fit'>
+            <GenericInput
+              placeholder='Describe an action here...'
+              value={inputValue}
+              onChange={handleInputChange}
+            />
+            <GenericButton
+              text={`Save${unsavedChanges || !highlightedChunk ? '' : 'd'}`}
+              onClick={handleSaveAction}
+              loading={isLoading}
+              disabled={isLoading || !unsavedChanges}
+              leftIcon={
+                !(unsavedChanges || !highlightedChunk) &&
+                !isLoading && <HiCheck size={20} />
+              }
+            />
+            <GenericButton
+              text='Delete'
+              red
+              disabled={highlightedChunk === undefined}
+              onClick={handleDeleteAction}
+              loading={deleted && isLoading}
+              leftIcon={deleted && !isLoading && <HiCheck size={20} />}
+            />
+          </Group>
+        </Stack>
+      </ScrollArea>
+      <HelpModal opened={isHelpModalOpened} setOpened={setHelpModalOpened} />
+    </>
   );
 };
 
