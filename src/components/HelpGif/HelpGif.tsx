@@ -17,7 +17,7 @@ const HelpGif = () => {
           src={understandingTheProblemGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader />}
+          placeholder={<Loader className='mb-4' />}
         />
       );
     case '/assignment/design':
@@ -26,7 +26,7 @@ const HelpGif = () => {
           src={designingASolutionGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader />}
+          placeholder={<Loader className='mb-4' />}
         />
       );
     case '/assignment/evaluation':
@@ -35,7 +35,7 @@ const HelpGif = () => {
           src={evaluatingASolutionGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader />}
+          placeholder={<Loader className='mb-4' />}
         />
       );
     case '/assignment/implementation':
@@ -44,7 +44,7 @@ const HelpGif = () => {
           src={implementingASolutionGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader />}
+          placeholder={<Loader className='mb-4' />}
         />
       );
     case '/assignment/test-cases':
@@ -54,6 +54,7 @@ const HelpGif = () => {
           width={600}
           withPlaceholder
           placeholder={<Loader />}
+          className='mb-4'
         />
       );
     default:
