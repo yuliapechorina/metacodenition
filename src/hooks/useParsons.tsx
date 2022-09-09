@@ -6,7 +6,7 @@ import useQuestion from './useQuestion';
 
 export type ParsonsFragment = {
   listItem: ItemInterface;
-  userGenerated: boolean;
+  userGenerated?: boolean;
 };
 
 const getIdsFromFragments = (fragments: ParsonsFragment[]) =>
@@ -20,25 +20,19 @@ const generateUnusedIds = (
   allIds: (string | number)[]
 ) => allIds.filter((id) => !usedIds.includes(id));
 
-const generateDefaultFragments = (defaultListItems: ItemInterface[]) =>
-  defaultListItems.map<ParsonsFragment>((listItem) => ({
-    listItem,
-    userGenerated: false,
-  }));
-
-const generateUserFragments = (highlights: Highlight[]) =>
+const generateHighlightFragments = (highlights: Highlight[]) =>
   highlights
     .filter((hl) => hl.action)
     .map<ParsonsFragment>((highlight: Highlight) => ({
-      listItem: { id: `user-${highlight.id}`, action: highlight.action },
+      listItem: { id: highlight.id, action: highlight.action },
       userGenerated: true,
     }));
 
 const useParsons = () => {
   const { setUnsavedChanges } = useAssignment();
   const {
-    defaultListItems,
     highlights,
+    actions,
     usedParsonsIds,
     isLoading,
     isError,
@@ -55,11 +49,8 @@ const useParsons = () => {
   const [usedIds, setUsedIds] = useState<(string | number)[]>([]);
 
   useEffect(() => {
-    const newDefaultListItems = (defaultListItems as ItemInterface[]) || [];
-    const newUserFragments = generateUserFragments(highlights || []);
-    const newParsonsFragments = newUserFragments.concat(
-      generateDefaultFragments(newDefaultListItems)
-    );
+    const newHighlightFragments = generateHighlightFragments(highlights || []);
+    const newParsonsFragments = newHighlightFragments.concat(actions);
     const newIds = getIdsFromFragments(newParsonsFragments);
     const newUsedIds = usedParsonsIds;
     const newUnusedIds =
@@ -69,7 +60,7 @@ const useParsons = () => {
     setParsonsFragments(newParsonsFragments);
     setUsedIds(newUsedIds);
     setUnusedIds(newUnusedIds);
-  }, [defaultListItems, highlights]);
+  }, [actions, highlights]);
 
   useEffect(() => {
     const sameLength = usedParsonsIds.length === usedIds.length;
@@ -125,6 +116,52 @@ const useParsons = () => {
     });
   };
 
+  const addAction = (action: ItemInterface) => {
+    updateUserQuestionDocument({
+      actions: [...actions, { listItem: action }],
+    });
+  };
+
+  const editFragment = (fragment: ParsonsFragment) => {
+    // Check if the fragment is a highlight
+    const highlight = highlights?.find((hl) => hl.id === fragment.listItem.id);
+    if (highlight) {
+      updateUserQuestionDocument({
+        highlights: highlights.map((hl) =>
+          hl.id === highlight.id
+            ? { ...hl, action: fragment.listItem.action }
+            : hl
+        ),
+      });
+    } else {
+      updateUserQuestionDocument({
+        actions: actions.map((action) =>
+          action.listItem.id === fragment.listItem.id
+            ? { listItem: fragment.listItem }
+            : action
+        ),
+      });
+    }
+  };
+
+  const deleteFragment = (fragment: ParsonsFragment) => {
+    // Check if the fragment is a highlight
+    const highlight = highlights?.find((hl) => hl.id === fragment.listItem.id);
+    if (highlight) {
+      updateUserQuestionDocument({
+        highlights: highlights.map((hl: Highlight) =>
+          hl.id === highlight.id ? { ...hl, action: '' } : hl
+        ),
+      });
+    } else {
+      updateUserQuestionDocument({
+        actions: actions.filter(
+          (action) => action.listItem.id !== fragment.listItem.id
+        ),
+      });
+    }
+  };
+
   return {
     submitParsons,
     isError,
@@ -135,6 +172,9 @@ const useParsons = () => {
     getUsedListItems,
     setUsedListItems,
     getUsedParsonsFragments,
+    addAction,
+    editFragment,
+    deleteFragment,
   };
 };
 
