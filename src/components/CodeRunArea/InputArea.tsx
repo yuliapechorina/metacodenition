@@ -32,7 +32,7 @@ const InputArea = (props: InputAreaProps) => {
 
   return (
     <Stack>
-      <Text className='grow text-lg'>Input</Text>
+      <Text className='grow text-lg font-bold'>Input</Text>
       <Group>
         <TestCaseInput
           className='grow rounded'
