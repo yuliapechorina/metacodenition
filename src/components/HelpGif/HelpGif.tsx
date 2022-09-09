@@ -12,15 +12,25 @@ const HelpGif = () => {
 
   switch (location.pathname) {
     case '/assignment/problem':
-      return <Image src={understandingTheProblemGif} width={600} />;
+      return (
+        <Image src={understandingTheProblemGif} width={600} withPlaceholder />
+      );
     case '/assignment/design':
-      return <Image src={designingASolutionGif} width={600} />;
+      return <Image src={designingASolutionGif} width={600} withPlaceholder />;
     case '/assignment/evaluation':
-      return <Image src={evaluatingASolutionGif} width={600} />;
+      return <Image src={evaluatingASolutionGif} width={600} withPlaceholder />;
     case '/assignment/implementation':
-      return <Image src={implementingASolutionGif} width={600} />;
+      return (
+        <Image src={implementingASolutionGif} width={600} withPlaceholder />
+      );
     case '/assignment/test-cases':
-      return <Image src={evaluatingImplementedSolutionGif} width={600} />;
+      return (
+        <Image
+          src={evaluatingImplementedSolutionGif}
+          width={600}
+          withPlaceholder
+        />
+      );
     default:
       return null;
   }
