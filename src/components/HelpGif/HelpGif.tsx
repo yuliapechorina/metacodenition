@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from '@mantine/core';
+import { Image, Loader } from '@mantine/core';
 import { useLocation } from 'react-router-dom';
 import understandingTheProblemGif from '../../assets/understanding-the-problem.gif';
 import designingASolutionGif from '../../assets/designing-a-solution.gif';
@@ -13,15 +13,39 @@ const HelpGif = () => {
   switch (location.pathname) {
     case '/assignment/problem':
       return (
-        <Image src={understandingTheProblemGif} width={600} withPlaceholder />
+        <Image
+          src={understandingTheProblemGif}
+          width={600}
+          withPlaceholder
+          placeholder={<Loader />}
+        />
       );
     case '/assignment/design':
-      return <Image src={designingASolutionGif} width={600} withPlaceholder />;
+      return (
+        <Image
+          src={designingASolutionGif}
+          width={600}
+          withPlaceholder
+          placeholder={<Loader />}
+        />
+      );
     case '/assignment/evaluation':
-      return <Image src={evaluatingASolutionGif} width={600} withPlaceholder />;
+      return (
+        <Image
+          src={evaluatingASolutionGif}
+          width={600}
+          withPlaceholder
+          placeholder={<Loader />}
+        />
+      );
     case '/assignment/implementation':
       return (
-        <Image src={implementingASolutionGif} width={600} withPlaceholder />
+        <Image
+          src={implementingASolutionGif}
+          width={600}
+          withPlaceholder
+          placeholder={<Loader />}
+        />
       );
     case '/assignment/test-cases':
       return (
@@ -29,6 +53,7 @@ const HelpGif = () => {
           src={evaluatingImplementedSolutionGif}
           width={600}
           withPlaceholder
+          placeholder={<Loader />}
         />
       );
     default:
