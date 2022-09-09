@@ -1,15 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Divider, ScrollArea, Stack, Text, Title } from '@mantine/core';
+import { Divider, Group, ScrollArea, Stack, Text, Title } from '@mantine/core';
+import { logEvent } from 'firebase/analytics';
 import InterventionModal from '../../components/InterventionModal';
 import TestCaseSolver from '../../components/TestCaseSolver';
 import useAssignment from '../../context/AssignmentContext';
 import { getCookie, setCookie } from '../../util/cookie';
 import ProblemText from '../../components/ProblemText';
+import HelpButton from '../../components/HelpButton';
+import { analytics } from '../../util/firebase';
+import HelpModal from '../../components/HelpModal';
 
 const ProblemPage = () => {
   const { questionNumber } = useAssignment();
 
   const [interventionModalOpened, setInterventionModalOpened] = useState(false);
+
+  const [isHelpModalOpened, setHelpModalOpened] = useState(false);
 
   useEffect(() => {
     if (questionNumber === 3) {
@@ -21,11 +27,19 @@ const ProblemPage = () => {
     }
   }, [questionNumber]);
 
+  const handleClickOpenHelpModal = () => {
+    logEvent(analytics, 'open_help_modal');
+    setHelpModalOpened(true);
+  };
+
   return (
     <>
       <ScrollArea className='h-full'>
         <Stack className='p-4'>
-          <Title order={4}>Problem:</Title>
+          <Group className='justify-between items-start flex-nowrap'>
+            <Title order={4}>Problem:</Title>
+            <HelpButton onClick={handleClickOpenHelpModal} />
+          </Group>
           <Text className='text-justify'>
             <ProblemText />
           </Text>
@@ -37,6 +51,7 @@ const ProblemPage = () => {
         opened={interventionModalOpened}
         setOpened={setInterventionModalOpened}
       />
+      <HelpModal opened={isHelpModalOpened} setOpened={setHelpModalOpened} />
     </>
   );
 };
