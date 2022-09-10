@@ -16,9 +16,9 @@ const FragmentCard = ({
     p='md'
     className='bg-white cursor-grab h-fit min-w-0'
   >
-    <Group position='apart'>
+    <Group position='apart' className='flex-nowrap'>
       {fragment.userGenerated ? (
-        <Group className=' space-x-0 gap-2'>
+        <Group className=' space-x-0 gap-2 flex-nowrap'>
           <Tooltip label='This action is linked to a highlight'>
             <HiLink />
           </Tooltip>
