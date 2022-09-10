@@ -22,12 +22,8 @@ const useTestCases = () => {
       ...(partial[idx] ?? {}),
     }));
 
-  const checkResult = (stdout: string, expected: string) => {
-    if (questionFunction.returnType === 'void') {
-      return stdout === expected ? 'pass' : 'fail';
-    }
-    return stdout === `return_value: ${expected}` ? 'pass' : 'fail';
-  };
+  const checkResult = (stdout: string, expected: string) =>
+    stdout === expected ? 'pass' : 'fail';
 
   const runCases = async (runTestCases: ITestCase[]) => {
     const runCode = async (testCase: ITestCase) => {

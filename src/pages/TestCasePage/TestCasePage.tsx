@@ -235,13 +235,13 @@ const TestCasePage = () => {
             </Center>
           </td>
           <td>
-            <Code block className='text-md'>
+            <Code block className='text-md w-fit'>
               {testCase && buildTestCaseString(questionFunction, testCase)}
             </Code>
           </td>
           <td>
             {testCase.output ? (
-              <Code block className='text-md'>
+              <Code block className='text-md w-fit'>
                 {testCase.output}
               </Code>
             ) : (
@@ -249,12 +249,9 @@ const TestCasePage = () => {
             )}
           </td>
           <td>
-            <Group className='inline-flex items-center '>
+            <Group className='inline-flex'>
               {testCase.solved ? (
                 <Code block className='text-md'>
-                  {questionFunction?.returnType !== 'void'
-                    ? 'return_value: '
-                    : ''}
                   {testCase.expected}
                 </Code>
               ) : (

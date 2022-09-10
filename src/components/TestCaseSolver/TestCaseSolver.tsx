@@ -148,13 +148,7 @@ const TestCaseSolver = () => {
                 buildTestCaseString(questionFunction, currentTestCase)}
             </Code>
           </Text>
-          <Text>
-            What is{' '}
-            {questionFunction?.returnType !== 'void'
-              ? 'the value of return_value'
-              : 'the output'}
-            ?
-          </Text>
+          <Text>What is the output?</Text>
           <Group className='w-full h-fit'>
             <GenericInput
               placeholder='Enter your expected output'

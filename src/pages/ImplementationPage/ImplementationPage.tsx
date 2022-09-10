@@ -1,11 +1,11 @@
 import Split from 'react-split';
+import BottomPanel from '../../components/BottomPanel';
 import CodeEditor from '../../components/CodeEditor';
-import CodeRunArea from '../../components/CodeRunArea';
 
 const ImplementationPage = () => (
-  <Split className='split h-full' direction='vertical' sizes={[75, 25]}>
+  <Split className='split h-full' direction='vertical' sizes={[50, 50]}>
     <CodeEditor className='h-full' />
-    <CodeRunArea className='p-4 relative' />
+    <BottomPanel />
   </Split>
 );
 

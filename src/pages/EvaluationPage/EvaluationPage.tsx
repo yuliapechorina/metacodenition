@@ -1,27 +1,26 @@
-import {
-  Card,
-  Group,
-  Stack,
-  Title,
-  ScrollArea,
-  Center,
-  Text,
-} from '@mantine/core';
+import { Group, Stack, Title, ScrollArea, Center, Text } from '@mantine/core';
 import { useState } from 'react';
-import { ReactSortable } from 'react-sortablejs';
+import { ItemInterface, ReactSortable } from 'react-sortablejs';
 import { HiCheck } from 'react-icons/hi';
 import { logEvent } from 'firebase/analytics';
+import { v4 as uuidv4 } from 'uuid';
 import GenericButton from '../../components/generics/GenericButton';
-import useParsons from '../../hooks/useParsons';
+import useParsons, { ParsonsFragment } from '../../hooks/useParsons';
 import useAssignment from '../../context/AssignmentContext';
 import { analytics } from '../../util/firebase';
 import ProblemModal from '../../components/ProblemModal';
 import HelpButton from '../../components/HelpButton';
+import FragmentCard from './FragmentCard';
+import EditFragmentCard from './EditFragmentCard';
+import NewFragmentCard from './NewFragmentCard';
+import AddActionButton from './AddActionButton';
 
 const EvaluationPage = () => {
   const { unsavedChanges } = useAssignment();
 
   const [isProblemOpened, setProblemOpened] = useState(false);
+  const [editAction, setEditAction] = useState<ItemInterface | null>(null);
+  const [isNewAction, setIsNewAction] = useState(false);
 
   const {
     submitParsons,
@@ -32,6 +31,9 @@ const EvaluationPage = () => {
     getUsedListItems,
     setUsedListItems,
     getUsedParsonsFragments,
+    addAction,
+    editFragment,
+    deleteFragment,
   } = useParsons();
 
   const handleClickSave = () => {
@@ -48,6 +50,64 @@ const EvaluationPage = () => {
     setProblemOpened(!isProblemOpened);
   };
 
+  const handleAddAction = () => {
+    setEditAction({ id: uuidv4(), action: '' });
+    setIsNewAction(true);
+  };
+
+  const handleSaveAction = () => {
+    if (editAction) {
+      handleClickSave();
+      addAction(editAction);
+      setEditAction(null);
+      setIsNewAction(false);
+    }
+  };
+
+  const handleCancelAction = () => {
+    setEditAction(null);
+    setIsNewAction(false);
+  };
+
+  const handleStartEditAction = (action: ItemInterface) => {
+    setEditAction(action);
+    setIsNewAction(false);
+  };
+
+  const handleUpdateAction = () => {
+    if (editAction && editAction.action) {
+      handleClickSave();
+      editFragment({ listItem: editAction });
+      setEditAction(null);
+      setIsNewAction(false);
+    }
+  };
+
+  const handleDeleteAction = () => {
+    if (editAction) {
+      handleClickSave();
+      deleteFragment({ listItem: editAction });
+      setEditAction(null);
+      setIsNewAction(false);
+    }
+  };
+
+  const renderFragment = (fragment: ParsonsFragment) => (
+    <div key={fragment.listItem.id}>
+      {editAction && !isNewAction && editAction.id === fragment.listItem.id ? (
+        <EditFragmentCard
+          editAction={editAction}
+          setEditAction={setEditAction}
+          handleDeleteAction={handleDeleteAction}
+          handleUpdateAction={handleUpdateAction}
+          handleCancelAction={handleCancelAction}
+        />
+      ) : (
+        <FragmentCard fragment={fragment} edit={handleStartEditAction} />
+      )}
+    </div>
+  );
+
   return (
     <>
       <Stack className='h-full p-0 z-10 relative'>
@@ -57,16 +117,18 @@ const EvaluationPage = () => {
               <Text inherit component='span' className='font-bold'>
                 Task:{' '}
               </Text>
-              Design your solution by dragging and dropping blocks to the design
-              area on the right. <br />
-              You can add your own blocks on the previous page.
+              Create an action plan by dragging and dropping actions to &quot;My
+              Action Plan&quot; on the right.
+              <br />
+              You do not have to use all your actions to form your plan, and you
+              can add new actions on the left.
             </Text>
             <HelpButton onClick={handleClickOpenProblem} className='m-2' />
           </Group>
           <Group className='items-start pb-32 flex-nowrap bg-gray-100 shadow-inner mx-4 rounded-lg'>
-            <Stack spacing={0} className='grow min-h-[32rem] w-[50%]'>
+            <Stack spacing={0} className='grow min-h-[32rem] w-1/2'>
               <Title order={4} className='text-center py-4 '>
-                Drag from here
+                My Actions
               </Title>
               <ReactSortable
                 list={getUnusedListItems!()}
@@ -75,25 +137,26 @@ const EvaluationPage = () => {
                 animation={100}
                 className='flex flex-col space-y-4 grow pl-8 pr-2'
               >
-                {getUnusedParsonsFragments!().map((fragment) => (
-                  <div key={fragment.listItem.id}>
-                    <Card
-                      shadow='sm'
-                      radius='md'
-                      p='md'
-                      className={`bg-white cursor-grab h-fit min-w-0 ${
-                        fragment.userGenerated && ' font-bold'
-                      }`}
-                    >
-                      {fragment.listItem.action}
-                    </Card>
+                {getUnusedParsonsFragments!().map((fragment) =>
+                  renderFragment(fragment)
+                )}
+                {editAction && isNewAction ? (
+                  <div key={editAction.id}>
+                    <NewFragmentCard
+                      editAction={editAction}
+                      setEditAction={setEditAction}
+                      handleCancelAction={handleCancelAction}
+                      handleSaveAction={handleSaveAction}
+                    />
                   </div>
-                ))}
+                ) : (
+                  <AddActionButton handleAddAction={handleAddAction} />
+                )}
               </ReactSortable>
             </Stack>
-            <Stack spacing={0} className='grow min-h-[32rem] w-[50%]'>
+            <Stack spacing={0} className='grow min-h-[32rem] w-1/2'>
               <Title order={4} className='py-4 text-center'>
-                Design your solution here
+                My Action Plan
               </Title>
               <ReactSortable
                 list={getUsedListItems!()}
@@ -104,20 +167,9 @@ const EvaluationPage = () => {
                 onAdd={handleRearrange}
                 onEnd={handleRearrange}
               >
-                {getUsedParsonsFragments!().map((fragment) => (
-                  <div key={fragment.listItem.id}>
-                    <Card
-                      shadow='sm'
-                      radius='md'
-                      p='md'
-                      className={`bg-white cursor-grab h-fit${
-                        fragment.userGenerated && ' font-bold'
-                      }`}
-                    >
-                      {fragment.listItem.action}
-                    </Card>
-                  </div>
-                ))}
+                {getUsedParsonsFragments!().map((fragment) =>
+                  renderFragment(fragment)
+                )}
               </ReactSortable>
             </Stack>
           </Group>
