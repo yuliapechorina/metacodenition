@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Stack, Title } from '@mantine/core';
+import { List, Stack, Text, Title } from '@mantine/core';
 import useParsons from '../../hooks/useParsons';
 
 const ActionPlan = () => {
@@ -14,6 +14,9 @@ const ActionPlan = () => {
             {fragment.listItem.action}
           </List.Item>
         ))}
+        {getUsedParsonsFragments().length === 0 && (
+          <Text>You haven&apos;t created an action plan yet!</Text>
+        )}
       </List>
     </Stack>
   );
