@@ -1,26 +1,7 @@
-import {
-  Card,
-  Group,
-  Stack,
-  Title,
-  ScrollArea,
-  Center,
-  Text,
-  UnstyledButton,
-  TextInput,
-  Button,
-  Tooltip,
-} from '@mantine/core';
+import { Group, Stack, Title, ScrollArea, Center, Text } from '@mantine/core';
 import { useState } from 'react';
 import { ItemInterface, ReactSortable } from 'react-sortablejs';
-import {
-  HiCheck,
-  HiLink,
-  HiPencil,
-  HiPlus,
-  HiTrash,
-  HiX,
-} from 'react-icons/hi';
+import { HiCheck } from 'react-icons/hi';
 import { logEvent } from 'firebase/analytics';
 import { v4 as uuidv4 } from 'uuid';
 import GenericButton from '../../components/generics/GenericButton';
@@ -29,6 +10,10 @@ import useAssignment from '../../context/AssignmentContext';
 import { analytics } from '../../util/firebase';
 import ProblemModal from '../../components/ProblemModal';
 import HelpButton from '../../components/HelpButton';
+import FragmentCard from './FragmentCard';
+import EditFragmentCard from './EditFragmentCard';
+import NewFragmentCard from './NewFragmentCard';
+import AddActionButton from './AddActionButton';
 
 const EvaluationPage = () => {
   const { unsavedChanges } = useAssignment();
@@ -107,77 +92,15 @@ const EvaluationPage = () => {
   const renderFragment = (fragment: ParsonsFragment) => (
     <div key={fragment.listItem.id}>
       {editAction && !isNewAction && editAction.id === fragment.listItem.id ? (
-        <>
-          <Card
-            shadow='sm'
-            radius='md'
-            p='md'
-            className='bg-white cursor-grab h-fit min-w-0'
-          >
-            <Group position='apart'>
-              <TextInput
-                value={editAction.action}
-                onChange={(e) =>
-                  setEditAction({
-                    ...editAction,
-                    action: e.currentTarget.value,
-                  })
-                }
-                placeholder='Describe your action'
-                className='grow'
-              />
-              <UnstyledButton
-                onClick={() => handleDeleteAction()}
-                className='hover:bg-gray-100 p-2 rounded-md'
-              >
-                <HiTrash />
-              </UnstyledButton>
-            </Group>
-          </Card>
-          <Center className='space-x-4 mt-4'>
-            <Button
-              size='sm'
-              className='bg-emerald-500 fill-green-50 hover:bg-emerald-600'
-              onClick={handleUpdateAction}
-            >
-              <HiCheck />
-            </Button>
-            <Button
-              size='sm'
-              className='bg-rose-500 fill-red-50 hover:bg-rose-600'
-              onClick={handleCancelAction}
-            >
-              <HiX />
-            </Button>
-          </Center>
-        </>
+        <EditFragmentCard
+          editAction={editAction}
+          setEditAction={setEditAction}
+          handleDeleteAction={handleDeleteAction}
+          handleUpdateAction={handleUpdateAction}
+          handleCancelAction={handleCancelAction}
+        />
       ) : (
-        <Card
-          shadow='sm'
-          radius='md'
-          p='md'
-          className='bg-white cursor-grab h-fit min-w-0'
-        >
-          <Group position='apart'>
-            {fragment.userGenerated ? (
-              <Group className=' space-x-0 gap-2'>
-                <Tooltip label='This action is linked to a highlight'>
-                  <HiLink />
-                </Tooltip>
-                {fragment.listItem.action}
-              </Group>
-            ) : (
-              fragment.listItem.action
-            )}
-
-            <UnstyledButton
-              onClick={() => handleStartEditAction(fragment.listItem)}
-              className='hover:bg-gray-100 p-2 rounded-md'
-            >
-              <HiPencil />
-            </UnstyledButton>
-          </Group>
-        </Card>
+        <FragmentCard fragment={fragment} edit={handleStartEditAction} />
       )}
     </div>
   );
@@ -216,50 +139,15 @@ const EvaluationPage = () => {
                 )}
                 {editAction && isNewAction ? (
                   <div key={editAction.id}>
-                    <Card
-                      shadow='sm'
-                      radius='md'
-                      p='md'
-                      className='bg-white cursor-grab h-fit min-w-0'
-                    >
-                      <TextInput
-                        value={editAction.action}
-                        onChange={(e) =>
-                          setEditAction({
-                            ...editAction,
-                            action: e.currentTarget.value,
-                          })
-                        }
-                        placeholder='Describe your action'
-                      />
-                    </Card>
-                    <Center className='space-x-4 mt-4'>
-                      <Button
-                        size='sm'
-                        className='bg-emerald-500 fill-green-50 hover:bg-emerald-600'
-                        onClick={handleSaveAction}
-                      >
-                        <HiCheck />
-                      </Button>
-                      <Button
-                        size='sm'
-                        className='bg-rose-500 fill-red-50 hover:bg-rose-600'
-                        onClick={handleCancelAction}
-                      >
-                        <HiX />
-                      </Button>
-                    </Center>
+                    <NewFragmentCard
+                      editAction={editAction}
+                      setEditAction={setEditAction}
+                      handleCancelAction={handleCancelAction}
+                      handleSaveAction={handleSaveAction}
+                    />
                   </div>
                 ) : (
-                  <Center>
-                    <UnstyledButton
-                      onClick={() => handleAddAction()}
-                      className='hover:bg-gray-200 inline-flex items-center p-3 text-sm space-x-1 rounded-md'
-                    >
-                      <Text size='sm'>Add a new action</Text>
-                      <HiPlus />
-                    </UnstyledButton>
-                  </Center>
+                  <AddActionButton handleAddAction={handleAddAction} />
                 )}
               </ReactSortable>
             </Stack>
