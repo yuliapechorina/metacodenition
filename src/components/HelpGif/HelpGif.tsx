@@ -17,7 +17,8 @@ const HelpGif = () => {
           src={understandingTheProblemGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader className='py-8' />}
+          placeholder={<Loader />}
+          className='py-8'
         />
       );
     case '/assignment/design':
@@ -26,7 +27,8 @@ const HelpGif = () => {
           src={designingASolutionGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader className='py-8' />}
+          placeholder={<Loader />}
+          className='py-8'
         />
       );
     case '/assignment/evaluation':
@@ -35,7 +37,8 @@ const HelpGif = () => {
           src={evaluatingASolutionGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader className='py-8' />}
+          placeholder={<Loader />}
+          className='py-8'
         />
       );
     case '/assignment/implementation':
@@ -44,7 +47,8 @@ const HelpGif = () => {
           src={implementingASolutionGif}
           width={600}
           withPlaceholder
-          placeholder={<Loader className='py-8' />}
+          placeholder={<Loader />}
+          className='py-8'
         />
       );
     case '/assignment/test-cases':
