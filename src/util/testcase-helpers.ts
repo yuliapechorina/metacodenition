@@ -1,4 +1,4 @@
-import { ITestCase, IFunction } from './testcase';
+import { ITestCase, IFunction, IArgument } from './testcase';
 
 export const buildFunctionString = (
   questionFunction: IFunction,
@@ -12,6 +12,22 @@ export const buildFunctionString = (
   }
   return `${questionFunction?.name}(${argsString});`;
 };
+
+export const buildPrintString = (returnType: string) => {
+  if (returnType === 'int') {
+    return '\nprintf("%d", return_value);';
+  }
+  return '';
+};
+
+export const buildInitialisedFunctionString = (
+  questionFunction: IFunction,
+  args: IArgument[]
+) =>
+  buildFunctionString(
+    questionFunction,
+    args.map((arg) => arg.name).join(', ')
+  ) + buildPrintString(questionFunction.returnType ?? '');
 
 export const buildTestCaseString = (
   questionFunction: IFunction,
@@ -33,8 +49,12 @@ export const buildTestCaseString = (
       ? `${acc}, ${questionFunction?.arguments?.[idx]?.name}`
       : `${questionFunction?.arguments?.[idx]?.name}`;
   }, '');
-  return `${nonInlineArgString}${buildFunctionString(
+  const functionCall = buildFunctionString(
     questionFunction,
     functionArgsString
+  );
+
+  return `${nonInlineArgString}${functionCall}${buildPrintString(
+    questionFunction.returnType ?? ''
   )}`;
 };

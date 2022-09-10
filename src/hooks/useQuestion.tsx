@@ -26,7 +26,6 @@ const useQuestion = () => {
   const [questionFunction, setQuestionFunction] = useState<IFunction>({});
   const [problemStatement, setProblemStatement] = useState<string>('');
   const [defaultTestCases, setDefaultTestCases] = useState<any[]>([]);
-  const [defaultListItems, setDefaultListItems] = useState<any[]>([]);
   const [initialCode, setInitialCode] = useState<string>('');
   const [codeTemplate, setCodeTemplate] = useState<string>('');
 
@@ -37,8 +36,6 @@ const useQuestion = () => {
       setProblemStatement(questionData.text);
     if (questionData?.testCases !== undefined)
       setDefaultTestCases(questionData.testCases);
-    if (questionData?.defaultListItems !== undefined)
-      setDefaultListItems(questionData.defaultListItems);
     if (questionData?.initialCode !== undefined)
       setInitialCode(questionData.initialCode);
     if (questionData?.codeTemplate !== undefined)
@@ -46,6 +43,7 @@ const useQuestion = () => {
   }, [questionData]);
 
   const [highlights, setHighlights] = useState<any[]>([]);
+  const [actions, setActions] = useState<any[]>([]);
   const [solvedTestCaseIds, setSolvedTestCaseIds] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [usedParsonsIds, setUsedParsonsIds] = useState<any[]>([]);
@@ -55,6 +53,8 @@ const useQuestion = () => {
   useEffect(() => {
     if (userQuestionData?.highlights !== undefined)
       setHighlights(userQuestionData?.highlights);
+    if (userQuestionData?.actions !== undefined)
+      setActions(userQuestionData?.actions);
     if (userQuestionData?.solvedTestCaseIds !== undefined)
       setSolvedTestCaseIds(userQuestionData?.solvedTestCaseIds);
     if (userQuestionData?.submitted !== undefined)
@@ -112,10 +112,10 @@ const useQuestion = () => {
     questionId,
     questionFunction,
     defaultTestCases,
-    defaultListItems,
     initialCode,
     codeTemplate,
     highlights,
+    actions,
     solvedTestCaseIds,
     submitted,
     usedParsonsIds,

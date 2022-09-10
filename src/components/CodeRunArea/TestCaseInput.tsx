@@ -2,6 +2,7 @@ import { Code, Group, Stack } from '@mantine/core';
 import React from 'react';
 import useQuestion from '../../hooks/useQuestion';
 import { IArgument } from '../../util/testcase';
+import { buildInitialisedFunctionString } from '../../util/testcase-helpers';
 import ArgumentInput from './ArgumentInput';
 
 const TestCaseInput = ({
@@ -35,15 +36,7 @@ const TestCaseInput = ({
             ;
           </Group>
         ))}
-        {questionFunction?.returnType !== 'void'
-          ? `${questionFunction.returnType} return_value = ${
-              questionFunction.name
-            }(${questionFunction.arguments
-              ?.map((arg) => arg.name)
-              .join(', ')});`
-          : `${questionFunction.name}(${questionFunction.arguments
-              ?.map((arg) => arg.name)
-              .join(', ')});`}
+        {buildInitialisedFunctionString(questionFunction, value ?? [])}
       </Code>
     </Stack>
   );
