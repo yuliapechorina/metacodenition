@@ -160,11 +160,12 @@ const EvaluationPage = () => {
         >
           <Group position='apart'>
             {fragment.userGenerated ? (
-              <Tooltip label='This action is linked to a highlight'>
-                <Group className=' space-x-0 gap-2'>
-                  <HiLink /> {fragment.listItem.action}
-                </Group>
-              </Tooltip>
+              <Group className=' space-x-0 gap-2'>
+                <Tooltip label='This action is linked to a highlight'>
+                  <HiLink />
+                </Tooltip>
+                {fragment.listItem.action}
+              </Group>
             ) : (
               fragment.listItem.action
             )}
