@@ -57,6 +57,7 @@ const EvaluationPage = () => {
 
   const handleSaveAction = () => {
     if (editAction) {
+      handleClickSave();
       addAction(editAction);
       setEditAction(null);
       setIsNewAction(false);
@@ -75,6 +76,7 @@ const EvaluationPage = () => {
 
   const handleUpdateAction = () => {
     if (editAction && editAction.action) {
+      handleClickSave();
       editFragment({ listItem: editAction });
       setEditAction(null);
       setIsNewAction(false);
@@ -83,6 +85,7 @@ const EvaluationPage = () => {
 
   const handleDeleteAction = () => {
     if (editAction) {
+      handleClickSave();
       deleteFragment({ listItem: editAction });
       setEditAction(null);
       setIsNewAction(false);
