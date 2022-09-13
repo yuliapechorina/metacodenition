@@ -40,7 +40,7 @@ const logIn = () => {
   const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
   setUserProperties(analytics, {
     upi,
-    userGroup,
+    user_group: userGroup,
   });
 };
 

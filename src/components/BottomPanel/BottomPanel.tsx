@@ -1,10 +1,11 @@
 import { Stack, Tabs } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
-import { HiOutlinePlay } from 'react-icons/hi';
+import { HiOutlinePlay, HiOutlineQuestionMarkCircle } from 'react-icons/hi';
 import { IoRocketOutline } from 'react-icons/io5';
 import useInterventions from '../../hooks/useInterventions';
 import ActionPlan from '../ActionPlan';
 import CodeRunArea from '../CodeRunArea';
+import ProblemText from '../ProblemText';
 
 const BottomPanel = () => {
   const [currentTabIndex, setCurrentTabIndex] = React.useState(0);
@@ -30,7 +31,14 @@ const BottomPanel = () => {
             <ActionPlan />
           </Tabs.Tab>
         )}
-        <Tabs.Tab label='Run Code' key={1} icon={<HiOutlinePlay size={20} />}>
+        <Tabs.Tab
+          label='Problem'
+          key={1}
+          icon={<HiOutlineQuestionMarkCircle size={20} />}
+        >
+          <ProblemText />
+        </Tabs.Tab>
+        <Tabs.Tab label='Run Code' key={2} icon={<HiOutlinePlay size={20} />}>
           <CodeRunArea />
         </Tabs.Tab>
       </Tabs>
