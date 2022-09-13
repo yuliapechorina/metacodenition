@@ -10,6 +10,7 @@ import LogOutButton from '../../components/LogOutButton';
 import useAssignment from '../../context/AssignmentContext';
 import ChangeAssignmentButton from '../../components/ChangeAssignmentButton';
 import SettingsButton from '../../components/SettingsButton';
+import useInterventions from '../../hooks/useInterventions';
 
 const ApplicationShell = () => {
   const {
@@ -21,10 +22,15 @@ const ApplicationShell = () => {
   const location = useLocation();
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
+  const { interventions } = useInterventions();
 
   useEffect(() => {
     if (assignmentComplete && assignmentName) navigate('/submit');
   }, [assignmentComplete, assignmentName]);
+
+  useEffect(() => {
+    if (!(questionNumber === questionsLength)) navigate('/assignment');
+  }, [interventions]);
 
   return (
     <>

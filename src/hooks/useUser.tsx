@@ -43,12 +43,12 @@ const useUser = () => {
   }, [isError]);
 
   useEffect(() => {
-    if (user && userData?.userGroup === undefined) {
+    if (user && userData && !userData?.userGroup) {
       const upi = user.email?.split('@')?.[0];
       const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
       updateUserDocument({ userGroup });
     }
-  });
+  }, [user, userData]);
 
   return {
     userData,
