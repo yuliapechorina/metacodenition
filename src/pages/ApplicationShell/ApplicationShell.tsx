@@ -29,7 +29,11 @@ const ApplicationShell = () => {
   }, [assignmentComplete, assignmentName]);
 
   useEffect(() => {
-    if (!(questionNumber === questionsLength)) navigate('/assignment');
+    if (
+      !(questionNumber === questionsLength) &&
+      location.pathname.startsWith('/assignment/')
+    )
+      navigate('/assignment');
   }, [interventions]);
 
   return (
