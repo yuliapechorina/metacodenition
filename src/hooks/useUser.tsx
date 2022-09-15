@@ -1,4 +1,5 @@
 import { doc } from 'firebase/firestore';
+import Prando from 'prando';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -40,6 +41,14 @@ const useUser = () => {
       });
     }
   }, [isError]);
+
+  useEffect(() => {
+    if (user && userData && !userData?.userGroup) {
+      const upi = user.email?.split('@')?.[0];
+      const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
+      updateUserDocument({ userGroup });
+    }
+  }, [user, userData]);
 
   return {
     userData,

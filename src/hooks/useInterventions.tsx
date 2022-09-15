@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAssignment from '../context/AssignmentContext';
 import useNotifications from '../context/NotificationContext';
+import useUser from './useUser';
 
 type IIntervention = {
   name: string;
@@ -26,20 +27,46 @@ const defaultInterventions = [
   },
 ];
 
+const noInterventions = defaultInterventions.map((intervention) => ({
+  ...intervention,
+  enabled: false,
+}));
+
 const useInterventions = () => {
-  const { userAssignmentDocData, updateUserAssignmentDoc, isLoading, isError } =
-    useAssignment();
+  const {
+    userAssignmentDocData,
+    updateUserAssignmentDoc,
+    isLoading,
+    isError,
+    questionNumber,
+    questionsLength,
+    abTestingEnabled,
+  } = useAssignment();
   const [interventions, setInterventions] = useState<IIntervention[]>([]);
+  const { userData } = useUser();
+  const userGroup = userData?.userGroup;
 
   useEffect(() => {
     if (userAssignmentDocData !== undefined) {
       if (userAssignmentDocData.interventions !== undefined) {
-        setInterventions(userAssignmentDocData.interventions);
+        const isLastQuestion = (questionsLength ?? 3) === (questionNumber ?? 0);
+        const questionIsEven = (questionNumber ?? 0) % 2 === 0;
+        const questionIsOdd = (questionNumber ?? 0) % 2 === 1;
+
+        if (isLastQuestion) {
+          setInterventions(userAssignmentDocData.interventions);
+        } else if (abTestingEnabled && userGroup === 'A' && questionIsEven) {
+          setInterventions(noInterventions);
+        } else if (abTestingEnabled && userGroup === 'B' && questionIsOdd) {
+          setInterventions(noInterventions);
+        } else {
+          setInterventions(defaultInterventions);
+        }
       } else {
         updateUserAssignmentDoc!({ interventions: defaultInterventions });
       }
     }
-  }, [userAssignmentDocData]);
+  }, [userAssignmentDocData, questionNumber, questionsLength, userGroup]);
 
   const toggleInterventionEnabled = (name: string) => {
     const newInterventions = interventions.map((intervention) => {

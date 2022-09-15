@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import ApplicationShell from './pages/ApplicationShell';
 import AuthRoute from './components/AuthRoute';
@@ -17,47 +17,38 @@ import FirebaseAnalytics from './components/FirebaseAnalytics';
 
 const App = () => {
   const { interventions } = useInterventions();
-  const [problemRouteEnabled, setProblemRouteEnabled] = useState(true);
-  const [designRouteEnabled, setDesignRouteEnabled] = useState(true);
-  const [evaluationRouteEnabled, setEvaluationRouteEnabled] = useState(true);
-  const [testCaseRouteEnabled, setTestCaseRouteEnabled] = useState(true);
-  const [assignmentRedirectRoute, setAssignmentRedirectRoute] =
-    useState('problem');
 
-  const isInterventionEnabled = (name: string) =>
-    interventions.find((intervention) => intervention.name === name)?.enabled;
+  const isInterventionEnabled = useCallback(
+    (name: string) =>
+      interventions.find((intervention) => intervention.name === name)?.enabled,
+    [interventions]
+  );
 
-  useEffect(() => {
-    setProblemRouteEnabled(
-      isInterventionEnabled('Understanding the problem') ?? true
-    );
-    setDesignRouteEnabled(
-      isInterventionEnabled('Designing a solution') ?? true
-    );
-    setEvaluationRouteEnabled(
-      isInterventionEnabled('Evaluating a solution') ?? true
-    );
-    setTestCaseRouteEnabled(
-      isInterventionEnabled('Evaluating implemented solution') ?? true
-    );
-  }, [interventions]);
+  const problemRouteEnabled = useMemo(
+    () => isInterventionEnabled('Understanding the problem'),
+    [isInterventionEnabled]
+  );
+  const designRouteEnabled = useMemo(
+    () => isInterventionEnabled('Designing a solution'),
+    [isInterventionEnabled]
+  );
+  const evaluationRouteEnabled = useMemo(
+    () => isInterventionEnabled('Evaluating a solution'),
+    [isInterventionEnabled]
+  );
+  const testCaseRouteEnabled = useMemo(
+    () => isInterventionEnabled('Evaluating implemented solution'),
+    [isInterventionEnabled]
+  );
 
-  useEffect(() => {
-    let newRedirectRoute = 'implementation';
-    if (problemRouteEnabled) {
-      newRedirectRoute = 'problem';
-    } else if (designRouteEnabled) {
-      newRedirectRoute = 'design';
-    } else if (evaluationRouteEnabled) {
-      newRedirectRoute = 'evaluation';
-    }
-    setAssignmentRedirectRoute(newRedirectRoute);
-  }, [
-    problemRouteEnabled,
-    designRouteEnabled,
-    evaluationRouteEnabled,
-    testCaseRouteEnabled,
-  ]);
+  const assignmentRedirectRoute = useMemo(() => {
+    if (isInterventionEnabled('Understanding the problem')) return 'problem';
+    if (isInterventionEnabled('Designing a solution')) return 'design';
+    if (isInterventionEnabled('Evaluating a solution')) return 'evaluation';
+    if (isInterventionEnabled('Evaluating implemented solution'))
+      return 'test-cases';
+    return 'implementation';
+  }, [isInterventionEnabled]);
 
   return (
     <BrowserRouter>

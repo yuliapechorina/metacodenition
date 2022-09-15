@@ -32,6 +32,7 @@ interface IAssignmentContext {
   isError: boolean;
   unsavedChanges: boolean;
   setUnsavedChanges: (b: boolean) => void;
+  abTestingEnabled: boolean;
 }
 
 const AssignmentContext = createContext<Partial<IAssignmentContext>>({});
@@ -93,6 +94,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
   const questionNumber = questionIndex !== undefined ? questionIndex + 1 : 0;
   const questionsLength = currentAssignment?.questions?.length;
   const finalQuestion = questionNumber === questionsLength;
+  const abTestingEnabled = currentAssignment?.abTestingEnabled ?? false;
 
   const { updateDocumentRef, isLoading, isError } = useUpdate();
   const updateUserAssignmentDoc = (data: { [x: string]: any }) => {
@@ -176,6 +178,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       isError,
       unsavedChanges,
       setUnsavedChanges,
+      abTestingEnabled,
     }),
     [
       assignmentName,
@@ -196,6 +199,7 @@ export const AssignmentProvider = ({ children }: AssignmentProviderProps) => {
       isError,
       unsavedChanges,
       setUnsavedChanges,
+      abTestingEnabled,
     ]
   );
 

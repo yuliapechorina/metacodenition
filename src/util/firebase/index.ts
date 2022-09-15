@@ -6,6 +6,7 @@ import {
   initializeAnalytics,
   setUserProperties,
 } from 'firebase/analytics';
+import Prando from 'prando';
 import { signIn, signOutAndNavigateHome } from './authentication';
 
 const firebaseConfig = {
@@ -34,9 +35,12 @@ const auth = getAuth(app);
 
 const logIn = () => {
   signIn(auth, googleProvider, db);
+
   const upi = auth.currentUser?.email?.split('@')?.[0];
+  const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
   setUserProperties(analytics, {
     upi,
+    user_group: userGroup,
   });
 };
 
