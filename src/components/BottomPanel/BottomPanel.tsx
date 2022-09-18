@@ -1,4 +1,4 @@
-import { Stack, Tabs } from '@mantine/core';
+import { ScrollArea, Stack, Tabs } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { HiOutlinePlay, HiOutlineQuestionMarkCircle } from 'react-icons/hi';
 import { IoRocketOutline } from 'react-icons/io5';
@@ -20,15 +20,21 @@ const BottomPanel = () => {
   }, [interventions]);
 
   return (
-    <Stack className='p-4 pt-0 relative'>
-      <Tabs active={currentTabIndex} onTabChange={setCurrentTabIndex}>
+    <Stack className='p-4 pt-0 relative h-full'>
+      <Tabs
+        active={currentTabIndex}
+        onTabChange={setCurrentTabIndex}
+        classNames={{ body: 'overflow-y-auto h-full', root: 'h-full' }}
+      >
         {actionPlanTabEnabled && (
           <Tabs.Tab
             label='Action Plan'
             key={0}
             icon={<IoRocketOutline size={20} />}
           >
-            <ActionPlan />
+            <ScrollArea className='h-full pb-8 pr-6'>
+              <ActionPlan />
+            </ScrollArea>
           </Tabs.Tab>
         )}
         <Tabs.Tab
@@ -36,10 +42,14 @@ const BottomPanel = () => {
           key={1}
           icon={<HiOutlineQuestionMarkCircle size={20} />}
         >
-          <ProblemText />
+          <ScrollArea className='h-full pb-8 pr-6'>
+            <ProblemText />
+          </ScrollArea>
         </Tabs.Tab>
         <Tabs.Tab label='Run Code' key={2} icon={<HiOutlinePlay size={20} />}>
-          <CodeRunArea />
+          <ScrollArea className='h-full pb-8 pr-6'>
+            <CodeRunArea />
+          </ScrollArea>
         </Tabs.Tab>
       </Tabs>
     </Stack>

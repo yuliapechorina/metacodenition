@@ -6,11 +6,13 @@ import {
   Group,
   Space,
   LoadingOverlay,
+  Divider,
+  Text,
 } from '@mantine/core';
 import { DocumentData } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { HiCheck, HiChevronDoubleRight } from 'react-icons/hi';
+import { HiCheck, HiChevronDoubleRight, HiOutlineMail } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import useAssignment from '../../context/AssignmentContext';
 import useUser from '../../hooks/useUser';
@@ -48,7 +50,7 @@ const EntryPage = () => {
   }, [assignmentName]);
 
   return (
-    <ScrollArea className='h-full'>
+    <ScrollArea className='h-full relative'>
       <Stack className='p-16'>
         <Title order={2} className='font-black'>
           Kia Ora, {user?.displayName}!
@@ -72,6 +74,28 @@ const EntryPage = () => {
             </Group>
           </UnstyledButton>
         ))}
+        <Space h={8} />
+        <Divider />
+        <Space h={8} />
+        <Title order={4}>How to use:</Title>
+        <iframe
+          className='w-1/3 aspect-video'
+          src='https://www.youtube-nocookie.com/embed/9CSfaRW8IhQ'
+          title='Metacodenition Intro Video'
+          frameBorder='0'
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+          allowFullScreen
+        />
+        <Space h={8} />
+        <Divider />
+        <Space h={8} />
+        <Title order={4}>Contact info:</Title>
+        <Text>
+          <a href='mailto:metacodenition@gmail.com'>
+            <HiOutlineMail size={32} className='text-gray-600 inline pr-2' />
+            metacodenition@gmail.com
+          </a>
+        </Text>
       </Stack>
     </ScrollArea>
   );
