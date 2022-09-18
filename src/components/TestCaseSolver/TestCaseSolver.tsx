@@ -57,7 +57,7 @@ const TestCaseSolver = () => {
         setIncorrectAnswer(false);
 
         logEvent(analytics, 'check_test_case', {
-          current_test_case: currentTestCase?.input,
+          current_test_case: currentTestCase?.id,
           correct: true,
           question_number: questionNumber,
         });
@@ -65,7 +65,7 @@ const TestCaseSolver = () => {
         setIncorrectAnswer(true);
 
         logEvent(analytics, 'check_test_case', {
-          current_test_case: currentTestCase?.input,
+          current_test_case: currentTestCase?.id,
           correct: false,
           question_number: questionNumber,
         });
@@ -77,7 +77,7 @@ const TestCaseSolver = () => {
     setInputValue('');
     setCurrentTestCase(getRandomUnsolvedTestCase());
     logEvent(analytics, 'shuffle_test_cases', {
-      current_test_case: currentTestCase?.input,
+      current_test_case: currentTestCase?.id,
       question_number: questionNumber,
     });
   };
@@ -86,7 +86,7 @@ const TestCaseSolver = () => {
     setInputValue('');
     setCurrentTestCase(getRandomUnsolvedTestCase());
     logEvent(analytics, 'next_test_case', {
-      current_test_case: currentTestCase?.input,
+      current_test_case: currentTestCase?.id,
       question_number: questionNumber,
     });
   };
