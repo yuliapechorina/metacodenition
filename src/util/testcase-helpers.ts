@@ -34,10 +34,13 @@ export const buildTestCaseString = (
   testCase: ITestCase
 ) => {
   const nonInlineArgString = testCase.input.reduce((acc, curr, idx) => {
+    const isArray = questionFunction?.arguments?.[idx]?.isArray ?? false;
+    const arraySize = curr.size;
+    const arrayInitializer = arraySize ? `[${arraySize.toString()}]` : '[]';
     if (!curr.inline) {
       return `${acc}${questionFunction?.arguments?.[idx]?.type} ${
         questionFunction?.arguments?.[idx]?.name
-      }${curr.size ? `[${curr.size?.toString()}]` : ''} = ${curr.value};\n`;
+      }${isArray ? arrayInitializer : ''} = ${curr.value};\n`;
     }
     return acc;
   }, '');
