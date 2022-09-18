@@ -17,6 +17,7 @@ import GenericButton from '../generics/GenericButton';
 import { analytics } from '../../util/firebase';
 import { ITestCase } from '../../util/testcase';
 import { buildTestCaseString } from '../../util/testcase-helpers';
+import useAssignment from '../../context/AssignmentContext';
 
 const TestCaseSolver = () => {
   const { questionFunction, isLoading, updateUserQuestionDocument } =
@@ -28,6 +29,7 @@ const TestCaseSolver = () => {
   );
   const [inputValue, setInputValue] = useState<string | undefined>(undefined);
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
+  const { questionNumber } = useAssignment();
 
   useEffect(() => {
     if (testCases.length !== 0 && currentTestCase?.solved !== true) {
@@ -57,6 +59,7 @@ const TestCaseSolver = () => {
         logEvent(analytics, 'check_test_case', {
           current_test_case: currentTestCase?.input,
           correct: true,
+          question_number: questionNumber,
         });
       } else {
         setIncorrectAnswer(true);
@@ -64,6 +67,7 @@ const TestCaseSolver = () => {
         logEvent(analytics, 'check_test_case', {
           current_test_case: currentTestCase?.input,
           correct: false,
+          question_number: questionNumber,
         });
       }
     }
@@ -74,6 +78,7 @@ const TestCaseSolver = () => {
     setCurrentTestCase(getRandomUnsolvedTestCase());
     logEvent(analytics, 'shuffle_test_cases', {
       current_test_case: currentTestCase?.input,
+      question_number: questionNumber,
     });
   };
 
@@ -82,6 +87,7 @@ const TestCaseSolver = () => {
     setCurrentTestCase(getRandomUnsolvedTestCase());
     logEvent(analytics, 'next_test_case', {
       current_test_case: currentTestCase?.input,
+      question_number: questionNumber,
     });
   };
 
@@ -90,7 +96,9 @@ const TestCaseSolver = () => {
       solvedTestCaseIds: [],
     });
     setCurrentTestCase(getRandomUnsolvedTestCase());
-    logEvent(analytics, 'reset_test_cases');
+    logEvent(analytics, 'reset_test_cases', {
+      question_number: questionNumber,
+    });
   };
 
   const noneSolved = testCases.filter((tc) => tc.solved).length === 0;

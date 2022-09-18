@@ -32,7 +32,7 @@ import TestCaseInput from '../../components/CodeRunArea/TestCaseInput';
 import HelpButton from '../../components/HelpButton';
 
 const TestCasePage = () => {
-  const { setUnsavedChanges } = useAssignment();
+  const { setUnsavedChanges, questionNumber } = useAssignment();
   const { questionFunction } = useQuestion();
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
@@ -42,7 +42,9 @@ const TestCasePage = () => {
   const [isProblemOpened, setProblemOpened] = useState(false);
 
   const handleClickOpenProblem = () => {
-    logEvent(analytics, 'open_problem_modal');
+    logEvent(analytics, 'open_problem_modal', {
+      question_number: questionNumber,
+    });
     setProblemOpened(!isProblemOpened);
   };
 
@@ -81,6 +83,7 @@ const TestCasePage = () => {
     logEvent(analytics, 'run_test_cases', {
       num_test_cases: selectedTestCases.length,
       num_passed: passCount,
+      question_number: questionNumber,
     });
 
     const notification: INotification =
@@ -136,7 +139,7 @@ const TestCasePage = () => {
   useEffect(() => setUnsavedChanges!(displayInputRow), [displayInputRow]);
 
   const saveTestCase = () => {
-    logEvent(analytics, 'add_test_case');
+    logEvent(analytics, 'add_test_case', { question_number: questionNumber });
 
     if (
       testCases.filter(
@@ -160,7 +163,9 @@ const TestCasePage = () => {
     deleteUserTestCase(testCase);
     setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
 
-    logEvent(analytics, 'delete_test_case');
+    logEvent(analytics, 'delete_test_case', {
+      question_number: questionNumber,
+    });
   };
 
   const inputRow = (

@@ -13,7 +13,7 @@ import HelpButton from '../../components/HelpButton';
 import HelpModal from '../../components/HelpModal';
 
 const DesignPage = () => {
-  const { unsavedChanges, setUnsavedChanges } = useAssignment();
+  const { unsavedChanges, setUnsavedChanges, questionNumber } = useAssignment();
 
   const { isLoading, highlights, updateUserQuestionDocument } = useQuestion();
 
@@ -68,7 +68,7 @@ const DesignPage = () => {
 
     if (newHighlight.highlightedText === '') return undefined;
 
-    logEvent(analytics, 'highlight');
+    logEvent(analytics, 'highlight', { question_number: questionNumber });
 
     const newHighlights = highlights
       ? [...highlights.filter((hl) => hl.action), newHighlight]
@@ -120,7 +120,7 @@ const DesignPage = () => {
         highlights: newHighlights,
       });
     }
-    logEvent(analytics, 'save_action');
+    logEvent(analytics, 'save_action', { question_number: questionNumber });
   };
 
   const handleDeleteAction = () => {
@@ -135,7 +135,7 @@ const DesignPage = () => {
       window.setTimeout(() => setDeleted(false), 3000);
     }
 
-    logEvent(analytics, 'delete_action');
+    logEvent(analytics, 'delete_action', { question_number: questionNumber });
   };
 
   return (

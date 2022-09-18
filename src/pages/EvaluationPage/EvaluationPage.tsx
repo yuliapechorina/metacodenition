@@ -16,7 +16,7 @@ import NewFragmentCard from './NewFragmentCard';
 import AddActionButton from './AddActionButton';
 
 const EvaluationPage = () => {
-  const { unsavedChanges } = useAssignment();
+  const { unsavedChanges, questionNumber } = useAssignment();
 
   const [isProblemOpened, setProblemOpened] = useState(false);
   const [editAction, setEditAction] = useState<ItemInterface | null>(null);
@@ -38,15 +38,19 @@ const EvaluationPage = () => {
 
   const handleClickSave = () => {
     submitParsons();
-    logEvent(analytics, 'save_parsons');
+    logEvent(analytics, 'save_parsons', { question_number: questionNumber });
   };
 
   const handleRearrange = () => {
-    logEvent(analytics, 'rearrange_parsons');
+    logEvent(analytics, 'rearrange_parsons', {
+      question_number: questionNumber,
+    });
   };
 
   const handleClickOpenProblem = () => {
-    logEvent(analytics, 'open_problem_modal');
+    logEvent(analytics, 'open_problem_modal', {
+      question_number: questionNumber,
+    });
     setProblemOpened(!isProblemOpened);
   };
 

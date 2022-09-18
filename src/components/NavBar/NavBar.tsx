@@ -18,6 +18,7 @@ const NavBar = () => {
   const { isLoading } = useQuestion();
   const [submissionModalOpened, setSubmissionModalOpened] = useState(false);
   const [navigationModalOpened, setNavigationModalOpened] = useState(false);
+  const { questionNumber } = useAssignment();
 
   const isLastPage = useMemo(() => {
     const stage = location.pathname.split('/')[2];
@@ -34,7 +35,7 @@ const NavBar = () => {
       setSubmissionModalOpened(true);
     }
 
-    logEvent(analytics, 'submit_question');
+    logEvent(analytics, 'submit_question', { question_number: questionNumber });
   };
 
   return (
