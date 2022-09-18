@@ -44,10 +44,11 @@ const useUser = () => {
   }, [isError]);
 
   useEffect(() => {
-    if (user && userData && !userData?.userGroup) {
+    if (user) {
       const upi = user.email?.split('@')?.[0];
       const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
-      updateUserDocument({ userGroup, upi });
+      if (userData && !userData?.userGroup)
+        updateUserDocument({ userGroup, upi });
       setUserProperties(analytics, {
         upi,
         user_group: userGroup,
