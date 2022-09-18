@@ -125,7 +125,7 @@ const TestCaseSolver = () => {
                 className={
                   noneSolved
                     ? 'bg-gray-200 stroke-gray-400 rounded-full p-1'
-                    : 'bg-emerald-500 stroke-emerald-50 rounded-full p-1'
+                    : 'bg-red-500 stroke-red-50 rounded-full p-1'
                 }
               />
             </UnstyledButton>
