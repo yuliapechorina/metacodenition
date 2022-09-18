@@ -32,7 +32,7 @@ const BottomPanel = () => {
             key={0}
             icon={<IoRocketOutline size={20} />}
           >
-            <ScrollArea className='h-full pb-8'>
+            <ScrollArea className='h-full pb-8 pr-6'>
               <ActionPlan />
             </ScrollArea>
           </Tabs.Tab>
@@ -42,12 +42,12 @@ const BottomPanel = () => {
           key={1}
           icon={<HiOutlineQuestionMarkCircle size={20} />}
         >
-          <ScrollArea className='h-full pb-8'>
+          <ScrollArea className='h-full pb-8 pr-6'>
             <ProblemText />
           </ScrollArea>
         </Tabs.Tab>
         <Tabs.Tab label='Run Code' key={2} icon={<HiOutlinePlay size={20} />}>
-          <ScrollArea className='h-full pb-8'>
+          <ScrollArea className='h-full pb-8 pr-6'>
             <CodeRunArea />
           </ScrollArea>
         </Tabs.Tab>
