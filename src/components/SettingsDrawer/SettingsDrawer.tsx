@@ -4,6 +4,7 @@ import { Checkbox, Drawer, Text } from '@mantine/core';
 import { logEvent } from 'firebase/analytics';
 import useInterventions from '../../hooks/useInterventions';
 import { analytics } from '../../util/firebase';
+import useAssignment from '../../context/AssignmentContext';
 
 type SettingsDrawerProps = {
   opened: boolean;
@@ -12,6 +13,7 @@ type SettingsDrawerProps = {
 
 const SettingsDrawer = ({ opened, setOpened }: SettingsDrawerProps) => {
   const { interventions, toggleInterventionEnabled } = useInterventions();
+  const { questionNumber } = useAssignment();
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>(
     new Array(interventions.length).fill(false)
@@ -33,6 +35,7 @@ const SettingsDrawer = ({ opened, setOpened }: SettingsDrawerProps) => {
       designing_a_solution: newCheckedStates[1],
       evaluating_a_solution: newCheckedStates[2],
       evaluating_implemented_solution: newCheckedStates[3],
+      question_number: questionNumber,
     });
   };
 

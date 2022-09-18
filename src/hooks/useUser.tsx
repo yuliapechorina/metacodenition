@@ -1,10 +1,11 @@
+import { setUserProperties } from 'firebase/analytics';
 import { doc } from 'firebase/firestore';
 import Prando from 'prando';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import useNotifications from '../context/NotificationContext';
-import { auth, db } from '../util/firebase';
+import { analytics, auth, db } from '../util/firebase';
 import useUpdate from './useUpdate';
 
 const useUser = () => {
@@ -46,7 +47,11 @@ const useUser = () => {
     if (user && userData && !userData?.userGroup) {
       const upi = user.email?.split('@')?.[0];
       const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
-      updateUserDocument({ userGroup });
+      updateUserDocument({ userGroup, upi });
+      setUserProperties(analytics, {
+        upi,
+        user_group: userGroup,
+      });
     }
   }, [user, userData]);
 

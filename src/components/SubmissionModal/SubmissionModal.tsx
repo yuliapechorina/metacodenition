@@ -23,7 +23,9 @@ const SubmissionModal = ({ opened, setOpened }: SubmissionModalProps) => {
     setNextQuestion!();
     navigate('/assignment');
     setOpened(false);
-    logEvent(analytics, 'confirm_submit_question');
+    logEvent(analytics, 'confirm_submit_question', {
+      question_number: questionNumber,
+    });
   };
 
   const handleClickNo = () => {

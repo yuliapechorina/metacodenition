@@ -28,7 +28,7 @@ const ProblemPage = () => {
   }, [questionNumber]);
 
   const handleClickOpenHelpModal = () => {
-    logEvent(analytics, 'open_help_modal');
+    logEvent(analytics, 'open_help_modal', { question_number: questionNumber });
     setHelpModalOpened(true);
   };
 

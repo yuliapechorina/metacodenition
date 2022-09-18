@@ -2,6 +2,7 @@ import { Stack, Text } from '@mantine/core';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { submitRun } from '../../api/codeRunner.api';
+import useAssignment from '../../context/AssignmentContext';
 import useCode from '../../context/CodeContext';
 import useNotifications from '../../context/NotificationContext';
 import { analytics } from '../../util/firebase';
@@ -19,9 +20,10 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   const [loading, setLoading] = useState(false);
   const { getRunFile } = useCode();
   const [output, setOutput] = useState('');
-  
+  const { questionNumber } = useAssignment();
+
   const run = (args: IArgument[]) => {
-    logEvent(analytics, 'run_code');
+    logEvent(analytics, 'run_code', { question_number: questionNumber });
 
     const runCode = async () => {
       setLoading(true);

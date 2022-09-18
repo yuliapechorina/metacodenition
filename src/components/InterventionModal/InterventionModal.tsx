@@ -5,6 +5,7 @@ import { logEvent } from 'firebase/analytics';
 import GenericButton from '../generics/GenericButton';
 import useInterventions from '../../hooks/useInterventions';
 import { analytics } from '../../util/firebase';
+import useAssignment from '../../context/AssignmentContext';
 
 type InterventionModalProps = {
   opened: boolean;
@@ -13,7 +14,7 @@ type InterventionModalProps = {
 
 const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
   const { interventions, setUserInterventions, isLoading } = useInterventions();
-
+  const { questionNumber } = useAssignment();
   const [checkedStates, setCheckedStates] = useState<boolean[]>(
     new Array(interventions.length).fill(false)
   );
@@ -42,6 +43,7 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
       designing_a_solution: checkedStates[1],
       evaluating_a_solution: checkedStates[2],
       evaluating_implemented_solution: checkedStates[3],
+      question_number: questionNumber,
     });
     setOpened(false);
   };
