@@ -20,8 +20,12 @@ const BottomPanel = () => {
   }, [interventions]);
 
   return (
-    <Stack className='p-4 pt-0 relative'>
-      <Tabs active={currentTabIndex} onTabChange={setCurrentTabIndex}>
+    <Stack className='p-4 pt-0 relative h-full'>
+      <Tabs
+        active={currentTabIndex}
+        onTabChange={setCurrentTabIndex}
+        classNames={{ body: 'overflow-y-auto h-full pb-8', root: 'h-full' }}
+      >
         {actionPlanTabEnabled && (
           <Tabs.Tab
             label='Action Plan'

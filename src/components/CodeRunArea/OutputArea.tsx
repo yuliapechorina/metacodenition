@@ -9,10 +9,10 @@ const OutputArea = (props: OutputAreaProps) => {
   const { loading, text } = props;
 
   return (
-    <Stack className='h-full pb-12'>
+    <Stack className='h-full'>
       <LoadingOverlay visible={loading} />
       <Text className='text-lg font-bold'>Output</Text>
-      <Code className='text-base min-h-10 bg-gray-100 p-4 rounded-md overflow-y-auto overflow-x-hidden fit-content mb-14 whitespace-pre'>
+      <Code className='text-base min-h-20 bg-gray-100 p-4 rounded-md fit-content whitespace-pre'>
         {text}
       </Code>
     </Stack>
