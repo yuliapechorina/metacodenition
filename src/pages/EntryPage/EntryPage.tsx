@@ -12,13 +12,7 @@ import {
 import { DocumentData } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import {
-  HiCheck,
-  HiChevronDoubleRight,
-  HiMail,
-  HiOutlineMail,
-  HiOutlineMailOpen,
-} from 'react-icons/hi';
+import { HiCheck, HiChevronDoubleRight, HiOutlineMail } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import useAssignment from '../../context/AssignmentContext';
 import useUser from '../../hooks/useUser';
