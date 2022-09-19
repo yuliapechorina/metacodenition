@@ -20,12 +20,10 @@ const useAssignmentsData = () => {
 
   const assignmentsData = rawAssignmentsData;
 
-  const assignmentIds = assignmentsSnapShot?.docs.reduce((a, v, i) => {
-    if (rawAssignmentsData?.[i]?.disabled) {
-      return a;
-    }
-    return [...a, v.id];
-  }, [] as string[]);
+  const assignmentIds = assignmentsSnapShot?.docs.reduce(
+    (a, v, i) => [...a, v.id],
+    [] as string[]
+  );
 
   const userAssignmentIds = userAssignmentsSnapShot?.docs.map((v) => v.id);
 
