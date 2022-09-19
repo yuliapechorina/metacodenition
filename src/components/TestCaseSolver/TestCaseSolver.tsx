@@ -18,6 +18,7 @@ import { analytics } from '../../util/firebase';
 import { ITestCase } from '../../util/testcase';
 import { buildTestCaseString } from '../../util/testcase-helpers';
 import useAssignment from '../../context/AssignmentContext';
+import useUser from '../../hooks/useUser';
 
 const TestCaseSolver = () => {
   const { questionFunction, isLoading, updateUserQuestionDocument } =
@@ -30,6 +31,7 @@ const TestCaseSolver = () => {
   const [inputValue, setInputValue] = useState<string | undefined>(undefined);
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const { questionNumber } = useAssignment();
+  const { upi, userGroup } = useUser();
 
   useEffect(() => {
     if (testCases.length !== 0 && currentTestCase?.solved !== true) {
@@ -60,6 +62,8 @@ const TestCaseSolver = () => {
           current_test_case: currentTestCase?.id,
           correct: true,
           question_number: questionNumber,
+          user_upi: upi,
+          user_testing_group: userGroup,
         });
       } else {
         setIncorrectAnswer(true);
@@ -68,6 +72,8 @@ const TestCaseSolver = () => {
           current_test_case: currentTestCase?.id,
           correct: false,
           question_number: questionNumber,
+          user_upi: upi,
+          user_testing_group: userGroup,
         });
       }
     }
@@ -79,6 +85,8 @@ const TestCaseSolver = () => {
     logEvent(analytics, 'shuffle_test_cases', {
       current_test_case: currentTestCase?.id,
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
   };
 
@@ -88,6 +96,8 @@ const TestCaseSolver = () => {
     logEvent(analytics, 'next_test_case', {
       current_test_case: currentTestCase?.id,
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
   };
 
@@ -98,6 +108,8 @@ const TestCaseSolver = () => {
     setCurrentTestCase(getRandomUnsolvedTestCase());
     logEvent(analytics, 'reset_test_cases', {
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
   };
 

@@ -11,11 +11,12 @@ import { analytics } from '../../util/firebase';
 import ProblemText from '../../components/ProblemText';
 import HelpButton from '../../components/HelpButton';
 import HelpModal from '../../components/HelpModal';
+import useUser from '../../hooks/useUser';
 
 const DesignPage = () => {
   const { unsavedChanges, setUnsavedChanges, questionNumber } = useAssignment();
-
   const { isLoading, highlights, updateUserQuestionDocument } = useQuestion();
+  const { upi, userGroup } = useUser();
 
   const [highlightedChunk, setHighlightedChunk] = useState<
     Highlight | undefined
@@ -28,7 +29,11 @@ const DesignPage = () => {
   const [isHelpModalOpened, setHelpModalOpened] = useState(false);
 
   const handleClickOpenHelpModal = () => {
-    logEvent(analytics, 'open_help_modal', { question_number: questionNumber });
+    logEvent(analytics, 'open_help_modal', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
     setHelpModalOpened(true);
   };
 
@@ -68,7 +73,11 @@ const DesignPage = () => {
 
     if (newHighlight.highlightedText === '') return undefined;
 
-    logEvent(analytics, 'highlight', { question_number: questionNumber });
+    logEvent(analytics, 'highlight', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
 
     const newHighlights = highlights
       ? [...highlights.filter((hl) => hl.action), newHighlight]
@@ -120,7 +129,11 @@ const DesignPage = () => {
         highlights: newHighlights,
       });
     }
-    logEvent(analytics, 'save_action', { question_number: questionNumber });
+    logEvent(analytics, 'save_action', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
   };
 
   const handleDeleteAction = () => {
@@ -135,7 +148,11 @@ const DesignPage = () => {
       window.setTimeout(() => setDeleted(false), 3000);
     }
 
-    logEvent(analytics, 'delete_action', { question_number: questionNumber });
+    logEvent(analytics, 'delete_action', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
   };
 
   return (

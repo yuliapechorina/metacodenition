@@ -7,6 +7,7 @@ import GenericButton from '../generics/GenericButton';
 import useQuestion from '../../hooks/useQuestion';
 import useCode from '../../context/CodeContext';
 import { analytics } from '../../util/firebase';
+import useUser from '../../hooks/useUser';
 
 type SubmissionModalProps = {
   opened: boolean;
@@ -17,6 +18,7 @@ const SubmissionModal = ({ opened, setOpened }: SubmissionModalProps) => {
   const { isLoading, updateUserQuestionDocument } = useQuestion();
   const { file } = useCode();
   const navigate = useNavigate();
+  const { upi, userGroup } = useUser();
 
   const handleClickYes = () => {
     updateUserQuestionDocument({ submitted: true, userCode: file });
@@ -25,6 +27,8 @@ const SubmissionModal = ({ opened, setOpened }: SubmissionModalProps) => {
     setOpened(false);
     logEvent(analytics, 'confirm_submit_question', {
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
   };
 

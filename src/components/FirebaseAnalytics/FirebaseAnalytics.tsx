@@ -2,6 +2,7 @@ import { logEvent } from 'firebase/analytics';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import useAssignment from '../../context/AssignmentContext';
+import useUser from '../../hooks/useUser';
 import { analytics } from '../../util/firebase';
 
 const pageNames = new Map([
@@ -19,6 +20,7 @@ const pageNames = new Map([
 const FirebaseAnalytics = () => {
   const location = useLocation();
   const { questionNumber } = useAssignment();
+  const { upi, userGroup } = useUser();
   useEffect(() => {
     if (
       location.pathname !== '/login' &&
@@ -29,6 +31,8 @@ const FirebaseAnalytics = () => {
         page_path: location.pathname,
         page_title: pageNames.get(location.pathname),
         question_number: questionNumber,
+        user_upi: upi,
+        user_testing_group: userGroup,
       });
     }
   }, [location]);

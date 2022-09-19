@@ -14,9 +14,11 @@ import FragmentCard from './FragmentCard';
 import EditFragmentCard from './EditFragmentCard';
 import NewFragmentCard from './NewFragmentCard';
 import AddActionButton from './AddActionButton';
+import useUser from '../../hooks/useUser';
 
 const EvaluationPage = () => {
   const { unsavedChanges, questionNumber } = useAssignment();
+  const { upi, userGroup } = useUser();
 
   const [isProblemOpened, setProblemOpened] = useState(false);
   const [editAction, setEditAction] = useState<ItemInterface | null>(null);
@@ -38,18 +40,26 @@ const EvaluationPage = () => {
 
   const handleClickSave = () => {
     submitParsons();
-    logEvent(analytics, 'save_parsons', { question_number: questionNumber });
+    logEvent(analytics, 'save_parsons', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
   };
 
   const handleRearrange = () => {
     logEvent(analytics, 'rearrange_parsons', {
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
   };
 
   const handleClickOpenProblem = () => {
     logEvent(analytics, 'open_problem_modal', {
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
     setProblemOpened(!isProblemOpened);
   };

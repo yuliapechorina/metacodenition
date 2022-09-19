@@ -5,6 +5,7 @@ import { submitRun } from '../../api/codeRunner.api';
 import useAssignment from '../../context/AssignmentContext';
 import useCode from '../../context/CodeContext';
 import useNotifications from '../../context/NotificationContext';
+import useUser from '../../hooks/useUser';
 import { analytics } from '../../util/firebase';
 import { IArgument } from '../../util/testcase';
 import InputArea from './InputArea';
@@ -21,9 +22,14 @@ const CodeRunArea = (props: CodeRunAreaProps) => {
   const { getRunFile } = useCode();
   const [output, setOutput] = useState('');
   const { questionNumber } = useAssignment();
+  const { upi, userGroup } = useUser();
 
   const run = (args: IArgument[]) => {
-    logEvent(analytics, 'run_code', { question_number: questionNumber });
+    logEvent(analytics, 'run_code', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
 
     const runCode = async () => {
       setLoading(true);
