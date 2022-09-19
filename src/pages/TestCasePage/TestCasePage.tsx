@@ -116,7 +116,7 @@ const TestCasePage = () => {
     input:
       questionFunction?.arguments?.map((arg) => ({ ...arg, value: '' })) ?? [],
     expected: '',
-    output: '',
+    output: undefined,
     solved: true,
     result: defaultResult,
     student_generated: true,
@@ -168,6 +168,31 @@ const TestCasePage = () => {
     });
   };
 
+  const getOutputString = (output?: string) => {
+    if (output === undefined) {
+      return 'Not run yet!';
+    }
+    if (output === '') {
+      return 'No output!';
+    }
+    return output;
+  };
+
+  const getOutputColumn = (output?: string) => {
+    const outputString = getOutputString(output);
+    if (outputString === 'Not run yet!') {
+      return outputString;
+    }
+    if (outputString === 'No output!') {
+      return outputString;
+    }
+    return (
+      <Code block className='text-md w-fit'>
+        {outputString}
+      </Code>
+    );
+  };
+
   const inputRow = (
     <>
       <tr>
@@ -183,7 +208,7 @@ const TestCasePage = () => {
           />
         </td>
         <td className='whitespace-pre'>
-          {inputTestCase.output || 'not run yet'}
+          {getOutputString(inputTestCase.output)}
         </td>
         <td>
           <TextInput
@@ -244,15 +269,7 @@ const TestCasePage = () => {
               {testCase && buildTestCaseString(questionFunction, testCase)}
             </Code>
           </td>
-          <td>
-            {testCase.output ? (
-              <Code block className='text-md w-fit'>
-                {testCase.output}
-              </Code>
-            ) : (
-              'Not run yet!'
-            )}
-          </td>
+          <td>{getOutputColumn(testCase.output)}</td>
           <td>
             <Group className='inline-flex'>
               {testCase.solved ? (
