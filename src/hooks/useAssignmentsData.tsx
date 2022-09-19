@@ -21,7 +21,7 @@ const useAssignmentsData = () => {
   const assignmentsData = rawAssignmentsData;
 
   const assignmentIds = assignmentsSnapShot?.docs.reduce(
-    (a, v, i) => [...a, v.id],
+    (a, v) => [...a, v.id],
     [] as string[]
   );
 
