@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 import useAssignment from '../../context/AssignmentContext';
 import useInterventions from '../../hooks/useInterventions';
 import useQuestion from '../../hooks/useQuestion';
+import useUser from '../../hooks/useUser';
 import { analytics } from '../../util/firebase';
 import GenericButton from '../generics/GenericButton';
 import MainLinks from '../MainLinks';
@@ -19,6 +20,7 @@ const NavBar = () => {
   const [submissionModalOpened, setSubmissionModalOpened] = useState(false);
   const [navigationModalOpened, setNavigationModalOpened] = useState(false);
   const { questionNumber } = useAssignment();
+  const { upi, userGroup } = useUser();
 
   const isLastPage = useMemo(() => {
     const stage = location.pathname.split('/')[2];
@@ -35,7 +37,11 @@ const NavBar = () => {
       setSubmissionModalOpened(true);
     }
 
-    logEvent(analytics, 'submit_question', { question_number: questionNumber });
+    logEvent(analytics, 'submit_question', {
+      question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
+    });
   };
 
   return (

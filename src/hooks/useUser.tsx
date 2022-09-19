@@ -1,7 +1,7 @@
 import { setUserProperties } from 'firebase/analytics';
 import { doc } from 'firebase/firestore';
 import Prando from 'prando';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
 import useNotifications from '../context/NotificationContext';
@@ -21,6 +21,12 @@ const useUser = () => {
   const { addNotification } = useNotifications();
 
   const [userData, isLoading, isError] = useDocumentData(userDoc);
+
+  const upi = useMemo(() => user?.email?.split('@')?.[0], [user?.email]);
+  const userGroup = useMemo(
+    () => (new Prando(upi).nextBoolean() ? 'A' : 'B'),
+    [upi]
+  );
 
   const updateUserDocument = async (data: { [x: string]: any }) =>
     userDoc && updateDocumentRef(userDoc, data);
@@ -45,8 +51,6 @@ const useUser = () => {
 
   useEffect(() => {
     if (user) {
-      const upi = user.email?.split('@')?.[0];
-      const userGroup = new Prando(upi).nextBoolean() ? 'A' : 'B';
       if (userData && !userData?.userGroup)
         updateUserDocument({ userGroup, upi });
       setUserProperties(analytics, {
@@ -62,6 +66,8 @@ const useUser = () => {
     isUserUpdateLoading,
     isLoading,
     isError,
+    upi,
+    userGroup,
   };
 };
 

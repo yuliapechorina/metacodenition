@@ -6,6 +6,7 @@ import GenericButton from '../generics/GenericButton';
 import useInterventions from '../../hooks/useInterventions';
 import { analytics } from '../../util/firebase';
 import useAssignment from '../../context/AssignmentContext';
+import useUser from '../../hooks/useUser';
 
 type InterventionModalProps = {
   opened: boolean;
@@ -18,6 +19,7 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
   const [checkedStates, setCheckedStates] = useState<boolean[]>(
     new Array(interventions.length).fill(false)
   );
+  const { upi, userGroup } = useUser();
 
   useEffect(() => {
     setCheckedStates(interventions.map((intervention) => intervention.enabled));
@@ -44,6 +46,8 @@ const InterventionModal = ({ opened, setOpened }: InterventionModalProps) => {
       evaluating_a_solution: checkedStates[2],
       evaluating_implemented_solution: checkedStates[3],
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
     setOpened(false);
   };

@@ -5,6 +5,7 @@ import { logEvent } from 'firebase/analytics';
 import useInterventions from '../../hooks/useInterventions';
 import { analytics } from '../../util/firebase';
 import useAssignment from '../../context/AssignmentContext';
+import useUser from '../../hooks/useUser';
 
 type SettingsDrawerProps = {
   opened: boolean;
@@ -14,6 +15,7 @@ type SettingsDrawerProps = {
 const SettingsDrawer = ({ opened, setOpened }: SettingsDrawerProps) => {
   const { interventions, toggleInterventionEnabled } = useInterventions();
   const { questionNumber } = useAssignment();
+  const { upi, userGroup } = useUser();
 
   const [checkedStates, setCheckedStates] = useState<boolean[]>(
     new Array(interventions.length).fill(false)
@@ -36,6 +38,8 @@ const SettingsDrawer = ({ opened, setOpened }: SettingsDrawerProps) => {
       evaluating_a_solution: newCheckedStates[2],
       evaluating_implemented_solution: newCheckedStates[3],
       question_number: questionNumber,
+      user_upi: upi,
+      user_testing_group: userGroup,
     });
   };
 
