@@ -18,9 +18,7 @@ const useAssignmentsData = () => {
     userAssignmentsCollection
   );
 
-  const assignmentsData = rawAssignmentsData?.filter(
-    (assignment) => !assignment?.disabled
-  );
+  const assignmentsData = rawAssignmentsData;
 
   const assignmentIds = assignmentsSnapShot?.docs.reduce((a, v, i) => {
     if (rawAssignmentsData?.[i]?.disabled) {
