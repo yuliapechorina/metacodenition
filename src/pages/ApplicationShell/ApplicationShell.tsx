@@ -11,6 +11,7 @@ import useAssignment from '../../context/AssignmentContext';
 import ChangeAssignmentButton from '../../components/ChangeAssignmentButton';
 import SettingsButton from '../../components/SettingsButton';
 import useInterventions from '../../hooks/useInterventions';
+import useUser from '../../hooks/useUser';
 
 const ApplicationShell = () => {
   const {
@@ -23,6 +24,7 @@ const ApplicationShell = () => {
   const [user] = useAuthState(auth);
   const navigate = useNavigate();
   const { interventions } = useInterventions();
+  const { userData } = useUser();
 
   useEffect(() => {
     if (assignmentComplete && assignmentName) navigate('/submit');
@@ -55,7 +57,7 @@ const ApplicationShell = () => {
                   {user && assignmentName && <ChangeAssignmentButton />}
                 </Group>
                 <Group>
-                  <Text size='lg'>{user?.displayName}</Text>
+                  <Text size='lg'>{userData?.name}</Text>
                   {user && <LogOutButton />}
                   {questionNumber === 3 && !assignmentComplete && (
                     <SettingsButton />
