@@ -1,4 +1,11 @@
-import { createContext, ReactNode, useContext, useMemo, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 export type NotificationType = 'success' | 'failure';
 
@@ -23,11 +30,19 @@ export const NotificationProvider = ({
   children,
 }: NotificationProviderProps) => {
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const notificationCallbacksRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const addNotification = (notification: INotification) =>
-    setNotifications([...notifications, notification]);
   const removeNotification = (notification: INotification) =>
     setNotifications(notifications.filter((n) => n !== notification));
+
+  const addNotification = (notification: INotification) => {
+    notificationCallbacksRef.current.push(
+      setTimeout(() => {
+        removeNotification(notification);
+      }, 5000)
+    );
+    setNotifications([...notifications, notification]);
+  };
 
   const value = useMemo(
     () => ({
