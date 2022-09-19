@@ -41,7 +41,11 @@ const useTestCases = () => {
           throw new Error(runResult.stderr || runResult.cmpinfo);
 
         const result: ResultType = checkResult(runResult.stdout, expected);
-        const newTestCase = { ...testCase, output: runResult.stdout, result };
+        const newTestCase = {
+          ...testCase,
+          output: runResult?.stdout ?? '',
+          result,
+        };
         setTestCases(
           testCases.map((tc) =>
             tc.input === newTestCase.input ? newTestCase : tc
