@@ -23,7 +23,7 @@ const useTestCases = () => {
     }));
 
   const checkResult = (stdout: string, expected: string) =>
-    stdout === expected ? 'pass' : 'fail';
+    stdout.trimEnd() === expected.trimEnd() ? 'pass' : 'fail';
 
   const runCases = async (runTestCases: ITestCase[]) => {
     const runCode = async (testCase: ITestCase) => {
