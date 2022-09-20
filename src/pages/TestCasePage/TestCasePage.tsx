@@ -31,6 +31,7 @@ import { buildTestCaseString } from '../../util/testcase-helpers';
 import TestCaseInput from '../../components/CodeRunArea/TestCaseInput';
 import HelpButton from '../../components/HelpButton';
 import useUser from '../../hooks/useUser';
+import useInterventions from '../../hooks/useInterventions';
 
 const TestCasePage = () => {
   const { setUnsavedChanges, questionNumber } = useAssignment();
@@ -38,6 +39,7 @@ const TestCasePage = () => {
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
   const { upi, userGroup } = useUser();
+  const { interventions } = useInterventions();
 
   const [parentCheckboxState, setParentCheckboxState] =
     useState<boolean>(false);
@@ -348,7 +350,17 @@ const TestCasePage = () => {
               {' '}
               understanding the problem{' '}
             </Text>
-            stage
+            stage.
+            {interventions.find((i) => i.name === 'Understanding the problem')
+              ?.enabled ? (
+              ''
+            ) : (
+              <Text>
+                Enable the stage via the settings button in the top right
+                corner. You can still add your own test cases at the bottom of
+                the page.
+              </Text>
+            )}
           </Text>
           <Table>
             <thead>
