@@ -19,8 +19,8 @@ const AppNotifications = () => {
   };
 
   const getNotificationTitle = (notification: INotification) =>
-    (notification!.type.at(0)?.toUpperCase() || '') +
-    notification!.type.slice(1);
+    (notification.type.toString().charAt(0)?.toUpperCase() || '') +
+    notification.type.toString().slice(1);
 
   const getNotificationColour = (notification: INotification) => {
     switch (notification?.type) {
