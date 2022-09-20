@@ -103,9 +103,13 @@ const useTestCases = () => {
     setTestCases([...testCases, { ...testCase, solved: true }]);
 
   const addUserTestCase = (testCase: ITestCase) => {
-    if (!testCase.student_generated) return;
+    if (!testCase || !testCase.student_generated) return;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { output, ...testCaseWithoutOutput } = testCase;
     updateUserQuestionDocument({
-      userTestCases: [...userTestCases, testCase],
+      userTestCases: userTestCases
+        ? [...userTestCases, testCaseWithoutOutput]
+        : [testCaseWithoutOutput],
     });
   };
 
