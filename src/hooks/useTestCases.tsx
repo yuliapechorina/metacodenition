@@ -46,20 +46,10 @@ const useTestCases = () => {
           output: runResult?.stdout ?? '',
           result,
         };
-        setTestCases(
-          testCases.map((tc) =>
-            tc.input === newTestCase.input ? newTestCase : tc
-          )
-        );
         return newTestCase as ITestCase;
       } catch (error: any) {
         const result: ResultType = 'fail';
         const newTestCase = { ...testCase, output: error.toString(), result };
-        setTestCases(
-          testCases.map((tc) =>
-            tc.input === newTestCase.input ? newTestCase : tc
-          )
-        );
         return newTestCase as ITestCase;
       }
     };
@@ -100,7 +90,11 @@ const useTestCases = () => {
   };
 
   const markAsSolved = (testCase: ITestCase) =>
-    setTestCases([...testCases, { ...testCase, solved: true }]);
+    setTestCases(
+      testCases.map((tc) =>
+        tc.id === testCase.id ? { ...testCase, solved: true } : tc
+      )
+    );
 
   const addUserTestCase = (testCase: ITestCase) => {
     if (!testCase || !testCase.student_generated) return;

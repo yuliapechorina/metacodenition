@@ -27,6 +27,10 @@ const ApplicationShell = () => {
   const { userData } = useUser();
 
   useEffect(() => {
+    if (questionNumber) navigate('/assignment');
+  }, [questionNumber]);
+
+  useEffect(() => {
     if (assignmentComplete && assignmentName) navigate('/submit');
   }, [assignmentComplete, assignmentName]);
 

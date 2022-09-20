@@ -31,6 +31,7 @@ import { buildTestCaseString } from '../../util/testcase-helpers';
 import TestCaseInput from '../../components/CodeRunArea/TestCaseInput';
 import HelpButton from '../../components/HelpButton';
 import useUser from '../../hooks/useUser';
+import useInterventions from '../../hooks/useInterventions';
 
 const TestCasePage = () => {
   const { setUnsavedChanges, questionNumber } = useAssignment();
@@ -38,8 +39,11 @@ const TestCasePage = () => {
   const { testCases, runCases, addUserTestCase, deleteUserTestCase } =
     useTestCases();
   const { upi, userGroup } = useUser();
+  const { interventions } = useInterventions();
 
-  const [selectedTestCases, setSelectedTestCases] = useState<ITestCase[]>([]);
+  const [parentCheckboxState, setParentCheckboxState] =
+    useState<boolean>(false);
+  const [selectedTestCaseIds, setSelectedTestCaseIds] = useState<string[]>([]);
   const [running, setRunning] = useState(false);
   const [isProblemOpened, setProblemOpened] = useState(false);
 
@@ -54,14 +58,13 @@ const TestCasePage = () => {
 
   const [displayInputRow, setDisplayInputRow] = useState(false);
 
-  const [parentCheckboxState, setParentCheckboxState] =
-    useState<boolean>(false);
-
   const { addNotification } = useNotifications();
 
   const handleParentCheckboxChange = (value: boolean) => {
-    setSelectedTestCases(
-      testCases.filter((testCase) => testCase.solved && value)
+    setSelectedTestCaseIds(
+      testCases
+        .filter((testCase) => testCase.solved && value)
+        .map((tc) => tc.id)
     );
     setParentCheckboxState(value);
   };
@@ -71,21 +74,22 @@ const TestCasePage = () => {
       type: 'failure',
       content: <Text>No test cases selected</Text>,
     };
-    if (selectedTestCases.length === 0) {
+    if (selectedTestCaseIds.length === 0) {
       addNotification!(noTestCasesNotification);
       return;
     }
 
     setRunning(true);
-    const testCaseResults = await runCases(selectedTestCases);
-    setSelectedTestCases(testCaseResults);
+    const testCaseResults = await runCases(
+      selectedTestCaseIds.map((id) => testCases.find((tc) => tc.id === id)!)
+    );
     const passCount = testCaseResults.reduce(
       (a, c) => (c.result === 'pass' ? a + 1 : a),
       0
     );
 
     logEvent(analytics, 'run_test_cases', {
-      num_test_cases: selectedTestCases.length,
+      num_test_cases: selectedTestCaseIds.length,
       num_passed: passCount,
       question_number: questionNumber,
       user_upi: upi,
@@ -93,7 +97,7 @@ const TestCasePage = () => {
     });
 
     const notification: INotification =
-      passCount === selectedTestCases.length
+      passCount === selectedTestCaseIds.length
         ? {
             type: 'success',
             content: <Text>All selected test cases passed!</Text>,
@@ -101,8 +105,8 @@ const TestCasePage = () => {
         : {
             type: 'failure',
             content: (
-              <Text>{`${selectedTestCases.length - passCount}/${
-                selectedTestCases.length
+              <Text>{`${selectedTestCaseIds.length - passCount}/${
+                selectedTestCaseIds.length
               } test cases failed!`}</Text>
             ),
           };
@@ -113,8 +117,10 @@ const TestCasePage = () => {
 
   const handleCheckboxChange = (testCase: ITestCase, selected: boolean) =>
     selected
-      ? setSelectedTestCases([...selectedTestCases, testCase])
-      : setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
+      ? setSelectedTestCaseIds([...selectedTestCaseIds, testCase.id])
+      : setSelectedTestCaseIds(
+          selectedTestCaseIds.filter((id) => id !== testCase.id)
+        );
 
   const defaultResult: ResultType = 'unrun';
   const getDefaultUserTestCase = (): ITestCase => ({
@@ -171,7 +177,9 @@ const TestCasePage = () => {
 
   const handleDeleteTestCase = (testCase: ITestCase) => {
     deleteUserTestCase(testCase);
-    setSelectedTestCases(selectedTestCases.filter((tc) => tc !== testCase));
+    setSelectedTestCaseIds(
+      selectedTestCaseIds.filter((id) => id !== testCase.id)
+    );
 
     logEvent(analytics, 'delete_test_case', {
       question_number: questionNumber,
@@ -268,7 +276,7 @@ const TestCasePage = () => {
           <td>
             <Center>
               <Checkbox
-                checked={selectedTestCases.includes(testCase)}
+                checked={selectedTestCaseIds.includes(testCase.id)}
                 onChange={(e) =>
                   handleCheckboxChange(testCase, e.currentTarget.checked)
                 }
@@ -342,7 +350,17 @@ const TestCasePage = () => {
               {' '}
               understanding the problem{' '}
             </Text>
-            stage
+            stage.
+            {interventions.find((i) => i.name === 'Understanding the problem')
+              ?.enabled ? (
+              ''
+            ) : (
+              <Text>
+                Enable the stage via the settings button in the top right
+                corner. You can still add your own test cases at the bottom of
+                the page.
+              </Text>
+            )}
           </Text>
           <Table>
             <thead>
@@ -350,7 +368,13 @@ const TestCasePage = () => {
                 <th className='min-w-fit w-12'>
                   <Center>
                     <Checkbox
-                      checked={parentCheckboxState}
+                      indeterminate={
+                        selectedTestCaseIds.length > 0 &&
+                        selectedTestCaseIds.length !== testCases.length
+                      }
+                      checked={
+                        selectedTestCaseIds.length > 0 && parentCheckboxState
+                      }
                       onChange={(e) =>
                         handleParentCheckboxChange(e.currentTarget.checked)
                       }
