@@ -176,6 +176,8 @@ const TestCaseSolver = () => {
               onChange={(e?: React.ChangeEvent<HTMLInputElement>) =>
                 setInputValue(e!.target.value)
               }
+              error={incorrectAnswer}
+              onSubmit={currentTestCase?.solved ? handleNext : handleCheckInput}
               rightSection={
                 (incorrectAnswer && (
                   <HiX size='32px' className=' fill-red-500 p-1' />
