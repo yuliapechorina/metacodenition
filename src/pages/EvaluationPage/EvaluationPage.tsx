@@ -145,7 +145,9 @@ const EvaluationPage = () => {
                 My Actions
               </Title>
               <ReactSortable
-                list={getUnusedListItems!()}
+                list={getUnusedListItems!().concat(
+                  editAction && isNewAction ? [editAction] : []
+                )}
                 setList={setUnusedListItems}
                 group='design-parsons'
                 animation={100}

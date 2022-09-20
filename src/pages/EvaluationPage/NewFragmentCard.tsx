@@ -14,12 +14,7 @@ const NewFragmentCard = ({
   handleCancelAction: () => void;
 }) => (
   <>
-    <Card
-      shadow='sm'
-      radius='md'
-      p='md'
-      className='bg-white cursor-grab h-fit min-w-0'
-    >
+    <Card shadow='sm' radius='md' p='md' className='bg-white h-fit min-w-0'>
       <TextInput
         value={editAction.action}
         onChange={(e) =>
