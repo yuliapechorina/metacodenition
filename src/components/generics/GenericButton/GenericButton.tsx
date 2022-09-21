@@ -1,11 +1,11 @@
-import React from 'react';
-import { Button, MantineSize } from '@mantine/core';
+import { MantineSize, Button } from '@mantine/core';
+import { MouseEvent, ReactNode } from 'react';
 
 type GenericButtonProps = {
   text: string;
   onClick?: () => void;
   className?: string;
-  leftIcon?: React.ReactNode;
+  leftIcon?: ReactNode;
   type?: 'button' | 'submit' | 'reset' | undefined;
   size?: MantineSize;
   disabled?: boolean;
@@ -32,11 +32,17 @@ const GenericButton = ({
   } else if (blue) {
     myClassName = `w-fit bg-blue-500 fill-blue-50 hover:bg-blue-600 rounded-md ${className}`;
   }
+
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget?.blur();
+    if (onClick) onClick();
+  };
+
   return (
     <Button
       uppercase
       size={size}
-      onClick={onClick}
+      onClick={handleClick}
       className={myClassName}
       leftIcon={leftIcon}
       type={type}
