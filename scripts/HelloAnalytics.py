@@ -97,6 +97,12 @@ def select_interventions_report (client: BetaAnalyticsDataClient, property_id):
                 ],
     metrics=[Metric(name="eventCount")],
     dimension_filters=dimension_filters,
+    metric_filter=FilterExpression(
+      filter=Filter(
+        field_name="eventCount",
+        numeric_filter=Filter.NumericFilter(operation=Filter.NumericFilter.Operation.GREATER_THAN, value=NumericValue(int64_value=0)),
+      )
+    )
   );
   write_report_to_file(response, "select_interventions_report.txt")
 
@@ -105,7 +111,7 @@ def main():
   client = BetaAnalyticsDataClient(credentials=credentials)
   # run_test_cases_report(client, "313384509")
   # check_test_case_report(client, "313384509")
-  submit_question_3_report(client, "313384509")
-  # select_interventions_report(client, "313384509")
+  # submit_question_3_report(client, "313384509")
+  select_interventions_report(client, "313384509")
 if __name__ == '__main__':
   main()

@@ -71,7 +71,7 @@ def write_report_to_file(response: RunReportResponse, filename: str):
 
   print(f"Added to {filename}");
 
-def run_report(client: BetaAnalyticsDataClient, property_id: str, dimensions: list[Dimension], metrics: list[Metric], dimension_filters: list[FilterExpression]=None, order_bys: list[OrderBy]=None):
+def run_report(client: BetaAnalyticsDataClient, property_id: str, dimensions: list[Dimension], metrics: list[Metric], dimension_filters: list[FilterExpression]=None, metric_filter: FilterExpression = None, order_bys: list[OrderBy]=None):
   filter_expressions = [
     FilterExpression(
       not_expression=FilterExpression(
@@ -111,17 +111,19 @@ def run_report(client: BetaAnalyticsDataClient, property_id: str, dimensions: li
 
   if(order_bys is None):
     order_bys = default_order_bys
+
   
   request = RunReportRequest(
-  property=f"properties/{property_id}",
-  dimensions=dimensions,
-  metrics=metrics,
-  date_ranges=[DateRange(start_date="2022-09-18", end_date="today")],
-  dimension_filter=FilterExpression(
-          and_group=FilterExpressionList(
-              expressions=filter_expressions
-          )
-      ),
-  order_bys=order_bys
+    property=f"properties/{property_id}",
+    dimensions=dimensions,
+    metrics=metrics,
+    date_ranges=[DateRange(start_date="2022-09-18", end_date="today")],
+    dimension_filter=FilterExpression(
+            and_group=FilterExpressionList(
+                expressions=filter_expressions
+            )
+        ),
+    metric_filter=metric_filter,
+    order_bys=order_bys
   )
   return client.run_report(request)
