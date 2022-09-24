@@ -1,7 +1,7 @@
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import *
 from google.oauth2 import service_account
-from run_report_utils import *
+from RunReportUtils import *
 
 def run_test_cases_report(client: BetaAnalyticsDataClient, property_id):
   response: RunReportResponse = run_report(
