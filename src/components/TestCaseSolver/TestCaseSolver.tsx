@@ -64,6 +64,7 @@ const TestCaseSolver = () => {
           question_number: questionNumber,
           user_upi: upi,
           user_testing_group: userGroup,
+          my_timestamp: new Date(Date.now()).toISOString(),
         });
       } else {
         setIncorrectAnswer(true);
@@ -74,6 +75,7 @@ const TestCaseSolver = () => {
           question_number: questionNumber,
           user_upi: upi,
           user_testing_group: userGroup,
+          my_timestamp: new Date(Date.now()).toISOString(),
         });
       }
     }
@@ -87,6 +89,7 @@ const TestCaseSolver = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
   };
 
@@ -98,6 +101,7 @@ const TestCaseSolver = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
   };
 
@@ -110,6 +114,7 @@ const TestCaseSolver = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
   };
 
