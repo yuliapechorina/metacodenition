@@ -33,6 +33,7 @@ const FirebaseAnalytics = () => {
         question_number: questionNumber,
         user_upi: upi,
         user_testing_group: userGroup,
+        my_timestamp: new Date(Date.now()).toISOString(),
       });
     }
   }, [location]);

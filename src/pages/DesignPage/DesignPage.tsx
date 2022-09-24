@@ -33,6 +33,7 @@ const DesignPage = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
     setHelpModalOpened(true);
   };
@@ -77,6 +78,7 @@ const DesignPage = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
 
     const newHighlights = highlights
@@ -133,6 +135,7 @@ const DesignPage = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
   };
 
@@ -152,6 +155,7 @@ const DesignPage = () => {
       question_number: questionNumber,
       user_upi: upi,
       user_testing_group: userGroup,
+      my_timestamp: new Date(Date.now()).toISOString(),
     });
   };
 
