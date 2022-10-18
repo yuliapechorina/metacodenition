@@ -16,39 +16,103 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Running the project
 
-In the project directory, you can run:
+While you can run the project offline using the firestore emulator suite, this would require extensive changes to the source code.
+It is actually much easier to get up-and-running by creating a firestore project on the [Firebase Console](https://console.firebase.google.com/).
+This project should not cost anything to run, as you will fall well within the free tier limits.
+You can run this project without activating billing.
 
-### `npm start`
+### Setting up the Firebase project
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+For the most up-to-date instructions, see the [Firebase documentation](https://firebase.google.com/docs/web/setup).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. Create a new project on the [Firebase Console](https://console.firebase.google.com/).
+2. Enable analytics if prompted, and when prompted to choose locations it is recommended to choose the closest location to you.
+3. From the "Project Overview" page, select the `</>` icon to add a web app to your project. Give your app a nickname and check the "Also set up Firebase Hosting for this app" checkbox.
+4. Copy the config object from the Firebase SDK snippet.
+5. Create a `.env` file in the root of the project.
+6. Add the following to the `.env` file, replacing the values with your own:
 
-### `npm test`
+```
+REACT_APP_FIREBASE_API_KEY=your-api-key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your-auth-domain
+REACT_APP_FIREBASE_PROJECT_ID=your-project-id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+REACT_APP_FIREBASE_FIREBASE_APP_ID=your-app-id
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+7. Follow the instructions to install the CLI
+8. From the root of the project, run `firebase login` and follow the instructions to login to your Firebase account.
+9. Run `firebase init` and select the following options:
 
-### `npm run build`
+```
+? Which Firebase CLI features do you want to set up for this folder? Press Space to select features, then Enter to confirm your choices.
+ ◯ Database: Deploy Firebase Realtime Database Rules
+ ◯ Firestore: Deploy rules and create indexes for Firestore
+ ◯ Functions: Configure and deploy Cloud Functions
+❯◉ Hosting: Configure and deploy Firebase Hosting sites
+  ◯ Storage: Deploy Cloud Storage security rules
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+10. Select "Use an existing project". Select the project you created in step 1.
+11. Select "build" as the public directory.
+12. Select "Configure as a single-page app (rewrite all urls to /index.html)".
+13. Do not select "Set up automatic builds and deploys with GitHub".
+14. Do not select "Overwrite build/index.html?".
+15. Run `npm run build` to build the project.
+16. Run `firebase deploy` to deploy the project.
+17. Navigate to firebase console and select the authentication tab.
+18. Select "Set up sign-in method" and enable "Google" sign-in method.
+19. Navigate to the "Firestore Database" tab and select "Create database". You can start in test mode and change to production later. Remember to select the region closest to you.
+20. Add a collection name "assignments", and add a document with Document ID "test". Add the following fields to the document:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+name | string | Test Assignment
+questions | array |
+      string | test_q_1
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+21. Add a collection name "questions", and add a document with Document ID "test_q_1". Add the following fields to the document:
 
-### `npm run eject`
+```
+codeTemplate | string | #include <stdio.h>\n/** STUDENT CODE BEGINS **/\n\n/** STUDENT CODE ENDS **/\nint main()\n{\n\tchar[] name = "Paul Denny\0";\n\tsay_hello(name);\n\treturn 0;\n}\n
+function | map
+      arguments | array
+              map |
+                    name | string | name
+                    isArray | boolean | true
+                    type | string | char
+      name | string | say_hello
+      returnType | string | void
+testCases | array
+      map |
+            input | array
+                    map |
+                          value | string | Paul Denny
+                          size | number | 11
+            expected | string | Hello, Paul Denny
+            id | string | default-1
+text | string | Write a function that takes a name as a parameter and prints "Hello, <name>" to the console.
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+21. You should now be able to access the project at the URL provided by the Firebase CLI. You can also run the project locally by running `npm start`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Accessing the compendium
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Data from the trial period is stored in the `compendium` folder.
+The `compendium/database` folder contains all database objects from the project's Cloud Firestore database.
+The `compendium/analytics` folder contains all analytics events from 22/09/22.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Python scripts
+
+We used many Python scripts throughout the project to process data.
+Some of these scripts may prove useful (especially the analytics scripts).
+These can be found in the `scripts` folder.
+
+### BigQuery queries
+
+The best way to access and query the data from the compendium is to use BigQuery.
+The `compendium/bigquery` folder contains all the queries we used.
+This is especially useful, as the `firestore/assignments` and `firestore/users/USER/assignments` are merged in `compendium/database/questions.json`. The same applies for the `questions` collections.
