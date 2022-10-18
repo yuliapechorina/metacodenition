@@ -1,0 +1,730 @@
+
+% Journals
+
+% First the Full Name is given, then the abbreviation used in the AMS Math
+% Reviews, with an indication if it could not be found there.
+% Note the 2nd overwrites the 1st, so swap them if you want the full name.
+
+ %{AMS}
+ @String{AMSTrans = "American Mathematical Society Translations" }
+ @String{AMSTrans = "Amer. Math. Soc. Transl." }
+ @String{BullAMS = "Bulletin of the American Mathematical Society" }
+ @String{BullAMS = "Bull. Amer. Math. Soc." }
+ @String{ProcAMS = "Proceedings of the American Mathematical Society" }
+ @String{ProcAMS = "Proc. Amer. Math. Soc." }
+ @String{TransAMS = "Transactions of the American Mathematical Society" }
+ @String{TransAMS = "Trans. Amer. Math. Soc." }
+
+ %ACM
+ @String{CACM = "Communications of the {ACM}" }
+ @String{CACM = "Commun. {ACM}" }
+ @String{CompServ = "Comput. Surveys" }
+ @String{JACM = "J. ACM" }
+ @String{ACMMathSoft = "{ACM} Transactions on Mathematical Software" }
+ @String{ACMMathSoft = "{ACM} Trans. Math. Software" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newsletter" }
+ @String{SIGNUM = "{ACM} {SIGNUM} Newslett." }
+
+ @String{AmerSocio = "American Journal of Sociology" }
+ @String{AmerStatAssoc = "Journal of the American Statistical Association" }
+ @String{AmerStatAssoc = "J. Amer. Statist. Assoc." }
+ @String{ApplMathComp = "Applied Mathematics and Computation" }
+ @String{ApplMathComp = "Appl. Math. Comput." }
+ @String{AmerMathMonthly = "American Mathematical Monthly" }
+ @String{AmerMathMonthly = "Amer. Math. Monthly" }
+ @String{BIT = "{BIT}" }
+ @String{BritStatPsych = "British Journal of Mathematical and Statistical
+          Psychology" }
+ @String{BritStatPsych = "Brit. J. Math. Statist. Psych." }
+ @String{CanMathBull = "Canadian Mathematical Bulletin" }
+ @String{CanMathBull = "Canad. Math. Bull." }
+ @String{CompApplMath = "Journal of Computational and Applied Mathematics" }
+ @String{CompApplMath = "J. Comput. Appl. Math." }
+ @String{CompPhys = "Journal of Computational Physics" }
+ @String{CompPhys = "J. Comput. Phys." }
+ @String{CompStruct = "Computers and Structures" }
+ @String{CompStruct = "Comput. \& Structures" }
+ @String{CompJour = "The Computer Journal" }
+ @String{CompJour = "Comput. J." }
+ @String{CompSysSci = "Journal of Computer and System Sciences" }
+ @String{CompSysSci = "J. Comput. System Sci." }
+ @String{Computing = "Computing" }
+ @String{ContempMath = "Contemporary Mathematics" }
+ @String{ContempMath = "Contemp. Math." }
+ @String{Crelle = "Crelle's Journal" }
+ @String{GiornaleMath = "Giornale di Mathematiche" }
+ @String{GiornaleMath = "Giorn. Mat." } % didn't find in AMS MR., ibid.
+
+ %IEEE
+ @String{Computer = "{IEEE} Computer" }
+ @String{IEEETransComp = "{IEEE} Transactions on Computers" }
+ @String{IEEETransComp = "{IEEE} Trans. Comput." }
+ @String{IEEETransAC = "{IEEE} Transactions on Automatic Control" }
+ @String{IEEETransAC = "{IEEE} Trans. Automat. Control" }
+ @String{IEEESpec = "{IEEE} Spectrum" } % didn't find in AMS MR
+ @String{ProcIEEE = "Proceedings of the {IEEE}" }
+ @String{ProcIEEE = "Proc. {IEEE}" } % didn't find in AMS MR
+ @String{IEEETransAeroElec = "{IEEE} Transactions on Aerospace and Electronic
+     Systems" }
+ @String{IEEETransAeroElec = "{IEEE} Trans. Aerospace Electron. Systems" }
+
+ @String{IMANumerAna = "{IMA} Journal of Numerical Analysis" }
+ @String{IMANumerAna = "{IMA} J. Numer. Anal." }
+ @String{InfProcLet = "Information Processing Letters" }
+ @String{InfProcLet = "Inform. Process. Lett." }
+ @String{InstMathApp = "Journal of the Institute of Mathematics and
+     its Applications" }
+ @String{InstMathApp = "J. Inst. Math. Appl." }
+ @String{IntControl = "International Journal of Control" }
+ @String{IntControl = "Internat. J. Control" }
+ @String{IntNumerEng = "International Journal for Numerical Methods in
+     Engineering" }
+ @String{IntNumerEng = "Internat. J. Numer. Methods Engrg." }
+ @String{IntSuper = "International Journal of Supercomputing Applications" }
+ @String{IntSuper = "Internat. J. Supercomputing Applic." } % didn't find
+%% in AMS MR
+ @String{Kibernetika = "Kibernetika" }
+ @String{JResNatBurStand = "Journal of Research of the National Bureau
+     of Standards" }
+ @String{JResNatBurStand = "J. Res. Nat. Bur. Standards" }
+ @String{LinAlgApp = "Linear Algebra and its Applications" }
+ @String{LinAlgApp = "Linear Algebra Appl." }
+ @String{MathAnaAppl = "Journal of Mathematical Analysis and Applications" }
+ @String{MathAnaAppl = "J. Math. Anal. Appl." }
+ @String{MathAnnalen = "Mathematische Annalen" }
+ @String{MathAnnalen = "Math. Ann." }
+ @String{MathPhys = "Journal of Mathematical Physics" }
+ @String{MathPhys = "J. Math. Phys." }
+ @String{MathComp = "Mathematics of Computation" }
+ @String{MathComp = "Math. Comp." }
+ @String{MathScand = "Mathematica Scandinavica" }
+ @String{MathScand = "Math. Scand." }
+ @String{TablesAidsComp = "Mathematical Tables and Other Aids to Computation" }
+ @String{TablesAidsComp = "Math. Tables Aids Comput." }
+ @String{NumerMath = "Numerische Mathematik" }
+ @String{NumerMath = "Numer. Math." }
+ @String{PacificMath = "Pacific Journal of Mathematics" }
+ @String{PacificMath = "Pacific J. Math." }
+ @String{ParDistComp = "Journal of Parallel and Distributed Computing" }
+ @String{ParDistComp = "J. Parallel and Distrib. Comput." } % didn't find
+%% in AMS MR
+ @String{ParComputing = "Parallel Computing" }
+ @String{ParComputing = "Parallel Comput." }
+ @String{PhilMag = "Philosophical Magazine" }
+ @String{PhilMag = "Philos. Mag." }
+ @String{ProcNAS = "Proceedings of the National Academy of Sciences
+                    of the USA" }
+ @String{ProcNAS = "Proc. Nat. Acad. Sci. U. S. A." }
+ @String{Psychometrika = "Psychometrika" }
+ @String{QuartMath = "Quarterly Journal of Mathematics, Oxford, Series (2)" }
+ @String{QuartMath = "Quart. J. Math. Oxford Ser. (2)" }
+ @String{QuartApplMath = "Quarterly of Applied Mathematics" }
+ @String{QuartApplMath = "Quart. Appl. Math." }
+ @String{RevueInstStat = "Review of the International Statisical Institute" }
+ @String{RevueInstStat = "Rev. Inst. Internat. Statist." }
+
+ %SIAM
+ @String{JSIAM = "Journal of the Society for Industrial and Applied
+     Mathematics" }
+ @String{JSIAM = "J. Soc. Indust. Appl. Math." }
+ @String{JSIAMB = "Journal of the Society for Industrial and Applied
+     Mathematics, Series B, Numerical Analysis" }
+ @String{JSIAMB = "J. Soc. Indust. Appl. Math. Ser. B Numer. Anal." }
+ @String{SIAMAlgMeth = "{SIAM} Journal on Algebraic and Discrete Methods" }
+ @String{SIAMAlgMeth = "{SIAM} J. Algebraic Discrete Methods" }
+ @String{SIAMAppMath = "{SIAM} Journal on Applied Mathematics" }
+ @String{SIAMAppMath = "{SIAM} J. Appl. Math." }
+ @String{SIAMComp = "{SIAM} Journal on Computing" }
+ @String{SIAMComp = "{SIAM} J. Comput." }
+ @String{SIAMMatrix = "{SIAM} Journal on Matrix Analysis and Applications" }
+ @String{SIAMMatrix = "{SIAM} J. Matrix Anal. Appl." }
+ @String{SIAMNumAnal = "{SIAM} Journal on Numerical Analysis" }
+ @String{SIAMNumAnal = "{SIAM} J. Numer. Anal." }
+ @String{SIAMReview = "{SIAM} Review" }
+ @String{SIAMReview = "{SIAM} Rev." }
+ @String{SIAMSciStat = "{SIAM} Journal on Scientific and Statistical
+     Computing" }
+ @String{SIAMSciStat = "{SIAM} J. Sci. Statist. Comput." }
+
+ @String{SoftPracExp = "Software Practice and Experience" }
+ @String{SoftPracExp = "Software Prac. Experience" } % didn't find in AMS MR
+ @String{StatScience = "Statistical Science" }
+ @String{StatScience = "Statist. Sci." }
+ @String{Techno = "Technometrics" }
+ @String{USSRCompMathPhys = "{USSR} Computational Mathematics and Mathematical
+     Physics" }
+ @String{USSRCompMathPhys = "{U. S. S. R.} Comput. Math. and Math. Phys." }
+ @String{VLSICompSys = "Journal of {VLSI} and Computer Systems" }
+ @String{VLSICompSys = "J. {VLSI} Comput. Syst." }
+ @String{ZAngewMathMech = "Zeitschrift fur Angewandte Mathematik und
+     Mechanik" }
+ @String{ZAngewMathMech = "Z. Angew. Math. Mech." }
+ @String{ZAngewMathPhys = "Zeitschrift fur Angewandte Mathematik und Physik" }
+ @String{ZAngewMathPhys = "Z. Angew. Math. Phys." }
+
+% Publishers % ================================================= |
+
+ @String{Academic = "Academic Press" }
+ @String{ACMPress = "{ACM} Press" }
+ @String{AdamHilger = "Adam Hilger" }
+ @String{AddisonWesley = "Addison-Wesley" }
+ @String{AllynBacon = "Allyn and Bacon" }
+ @String{AMS = "American Mathematical Society" }
+ @String{Birkhauser = "Birkha{\"u}ser" }
+ @String{CambridgePress = "Cambridge University Press" }
+ @String{Chelsea = "Chelsea" }
+ @String{ClaredonPress = "Claredon Press" }
+ @String{DoverPub = "Dover Publications" }
+ @String{Eyolles = "Eyolles" }
+ @String{HoltRinehartWinston = "Holt, Rinehart and Winston" }
+ @String{Interscience = "Interscience" }
+ @String{JohnsHopkinsPress = "The Johns Hopkins University Press" }
+ @String{JohnWileySons = "John Wiley and Sons" }
+ @String{Macmillan = "Macmillan" }
+ @String{MathWorks = "The Math Works Inc." }
+ @String{McGrawHill = "McGraw-Hill" }
+ @String{NatBurStd = "National Bureau of Standards" }
+ @String{NorthHolland = "North-Holland" }
+ @String{OxfordPress = "Oxford University Press" }  %address Oxford or London?
+ @String{PergamonPress = "Pergamon Press" }
+ @String{PlenumPress = "Plenum Press" }
+ @String{PrenticeHall = "Prentice-Hall" }
+ @String{SIAMPub = "{SIAM} Publications" }
+ @String{Springer = "Springer-Verlag" }
+ @String{TexasPress = "University of Texas Press" }
+ @String{VanNostrand = "Van Nostrand" }
+ @String{WHFreeman = "W. H. Freeman and Co." }
+
+%Entries
+
+@inproceedings{lakanen2015,
+author = {Lakanen, Antti-Jussi and Isom\"{o}tt\"{o}nen, Ville},
+title = {What Does It Take to Do Computer Programming? Surveying the K-12 Students' Conceptions},
+year = {2015},
+isbn = {9781450329668},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2676723.2677229},
+doi = {10.1145/2676723.2677229},
+abstract = {Phenomenographic studies in computing education research have previously focused on learning "programming thinking" [3], the act of learning to program [2], and conceptions of learning generally in an engineering context [10]. In the present study we analyze and discuss "what it takes to do computer programming" using phenomenography as research approach. This study is based on a large survey dataset gathered in summer outreach courses for K-12 students. The analysis resulted in 12 qualitatively different categories belonging to five separate, emergent themes: Syntax and language features, nature of programming work generally, computational thinking and problem solving, prerequisites, and auxiliary skills. We additionally reviewed whether the students' previous experience explains the categories, and observed that a mechanistic view of programming was prevailing among the inexperienced users, while experienced students more often stressed algorithmic thinking and logical reasoning.This study resembles work done by Eckerdal et al. [3], but gives a K-12 perspective to the question, "what does it takes to do programming?"},
+booktitle = {Proceedings of the 46th ACM Technical Symposium on Computer Science Education},
+pages = {458–463},
+numpages = {6},
+keywords = {outreach, game programming, phenomenography, k-12},
+location = {Kansas City, Missouri, USA},
+series = {SIGCSE '15}
+}
+
+@article{bruce2003,
+author = {Bruce, Christine and Buckingham, Lawrence and Hynd, John and Mcmahon, Camille and Roggenkamp, Michael and Stoodley, Ian},
+year = {2003},
+pages = {},
+title = {Ways of experiencing the act of learning to program: A phenomenographic study of introductory programming students at university}
+}
+
+
+@article{gomes2007,
+author = {Gomes, Anabela and Mendes, António José},
+year = {2007},
+publisher = {Psychology of Programming Interest Group},
+pages = {},
+title = {Problem Solving in Programming}
+}
+
+@article{medeiros2019,  
+author={Medeiros, Rodrigo Pessoa and Ramalho, Geber Lisboa and Falcão, Taciana Pontual},
+journal={IEEE Transactions on Education},
+title={A Systematic Literature Review on Teaching and Learning Introductory Programming in Higher Education}, year={2019},
+volume={62},
+number={2},
+pages={77-90},
+doi={10.1109/TE.2018.2864133}
+}
+
+@article{10.1145/1041624.1041673,
+author = {Lister, Raymond and Adams, Elizabeth S. and Fitzgerald, Sue and Fone, William and Hamer, John and Lindholm, Morten and McCartney, Robert and Mostr\"{o}m, Jan Erik and Sanders, Kate and Sepp\"{a}l\"{a}, Otto and Simon, Beth and Thomas, Lynda},
+title = {A Multi-National Study of Reading and Tracing Skills in Novice Programmers},
+year = {2004},
+issue_date = {December 2004},
+publisher = {ACM},
+address = {New York, NY, USA},
+volume = {36},
+number = {4},
+issn = {0097-8418},
+url = {https://doi.org/10.1145/1041624.1041673},
+doi = {10.1145/1041624.1041673},
+abstract = {A study by a ITiCSE 2001 working group ("the McCracken Group") established that many students do not know how to program at the conclusion of their introductory courses. A popular explanation for this incapacity is that the students lack the ability to problem-solve. That is, they lack the ability to take a problem description, decompose it into sub-problems and implement them, then assemble the pieces into a complete solution. An alternative explanation is that many students have a fragile grasp of both basic programming principles and the ability to systematically carry out routine programming tasks, such as tracing (or "desk checking") through code. This ITiCSE 2004 working group studied the alternative explanation, by testing students from seven countries, in two ways. First, students were tested on their ability to predict the outcome of executing a short piece of code. Second, students were tested on their ability, when given the desired function of short piece of near-complete code, to select the correct completion of the code from a small set of possibilities. Many students were weak at these tasks, especially the latter task, suggesting that such students have a fragile grasp of skills that are a prerequisite for problem-solving.},
+journal = {SIGCSE Bull.},
+month = {jun},
+pages = {119–150},
+numpages = {32}
+}
+
+@inproceedings{lister2004,
+author = {Lister, Raymond and Adams, Elizabeth S. and Fitzgerald, Sue and Fone, William and Hamer, John and Lindholm, Morten and McCartney, Robert and Mostr\"{o}m, Jan Erik and Sanders, Kate and Sepp\"{a}l\"{a}, Otto and Simon, Beth and Thomas, Lynda},
+title = {A Multi-National Study of Reading and Tracing Skills in Novice Programmers},
+year = {2004},
+isbn = {9781450377942},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1044550.1041673},
+doi = {10.1145/1044550.1041673},
+abstract = {A study by a ITiCSE 2001 working group ("the McCracken Group") established that many students do not know how to program at the conclusion of their introductory courses. A popular explanation for this incapacity is that the students lack the ability to problem-solve. That is, they lack the ability to take a problem description, decompose it into sub-problems and implement them, then assemble the pieces into a complete solution. An alternative explanation is that many students have a fragile grasp of both basic programming principles and the ability to systematically carry out routine programming tasks, such as tracing (or "desk checking") through code. This ITiCSE 2004 working group studied the alternative explanation, by testing students from seven countries, in two ways. First, students were tested on their ability to predict the outcome of executing a short piece of code. Second, students were tested on their ability, when given the desired function of short piece of near-complete code, to select the correct completion of the code from a small set of possibilities. Many students were weak at these tasks, especially the latter task, suggesting that such students have a fragile grasp of skills that are a prerequisite for problem-solving.},
+booktitle = {Working Group Reports from ITiCSE on Innovation and Technology in Computer Science Education},
+pages = {119–150},
+numpages = {32},
+location = {Leeds, United Kingdom},
+series = {ITiCSE-WGR '04}
+}
+
+@inproceedings{radermacher2014,
+author = {Radermacher, Alex and Walia, Gursimran and Knudson, Dean},
+title = {Investigating the Skill Gap between Graduating Students and Industry Expectations},
+year = {2014},
+isbn = {9781450327688},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2591062.2591159},
+doi = {10.1145/2591062.2591159},
+abstract = {Graduating computer science and software engineering students do not always possess the necessary skills, abilities, or knowledge when beginning their careers in the software industry. The lack of these skills and abilities can limit the productivity of newly hired, recent graduates, or even prevent them from gaining employment. This paper presents the results of an empirical study where twenty-three managers and hiring personnel from various software companies in the United States and Europe were interviewed. Participants were asked about areas where recent graduates frequently struggled when beginning employment at their companies and which skill deficiencies might prevent a recent graduate from being hired. The results of this study indicate that recent graduates struggle with using configuration management systems (and other software tools), effectively communicating with co-workers and customers, producing unit tests for their code, and other skills or abilities. The results also indicate that a lack of project experience and problem solving abilities are the most commonly cited issues preventing students from gaining employment. This research is intended to assist educators in identifying areas where students may not measure up the expectations of industry companies and in improving the curriculum at their universities to better prepare them for their future careers.},
+booktitle = {Companion Proceedings of the 36th International Conference on Software Engineering},
+pages = {291–300},
+numpages = {10},
+keywords = {Computer science education, Software developer, Required skills, Computer science pedagogy},
+location = {Hyderabad, India},
+series = {ICSE Companion 2014}
+}
+
+@inproceedings{deraat2009,
+author = {de Raadt, Michael and Watson, Richard and Toleman, Mark},
+title = {Teaching and Assessing Programming Strategies Explicitly},
+year = {2009},
+isbn = {9781920682767},
+publisher = {Australian Computer Society, Inc.},
+address = {AUS},
+abstract = {This paper describes how programming strategies were explicitly instructed and assessed in an introductory programming course and describes the impact of this curricular change. A description is given of how strategies were explicitly integrated into teaching materials and assessed in assignments and examinations. Comparisons are made between the outcomes of novices under the new curriculum and results of novices' learning under the previous implicit-only strategy curriculum, measured in an earlier study. This comparison shows improvement in novices' strategy application under the new curriculum.},
+booktitle = {Proceedings of the Eleventh Australasian Conference on Computing Education - Volume 95},
+pages = {45–54},
+numpages = {10},
+keywords = {curriculum, introductory programming, strategies},
+location = {Wellington, New Zealand},
+series = {ACE '09}
+}
+
+@article{muller2007,
+author = {Muller, Orna and Ginat, David and Haberman, Bruria},
+title = {Pattern-Oriented Instruction and Its Influence on Problem Decomposition and Solution Construction},
+year = {2007},
+issue_date = {September 2007},
+publisher = {ACM},
+address = {New York, NY, USA},
+volume = {39},
+number = {3},
+issn = {0097-8418},
+url = {https://doi.org/10.1145/1269900.1268830},
+doi = {10.1145/1269900.1268830},
+abstract = {Novices often experience difficulties in problem analysis and solution construction. Pattern-oriented instruction (POI) is a pedagogical approach based on incorporating patterns into instruction design. It is well-grounded in cognitive theories concerning knowledge construction and organization as well as the acquisition of expertise in problem solving. We show that the incorporation of algorithmic patterns through POI may enhance the construction of algorithmic problem-solving knowledge. Findings of a comparative research study showed that novices who studied according to the POI approach exhibited better problem-solving competence than those who studied in a traditional manner. Specifically, they were more competent in problem decomposition and solution construction.},
+journal = {SIGCSE Bull.},
+month = {jun},
+pages = {151–155},
+numpages = {5},
+keywords = {problem solving, problem decomposition, algorithmic patterns, pattern-oriented instruction}
+}
+
+@article{anneli1993,
+author = { Anneli   Eteläpelto },
+title = {Metacognition and the Expertise of Computer Program Comprehension},
+journal = {Scandinavian Journal of Educational Research},
+volume = {37},
+number = {3},
+pages = {243-254},
+year  = {1993},
+publisher = {Routledge},
+doi = {10.1080/0031383930370305},
+url = { https://doi.org/10.1080/0031383930370305}
+}
+
+@inproceedings{loksa2016,
+author = {Loksa, Dastyni and Ko, Amy J.},
+title = {The Role of Self-Regulation in Programming Problem Solving Process and Success},
+year = {2016},
+isbn = {9781450344494},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2960310.2960334},
+doi = {10.1145/2960310.2960334},
+abstract = {While prior work has investigated many aspects of programming problem solving, the role of self-regulation in problem solving success has received little attention. In this paper we contribute a framework for reasoning about self-regulation in programming problem solving. We then use this framework to investigate how 37 novice programmers of varying experience used self-regulation during a sequence of programming problems. We analyzed the extent to which novices engaged in five kinds of self-regulation during their problem solving, how this self-regulation varied between students enrolled in CS1 and CS2, and how self-regulation played a role in structuring problem solving. We then investigated the relationship between self-regulation and programming errors. Our results indicate that while most novices engage in self-regulation to navigate and inform their problem solving efforts, these self-regulation efforts are only effective when accompanied by programming knowledge adequate to succeed at solving a given problem, and only some types of self-regulation appeared related to errors. We discuss the implications of these findings on problem solving pedagogy in computing education.},
+booktitle = {Proceedings of the 2016 ACM Conference on International Computing Education Research},
+pages = {83–91},
+numpages = {9},
+keywords = {think-aloud, programming, self-regulation, problem solving},
+location = {Melbourne, VIC, Australia},
+series = {ICER '16}
+}
+
+@inproceedings{mani2013,
+author = {Mani, Murali and Mazumder, Quamrul},
+title = {Incorporating Metacognition into Learning},
+year = {2013},
+isbn = {9781450318686},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2445196.2445218},
+doi = {10.1145/2445196.2445218},
+abstract = {Metacognition refers to one's knowledge about one's cognitive processes, and is often associated with intelligence. Students who have good metacognition skills typically perform better in their cognitive tasks. For the Fall and Winter semesters in 2011-12, we incorporated metacognition into our computer science courses (both undergraduate and graduate level courses), so that the student becomes more aware of his/her own understanding of the various topics of the course. In this paper, we describe how we incorporated metacognition into our courses, and present results from our analysis of the data that we have gathered over the various courses.},
+booktitle = {Proceeding of the 44th ACM Technical Symposium on Computer Science Education},
+pages = {53–58},
+numpages = {6},
+keywords = {regression, metacognition, active learning},
+location = {Denver, Colorado, USA},
+series = {SIGCSE '13}
+}
+
+@mastersthesis{gibson1996,
+type={Bachelor's Thesis},
+author = {Gibson, Roseanne},
+title = {Developmental aspects : Metacognition and problem solving},
+year = {1996},
+url = {https://ro.ecu.edu.au/theses_hons/882/}
+}
+
+@inproceedings{parham2010,
+author = {Parham, Jennifer and Gugerty, Leo and Stevenson, D. E.},
+title = {Empirical Evidence for the Existence and Uses of Metacognition in Computer Science Problem Solving},
+year = {2010},
+isbn = {9781450300063},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1734263.1734406},
+doi = {10.1145/1734263.1734406},
+abstract = {We describe the second phase of an ongoing study whose aims are to explore how computer science students solve problems and to understand the relationship between metacognition and schemata. This research uses verbal protocols from computer science students, and based on the analysis of their transcripts, empirical evidence supports metacognition as a significant role in computer science problem solving. For the problem solved in this research, the students reveal a pattern in their interactions between metacognitive processes and the domain-specific strategies used to develop a program.},
+booktitle = {Proceedings of the 41st ACM Technical Symposium on Computer Science Education},
+pages = {416–420},
+numpages = {5},
+keywords = {schemata, computer science education, metacognition, cognitive processing, problem solving},
+location = {Milwaukee, Wisconsin, USA},
+series = {SIGCSE '10}
+}
+
+@inproceedings{loksa20162,
+author = {Loksa, Dastyni and Ko, Amy J. and Jernigan, Will and Oleson, Alannah and Mendez, Christopher J. and Burnett, Margaret M.},
+title = {Programming, Problem Solving, and Self-Awareness: Effects of Explicit Guidance},
+year = {2016},
+isbn = {9781450333627},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2858036.2858252},
+doi = {10.1145/2858036.2858252},
+abstract = {More people are learning to code than ever, but most learning opportunities do not explicitly teach the problem solving skills necessary to succeed at open-ended programming problems. In this paper, we present a new approach to impart these skills, consisting of: 1) explicit instruction on programming problem solving, which frames coding as a process of translating mental representations of problems and solutions into source code, 2) a method of visualizing and monitoring progression through six problem solving stages, 3) explicit, on-demand prompts for learners to reflect on their strategies when seeking help from instructors, and 4) context-sensitive help embedded in a code editor that reinforces the problem solving instruction. We experimentally evaluated the effects of our intervention across two 2-week web development summer camps with 48 high school students, finding that the intervention increased productivity, independence, programming self-efficacy, metacognitive awareness, and growth mindset. We discuss the implications of these results on learning technologies and classroom instruction.},
+booktitle = {Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems},
+pages = {1449–1461},
+numpages = {13},
+keywords = {metacognition, computer science education, problem-solving, programming},
+location = {San Jose, California, USA},
+series = {CHI '16}
+}
+
+@inproceedings{corno2021,
+author={Corno, Fulvio and De Russis, Luigi and Pablo Sáenz, Juan},
+booktitle={2021 IEEE Symposium on Visual Languages and Human-Centric Computing (VL/HCC)},
+title={TextCode: A Tool to Support Problem Solving Among Novice Programmers},
+year={2021},
+volume={},
+number={},
+pages={1-5},
+doi={10.1109/VL/HCC51201.2021.9576164}
+}
+
+@inproceedings{hilton2019,
+author = {Hilton, Andrew D. and Lipp, Genevieve M. and Rodger, Susan H.},
+title = {Translation from Problem to Code in Seven Steps},
+year = {2019},
+isbn = {9781450362597},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3300115.3309508},
+doi = {10.1145/3300115.3309508},
+abstract = {Students in introductory programming courses struggle with how to turn a problem statement into code. We introduce a teaching technique, "The Seven Steps," that provides structure and guidance on how to approach a problem. The first four steps focus on devising an algorithm in English, then the remaining steps are to translate that algorithm to code, test the algorithm, and debug failed test cases. This approach not only gives students a way to solve problems, but also ideas for what to do if they get stuck during the process. Furthermore, it provides a way for instructors to work examples in class that focus on the process of devising the code - instructors can show how to come up with the code, rather than just showing an example. We describe our experience with this technique in several introductory programming courses - both in the classroom and online.},
+booktitle = {Proceedings of the ACM Conference on Global Computing Education},
+pages = {78–84},
+numpages = {7},
+keywords = {CS1, metacognition, introductory programming, from problem to code, computational thinking},
+location = {Chengdu,Sichuan, China},
+series = {CompEd '19}
+}
+
+@inproceedings{mccracken2001,
+author = {McCracken, Michael and Almstrum, Vicki and Diaz, Danny and Guzdial, Mark and Hagan, Dianne and Kolikant, Yifat Ben-David and Laxer, Cary and Thomas, Lynda and Utting, Ian and Wilusz, Tadeusz},
+title = {A Multi-National, Multi-Institutional Study of Assessment of Programming Skills of First-Year CS Students},
+year = {2001},
+isbn = {9781450373593},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/572133.572137},
+doi = {10.1145/572133.572137},
+abstract = {In computer science, an expected outcome of a student's education is programming skill. This working group investigated the programming competency students have as they complete their first one or two courses in computer science. In order to explore options for assessing students, the working group developed a trial assessment of whether students can program. The underlying goal of this work was to initiate dialog in the Computer Science community on how to develop these types of assessments. Several universities participated in our trial assessment and the disappointing results suggest that many students do not know how to program at the conclusion of their introductory courses. For a combined sample of 216 students from four universities, the average score was 22.89 out of 110 points on the general evaluation criteria developed for this study. From this trial assessment we developed a framework of expectations for first-year courses and suggestions for further work to develop more comprehensive assessments.},
+booktitle = {WG Reports from ITiCSE on Innov. and Tech. in Computer Science Education},
+pages = {125–180},
+numpages = {56},
+location = {Canterbury, UK},
+series = {ITiCSE-WGR '01}
+}
+
+@inproceedings{prather2019,
+author = {Prather, James and Pettit, Raymond and Becker, Brett A. and Denny, Paul and Loksa, Dastyni and Peters, Alani and Albrecht, Zachary and Masci, Krista},
+title = {First Things First: Providing Metacognitive Scaffolding for Interpreting Problem Prompts},
+year = {2019},
+isbn = {9781450358903},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3287324.3287374},
+doi = {10.1145/3287324.3287374},
+abstract = {When solving programming problems, novices are often not aware of where they are in the problem-solving process. For instance, students who misinterpret the problem prompt will most likely not form a valid conceptual model of the task and fail to make progress towards a working solution. Avoiding such errors, and recovering from them once they occur, requires metacognitive skills that enable students to reflect on their problem-solving processes. For these reasons, developing metacognitive awareness is crucially important for novice students. Previous research has shown that explicitly teaching key steps of programming problem-solving, and having students reflect on where they are in the problem-solving process, can help students complete future programming assignments. Such metacognitive awareness training can be done through personal tutoring, but can be difficult to implement without a high ratio of instructors to students. We explore a more scalable approach, making use of an automated assessment tool, and conduct a controlled experiment to see whether scaffolding the problem-solving process would increase metacognitive awareness and improve student performance. We collected all code submissions by students in both control and experimental groups, as well as data from direct observation using a think-aloud protocol. We found that students who received the intervention showed a higher degree of understanding of the problem prompt and were more likely to complete the programming task successfully.},
+booktitle = {Proc. of the 50th ACM Tech. Sym. on Computer Science Education},
+pages = {531–537},
+numpages = {7},
+keywords = {cs1, metacognitive awareness, automated assessment tools},
+location = {Minneapolis, MN, USA},
+series = {SIGCSE '19}
+}
+
+@inproceedings{denny2019,
+author = {Denny, Paul and Prather, James and Becker, Brett A. and Albrecht, Zachary and Loksa, Dastyni and Pettit, Raymond},
+title = {A Closer Look at Metacognitive Scaffolding: Solving Test Cases Before Programming},
+year = {2019},
+isbn = {9781450377157},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3364510.3366170},
+doi = {10.1145/3364510.3366170},
+abstract = {Prior research has shown that novices face metacognitive difficulties associated with understanding problem statements. Metacognition refers to the processes that an individual uses to plan, monitor, and assess their own understanding and performance and is often described as "thinking about thinking." Metacognitive awareness is a higher-order thinking skill that includes knowing when and how to use particular strategies for problem-solving. However, novice students often lack metacognitive skills. This can be a disadvantage, particularly when learning in unfamiliar domains. For instance, students who misinterpret a problem statement will most likely form an invalid mental model of the problem which they may find difficult to correct. A prior think-aloud study that used an intervention focused on this initial step in the problem-solving process showed promising results at a small scale. In this paper, we report on a large (n = 976) controlled experiment to examine the scalability of the aforementioned study. We measure the effect on novice programmer performance of metacognitive scaffolding that requires deliberate reflection on the problem statement before any code is written. Although control and experimental groups exhibited similar completion rates overall, students in the experimental group encountered significantly fewer errors that related to the formation of an incorrect mental model of the problem. These results hold promise in moving towards more reliable methods for developing metacognitive awareness in novice programmers.},
+booktitle = {Proc of the 19th Koli Calling International Conf. on Computing Education Research},
+articleno = {11},
+numpages = {10},
+keywords = {metacognitive awareness, automated assessment tools, CS1},
+location = {Koli, Finland},
+series = {Koli Calling '19}
+}
+
+@inproceedings{craig2019,
+author = {Craig, Michelle and Petersen, Andrew and Campbell, Jennifer},
+title = {Answering the Correct Question},
+year = {2019},
+isbn = {9781450362597},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3300115.3309529},
+doi = {10.1145/3300115.3309529},
+abstract = {The first step in writing code is understanding the problem to be solved. When this step is not properly completed, students can waste time developing a solution to the wrong problem. Arguably, this tendency is exacerbated by online automatically-tested code submission systems where students work in isolation and sometimes appear to focus more on passing the instructor testcases than on understanding the problem or its solution. We report on an randomized A/B test with 831 CS1 students using an online submission system. Students in the control group wrote small Python functions based on a written description including a docstring with one example. Before the treatment-group students solved the same exercise, they were given a description of the same functions and were asked to provide the corresponding output for three sets of input. We hypothesized that this would decrease the time and attempts required to correctly write the code because students in the treatment group would not waste time on an incorrectly-conceived problem. We found support for this hypothesis on one of the problems but not on the other, and we offer some suggestions as to how this might be explained.},
+booktitle = {Proceedings of the ACM Conference on Global Computing Education},
+pages = {72–77},
+numpages = {6},
+location = {Chengdu,Sichuan, China},
+series = {CompEd '19}
+}
+
+@article{janzen2008,
+author = {Janzen, David and Saiedian, Hossein},
+title = {Test-Driven Learning in Early Programming Courses},
+year = {2008},
+issue_date = {March 2008},
+publisher = {ACM},
+address = {New York, NY, USA},
+volume = {40},
+number = {1},
+issn = {0097-8418},
+url = {https://doi.org/10.1145/1352322.1352315},
+doi = {10.1145/1352322.1352315},
+abstract = {Coercing new programmers to adopt disciplined development practices such as thorough unit testing is a challenging endeavor. Test-driven development (TDD) has been proposed as a solution to improve both software design and testing. Test-driven learning (TDL) has been proposed as a pedagogical approach for teaching TDD without imposing significant additional instruction time.This research evaluates the effects of students using a test-first (TDD) versus test-last approach in early programming courses, and considers the use of TDL on a limited basis in CS1 and CS2. Software testing, programmer productivity, programmer performance, and programmer opinions are compared between test-first and test-last programming groups. Results from this research indicate that a test-first approach can increase student testing and programmer performance, but that early programmers are very reluctant to adopt a test-first approach, even after having positive experiences using TDD. Further, this research demonstrates that TDL can be applied in CS1/2, but suggests that a more pervasive implementation of TDL may be necessary to motivate and establish disciplined testing practice among early programmers.},
+journal = {SIGCSE Bull.},
+month = {mar},
+pages = {532–536},
+numpages = {5},
+keywords = {test-driven learning, test-driven development, pedagogy, cs1}
+}
+
+@inproceedings{weinman2021,
+author = {Weinman, Nathaniel and Fox, Armando and Hearst, Marti A.},
+title = {Improving Instruction of Programming Patterns with Faded Parsons Problems},
+year = {2021},
+isbn = {9781450380966},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3411764.3445228},
+doi = {10.1145/3411764.3445228},
+abstract = {Learning to recognize and apply programming patterns — reusable abstractions of code — is critical to becoming a proficient computer scientist. However, many introductory Computer Science courses do not teach patterns, in part because teaching these concepts requires significant curriculum changes. As an alternative, we explore how a novel user interface for practicing coding — Faded Parsons Problems — can support introductory Computer Science students in learning to apply programming patterns. We ran a classroom-based study with 237 students which found that Faded Parsons Problems, or rearranging and completing partially blank lines of code into a valid program, are an effective exercise interface for teaching programming patterns, significantly surpassing the performance of the more standard approaches of code writing and code tracing exercises. Faded Parsons Problems also improve overall code writing ability at a comparable level to code writing exercises, but are preferred by students.},
+booktitle = {Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems},
+articleno = {53},
+numpages = {4},
+keywords = {Parsons Problems, CS1, Computing Education, Programming Patterns},
+location = {Yokohama, Japan},
+series = {CHI '21}
+}
+
+@inproceedings{garcia2021,
+author={Garcia, Rita},
+booktitle={2021 IEEE Frontiers in Education Conference (FIE)}, 
+title={Evaluating Parsons Problems as a Design-Based Intervention}, 
+year={2021},
+volume={},
+number={},
+pages={1-9},
+doi={10.1109/FIE49875.2021.9637175}
+}
+
+@inproceedings{prather2017,
+author = {Prather, James and Pettit, Raymond and McMurry, Kayla Holcomb and Peters, Alani and Homer, John and Simone, Nevan and Cohen, Maxine},
+title = {On Novices' Interaction with Compiler Error Messages: A Human Factors Approach},
+year = {2017},
+isbn = {9781450349680},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3105726.3106169},
+doi = {10.1145/3105726.3106169},
+abstract = {The difficulty in understanding compiler error messages can be a major impediment to novice student learning. To alleviate this issue, multiple researchers have run experiments enhancing compiler error messages in automated assessment tools for programming assignments. The conclusions reached by these published experiments appear to be conducting. We examine these experiments and propose five potential reasons for the inconsistent conclusions concerning enhanced compiler error messages: (1) students do not read them, (2) researchers are measuring the wrong thing, (3) the effects are hard to measure, (4) the messages are not properly designed, (5) the messages are properly designed, but students do not understand them in context due to increased cognitive load. We constructed mixed-methods experiments designed to address reasons 1 and 5 with a specific automated assessment tool, Athene, that previously reported inconclusive results. Testing student comprehension of the enhanced compiler error messages outside the context of an automated assessment tool demonstrated their effectiveness over standard compiler error messages. Quantitative results from a 60 minute one-on-one think-aloud study with 31 students did not show substantial increase in student learning outcomes over the control. However, qualitative results from the one-on-one think-aloud study indicated that most students are reading the enhanced compiler error messages and generally make effective changes after encountering them.},
+booktitle = {Proc. of the 2017 ACM Conf. on Int. Computing Education Research},
+pages = {74–82},
+numpages = {9},
+keywords = {automated assessment tools, human factors, usability, education, CS1, ethnography, HCI},
+location = {Tacoma, Washington, USA},
+series = {ICER '17}
+}
+
+@inproceedings{saenz2022,
+author = {Saenz, Juan Pablo and De Russis, Luigi},
+title = {On How Novices Approach Programming Exercises Before and During Coding},
+year = {2022},
+isbn = {9781450391566},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3491101.3519655},
+doi = {10.1145/3491101.3519655},
+abstract = {Various tools and approaches are available to support undergraduate students learning to program. Most of them concentrate on the code and aim to ease the visualization of data structures or guide the debugging. However, in undergraduate introductory courses, students are typically given exercises in the form of a natural language problem. Deriving a correct solution largely depends on the problem-solving strategy they adopt rather than on their proficiency in dealing with the syntax and semantics of the code. Indeed, they face various challenges (apart from the coding), such as identifying the relevant information, stating the algorithmic steps to solve it, breaking it into smaller parts, and evaluating the implemented solution. To our knowledge, almost no attention has been paid to supporting such problem-solving strategies before and during the coding. This paper reports an interview and a sketching exercise with 10 participants exploring how the novices approach the programming exercises from a problem-solving perspective and how they imagine a tool to support their cognitive process. Findings show that students intuitively perform various actions over the exercise text, and they would appreciate having support from the development environment. Accordingly, based on these findings, we provide implications for designing tools to support problem-solving strategies.},
+booktitle = {Extended Abstracts of the 2022 CHI Conference on Human Factors in Computing Systems},
+articleno = {361},
+numpages = {6},
+keywords = {programming, novices, problem-solving strategies, development environment},
+location = {New Orleans, LA, USA},
+series = {CHI EA '22}
+}
+
+@article{loksa2022,
+author = {Loksa, Dastyni and Margulieux, Lauren and Becker, Brett A. and Craig, Michelle and Denny, Paul and Pettit, Raymond and Prather, James},
+title = {Metacognition and Self-Regulation in Programming Education: Theories and Exemplars of Use},
+year = {2022},
+issue_date = {December 2022},
+publisher = {ACM},
+address = {New York, NY, USA},
+volume = {22},
+number = {4},
+url = {https://doi.org/10.1145/3487050},
+doi = {10.1145/3487050},
+abstract = {Metacognition and self-regulation are important skills for successful learning and have been discussed and researched extensively in the general education literature for several decades. More recently, there has been growing interest in understanding how metacognitive and self-regulatory skills contribute to student success in the context of computing education. This article presents a thorough systematic review of metacognition and self-regulation work in the context of computer programming and an in-depth discussion of the theories that have been leveraged in some way. We also discuss several prominent metacognitive and self-regulation theories from the literature outside of computing education—for example, from psychology and education—that have yet to be applied in the context of programming education.In our investigation, we built a comprehensive corpus of papers on metacognition and self-regulation in programming education, and then employed backward snowballing to provide a deeper examination of foundational theories from outside computing education, some of which have been explored in programming education, and others that have yet to be but hold much promise. In addition, we make new observations about the way these theories are used by the computing education community, and present recommendations on how metacognition and self-regulation can help inform programming education in the future. In particular, we discuss exemplars of studies that have used existing theories to support their design and discussion of results as well as studies that have proposed their own metacognitive theories in the context of programming education. Readers will also find the article a useful resource for helping students in programming courses develop effective strategies for metacognition and self-regulation.},
+journal = {ACM Trans. Comput. Educ.},
+month = {sep},
+articleno = {39},
+numpages = {31},
+keywords = {self-regulation, programming, metacognition, cognitive control, Cognition, metacognitive awareness, CS1}
+}
+
+@inproceedings{luxtonreilly2018,
+author = {Luxton-Reilly, Andrew and Simon and Albluwi, Ibrahim and Becker, Brett A. and Giannakos, Michail and Kumar, Amruth N. and Ott, Linda and Paterson, James and Scott, Michael James and Sheard, Judy and Szabo, Claudia},
+title = {Introductory Programming: A Systematic Literature Review},
+year = {2018},
+isbn = {9781450362238},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3293881.3295779},
+doi = {10.1145/3293881.3295779},
+abstract = {As computing becomes a mainstream discipline embedded in the school curriculum and acts as an enabler for an increasing range of academic disciplines in higher education, the literature on introductory programming is growing. Although there have been several reviews that focus on specific aspects of introductory programming, there has been no broad overview of the literature exploring recent trends across the breadth of introductory programming. This paper is the report of an ITiCSE working group that conducted a systematic review in order to gain an overview of the introductory programming literature. Partitioning the literature into papers addressing the student, teaching, the curriculum, and assessment, we explore trends, highlight advances in knowledge over the past 15 years, and indicate possible directions for future research.},
+booktitle = {Proc. Companion of the 23rd Annual ACM Conf. on Innov. and Tech. in Computer Science Education},
+pages = {55–106},
+numpages = {52},
+keywords = {overview, systematic review, introductory programming, systematic literature review, novice programming, SLR, CS1, literature review, ITiCSE working group, review},
+location = {Larnaca, Cyprus},
+series = {ITiCSE 2018 Companion}
+}
+
+@book{felleisen2001,
+title = "How to Design Programs: An Introduction to Programming and Computing",
+author = "Matthias Felleisen and Findler, {Robert Bruce} and Matthew Flatt and Shriram Krishnamurthi",
+year = "2001",
+isbn = {058539296X},
+language = "English",
+publisher = "MIT Press",
+}
+
+@inproceedings{10.1145/1508865.1508876,
+author = {Hanks, Brian and Brandt, Matt},
+title = {Successful and Unsuccessful Problem Solving Approaches of Novice Programmers},
+year = {2009},
+isbn = {9781605581835},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1508865.1508876},
+doi = {10.1145/1508865.1508876},
+abstract = {Learning to program continues to be challenging for many students. This paper reports on problem-solving approaches undertaken by pair programming students. We examine reasons why some approaches lead to success while others lead to failure. We also identify some aspects of the Java language that appear to lead to student misconceptions. Finally, we provide suggestions for educators interested in helping students learn successful approaches and avoid unsuccessful ones.},
+booktitle = {Proceedings of the 40th ACM Technical Symposium on Computer Science Education},
+pages = {24–28},
+numpages = {5},
+keywords = {novice, introductory programming, problem solving approaches, pair programming, java, distributed pair programming},
+location = {Chattanooga, TN, USA},
+series = {SIGCSE '09}
+}
+
+@article{hanks2009,
+author = {Hanks, Brian and Brandt, Matt},
+title = {Successful and Unsuccessful Problem Solving Approaches of Novice Programmers},
+year = {2009},
+issue_date = {March 2009},
+publisher = {ACM},
+address = {New York, NY, USA},
+volume = {41},
+number = {1},
+issn = {0097-8418},
+url = {https://doi.org/10.1145/1539024.1508876},
+doi = {10.1145/1539024.1508876},
+abstract = {Learning to program continues to be challenging for many students. This paper reports on problem-solving approaches undertaken by pair programming students. We examine reasons why some approaches lead to success while others lead to failure. We also identify some aspects of the Java language that appear to lead to student misconceptions. Finally, we provide suggestions for educators interested in helping students learn successful approaches and avoid unsuccessful ones.},
+journal = {SIGCSE Bull.},
+month = {mar},
+pages = {24–28},
+numpages = {5},
+keywords = {introductory programming, problem solving approaches, novice, java, distributed pair programming, pair programming}
+}
+
+%[8]
+@inproceedings{prather2018,
+author = {Prather, James and Pettit, Raymond and McMurry, Kayla and Peters, Alani and Homer, John and Cohen, Maxine},
+title = {Metacognitive Difficulties Faced by Novice Programmers in Automated Assessment Tools},
+year = {2018},
+isbn = {9781450356282},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi-org.ezproxy.auckland.ac.nz/10.1145/3230977.3230981},
+doi = {10.1145/3230977.3230981},
+abstract = {Most novice programmers are not explicitly aware of the problem-solving process used to approach programming problems and cannot articulate to an instructor where they are in that process. Many are now arguing that this skill, called metacognitive awareness, is crucial for novice learning. However, novices frequently learn in university CS1 courses that employ automated assessment tools (AATs), which are not typically designed to provide the cognitive scaffolding necessary for novices to develop metacognitive awareness. This paper reports on an experiment designed to understand what difficulties novice programmers currently face when learning to code with an AAT. We describe the experiences of CS1 students who participated in a think-aloud study where they were observed solving a programming problem with an AAT. Our observations show that some students mentally augmented the tool when it did not explicitly support their metacognitive awareness, while others stumbled due to the tool's lack of such support. We use these observations to formulate difficulties faced by novices that lack metacognitive awareness, compare these results to other related studies, and look toward future work in modifying AATs.},
+booktitle = {Proceedings of the 2018 ACM Conference on International Computing Education Research},
+pages = {41–50},
+numpages = {10},
+keywords = {education, cs1, human factors, hci, automated assessment tools, metacognitive awareness},
+location = {Espoo, Finland},
+series = {ICER '18}
+}
+
+
+@inproceedings{becker2019compiler,
+author = {Becker, Brett A. and Denny, Paul and Pettit, Raymond and Bouchard, Durell and Bouvier, Dennis J. and Harrington, Brian and Kamil, Amir and Karkare, Amey and McDonald, Chris and Osera, Peter-Michael and Pearce, Janice L. and Prather, James},
+title = {Compiler Error Messages Considered Unhelpful: The Landscape of Text-Based Programming Error Message Research},
+year = {2019},
+isbn = {9781450375672},
+publisher = {ACM},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3344429.3372508},
+doi = {10.1145/3344429.3372508},
+booktitle = {Proceedings of the Working Group Reports on Innovation and Technology in Computer Science Education},
+pages = {177–210},
+numpages = {34},
+keywords = {programming error messages, cs-1, novice programmers, considered harmful, syntax errors, warnings, compiler error messages, error messages, programming errors, review, diagnostic error messages, cs1, survey, design guidelines, human computer interaction, introduction to programming, hci, run-time errors},
+location = {Aberdeen, Scotland Uk},
+series = {ITiCSE-WGR '19}
+}
