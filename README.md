@@ -14,9 +14,64 @@
 </p>
 <br>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table of Contents
 
-## Running the project
+1. About the Project
+   - Structure
+   - Technologies
+2. Getting started
+   - Prerequisites
+   - Running the project
+3. Accessing the compendium
+
+## About the Project
+
+Metacodenition is a web-based IDE which provides scaffolding for the problem-solving process for novices.
+
+### Structure
+
+| Directory            | Description                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| **compendium**       | Contains all data from the trial period                                              |
+| compendium/analytics | Contains all analytics events                                                        |
+| compendium/bigquery  | BigQuery scripts used to query data                                                  |
+| compendium/database  | Contains all database objects from the project's Cloud Firestore database            |
+| **deliverables**     | Contains all Part IV Project deliverables                                            |
+| **scripts**          | Scripts used to process data, root directory contains analytics scripts              |
+| scripts/keith        | Python scripts used to plot graphs for Keith's final report                          |
+| scripts/yulia        | MATLAB scripts used to plot graphs for Yulia's final report                          |
+| **src**              | All the source files                                                                 |
+| src/api              | Contains functions for interacting with the code runner API                          |
+| src/assets           | Contains all images for the project                                                  |
+| src/components       | Frontend/UI components                                                               |
+| src/context          | Stores all React Context files used for global state                                 |
+| src/hooks            | Custom hooks used in the project                                                     |
+| src/pages            | Contains the React Router paths accessed when navigating through the web application |
+| src/util             | Utility files such as Firebase utilities and custom highlighting logic               |
+
+### Technologies
+
+Our application is built using [React.js](https://reactjs.org/). Additionally, we use the following technologies:
+
+- [Monaco Editor](https://microsoft.github.io/monaco-editor/)
+- [SortableJS](https://sortablejs.github.io/Sortable/)
+- [Mantine UI](https://mantine.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+To ensure consistency across our code base, we use the following:
+
+- [ESLint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [Husky](https://typicode.github.io/husky/#/)
+
+## Getting Started
+
+### Prerequsites
+
+node 16.x <br/>
+https://nodejs.org/en/download/
+
+### Running the project
 
 While you can run the project offline using the firestore emulator suite, this would require extensive changes to the source code.
 It is actually much easier to get up-and-running by creating a firestore project on the [Firebase Console](https://console.firebase.google.com/).
@@ -34,7 +89,7 @@ For the most up-to-date instructions, see the [Firebase documentation](https://f
 5. Create a `.env` file in the root of the project.
 6. Add the following to the `.env` file, replacing the values with your own:
 
-```
+```env
 REACT_APP_FIREBASE_API_KEY=your-api-key
 REACT_APP_FIREBASE_AUTH_DOMAIN=your-auth-domain
 REACT_APP_FIREBASE_PROJECT_ID=your-project-id
@@ -47,7 +102,7 @@ REACT_APP_FIREBASE_FIREBASE_APP_ID=your-app-id
 8. From the root of the project, run `firebase login` and follow the instructions to login to your Firebase account.
 9. Run `firebase init` and select the following options:
 
-```
+```shell
 ? Which Firebase CLI features do you want to set up for this folder? Press Space to select features, then Enter to confirm your choices.
  ◯ Database: Deploy Firebase Realtime Database Rules
  ◯ Firestore: Deploy rules and create indexes for Firestore
@@ -61,12 +116,13 @@ REACT_APP_FIREBASE_FIREBASE_APP_ID=your-app-id
 12. Select "Configure as a single-page app (rewrite all urls to /index.html)".
 13. Do not select "Set up automatic builds and deploys with GitHub".
 14. Do not select "Overwrite build/index.html?".
-15. Run `npm run build` to build the project.
-16. Run `firebase deploy` to deploy the project.
-17. Navigate to firebase console and select the authentication tab.
-18. Select "Set up sign-in method" and enable "Google" sign-in method.
-19. Navigate to the "Firestore Database" tab and select "Create database". You can start in test mode and change to production later. Remember to select the region closest to you.
-20. Add a collection name "assignments", and add a document with Document ID "test". Add the following fields to the document:
+15. Install NPM packages by running `npm install`.
+16. Run `npm run build` to build the project.
+17. Run `firebase deploy` to deploy the project.
+18. Navigate to firebase console and select the authentication tab.
+19. Select "Set up sign-in method" and enable "Google" sign-in method.
+20. Navigate to the "Firestore Database" tab and select "Create database". You can start in test mode and change to production later. Remember to select the region closest to you.
+21. Add a collection name "assignments", and add a document with Document ID "test". Add the following fields to the document:
 
 ```
 name | string | Test Assignment
@@ -116,3 +172,7 @@ These can be found in the `scripts` folder.
 The best way to access and query the data from the compendium is to use BigQuery.
 The `compendium/bigquery` folder contains all the queries we used.
 This is especially useful, as the `firestore/assignments` and `firestore/users/USER/assignments` are merged in `compendium/database/questions.json`. The same applies for the `questions` collections.
+
+### Acknowledgements
+
+- Assoc. Prof. Paul Denny, for being the best Part IV Project supervisor
