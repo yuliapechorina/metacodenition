@@ -30,4 +30,4 @@ yarn-error.log*
 
 # analytics scripts
 /scripts/*.txt
-/scripts/pedagogic-ide*.json
+/scripts/**/*.json
